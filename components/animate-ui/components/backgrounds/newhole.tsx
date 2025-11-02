@@ -1,24 +1,29 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import * as React from 'react';
 import { motion } from 'motion/react';
+
 import { cn } from '@/lib/utils';
+import { HoleBackground } from './hole';
 
 type NewHoleBackgroundProps = React.ComponentProps<'div'> & {
+  holeInnerColor?: string;
+  holeOuterColor?: string;
+  blobColor?: string;
   strokeColor?: string;
   numberOfLines?: number;
   numberOfDiscs?: number;
   particleRGBColor?: [number, number, number];
-  holeColors?: { inner: string; outer: string };
 };
 
 function NewHoleBackground({
+  holeInnerColor = 'transparent',
+  holeOuterColor = 'white',
+  blobColor = '#a900ff',
   strokeColor = '#737373',
   numberOfLines = 50,
   numberOfDiscs = 50,
   particleRGBColor = [255, 255, 255],
-  holeColors = { inner: 'white', outer: 'black' },
   className,
   children,
   ...props
@@ -72,7 +77,8 @@ function NewHoleBackground({
       dpi: window.devicePixelRatio || 1,
     };
     canvas.width = stateRef.current.render.width * stateRef.current.render.dpi;
-    canvas.height = stateRef.current.render.height * stateRef.current.render.dpi;
+    canvas.height =
+      stateRef.current.render.height * stateRef.current.render.dpi;
   }, []);
 
   const setDiscs = React.useCallback(() => {
@@ -84,8 +90,12 @@ function NewHoleBackground({
       w: width * 0.75,
       h: height * 0.7,
     };
-    stateRef.current.endDisc = { x: width * 0.5, y: height * 0.95, w: 0, h: 0 };
-
+    stateRef.current.endDisc = {
+      x: width * 0.5,
+      y: height * 0.95,
+      w: 0,
+      h: 0,
+    };
     let prevBottom = height;
     stateRef.current.clip = {};
     for (let i = 0; i < numberOfDiscs; i++) {
@@ -99,7 +109,6 @@ function NewHoleBackground({
       prevBottom = bottom;
       stateRef.current.discs.push(disc);
     }
-
     const clipPath = new Path2D();
     const disc = stateRef.current.clip.disc;
     clipPath.ellipse(disc.x, disc.y, disc.w, disc.h, 0, 0, Math.PI * 2);
@@ -111,22 +120,24 @@ function NewHoleBackground({
     const { width, height } = stateRef.current.rect;
     stateRef.current.lines = [];
     const linesAngle = (Math.PI * 2) / numberOfLines;
-    for (let i = 0; i < numberOfLines; i++) stateRef.current.lines.push([]);
-
+    for (let i = 0; i < numberOfLines; i++) {
+      stateRef.current.lines.push([]);
+    }
     stateRef.current.discs.forEach((disc: any) => {
       for (let i = 0; i < numberOfLines; i++) {
         const angle = i * linesAngle;
-        const p = { x: disc.x + Math.cos(angle) * disc.w, y: disc.y + Math.sin(angle) * disc.h };
+        const p = {
+          x: disc.x + Math.cos(angle) * disc.w,
+          y: disc.y + Math.sin(angle) * disc.h,
+        };
         stateRef.current.lines[i].push(p);
       }
     });
-
     const offCanvas = document.createElement('canvas');
     offCanvas.width = width;
     offCanvas.height = height;
     const ctx = offCanvas.getContext('2d');
     if (!ctx) return;
-
     stateRef.current.lines.forEach((line: any) => {
       ctx.save();
       let lineIsIn = false;
@@ -153,14 +164,20 @@ function NewHoleBackground({
       ctx.restore();
     });
     stateRef.current.linesCanvas = offCanvas;
-  }, [numberOfLines, strokeColor, holeColors]);
+  }, [numberOfLines, strokeColor, holeInnerColor, holeOuterColor, blobColor]);
 
   const initParticle = React.useCallback(
     (start: boolean = false) => {
-      const sx = stateRef.current.particleArea.sx + stateRef.current.particleArea.sw * Math.random();
-      const ex = stateRef.current.particleArea.ex + stateRef.current.particleArea.ew * Math.random();
+      const sx =
+        stateRef.current.particleArea.sx +
+        stateRef.current.particleArea.sw * Math.random();
+      const ex =
+        stateRef.current.particleArea.ex +
+        stateRef.current.particleArea.ew * Math.random();
       const dx = ex - sx;
-      const y = start ? stateRef.current.particleArea.h * Math.random() : stateRef.current.particleArea.h;
+      const y = start
+        ? stateRef.current.particleArea.h * Math.random()
+        : stateRef.current.particleArea.h;
       const r = 0.5 + Math.random() * 4;
       const vy = 0.5 + Math.random();
       return {
@@ -186,10 +203,12 @@ function NewHoleBackground({
       ew: disc.w * 2,
       h: height * 0.85,
     };
-    stateRef.current.particleArea.sx = (width - stateRef.current.particleArea.sw) / 2;
-    stateRef.current.particleArea.ex = (width - stateRef.current.particleArea.ew) / 2;
-
-    for (let i = 0; i < 100; i++) {
+    stateRef.current.particleArea.sx =
+      (width - stateRef.current.particleArea.sw) / 2;
+    stateRef.current.particleArea.ex =
+      (width - stateRef.current.particleArea.ew) / 2;
+    const totalParticles = 100;
+    for (let i = 0; i < totalParticles; i++) {
       stateRef.current.particles.push(initParticle(true));
     }
   }, [initParticle]);
@@ -198,56 +217,61 @@ function NewHoleBackground({
     (ctx: CanvasRenderingContext2D) => {
       ctx.strokeStyle = strokeColor;
       ctx.lineWidth = 2;
-
       const outerDisc = stateRef.current.startDisc;
+
       const gradient = ctx.createRadialGradient(outerDisc.x, outerDisc.y, 0, outerDisc.x, outerDisc.y, outerDisc.w);
-      
-      // The gradient setup now uses the live prop value
-      gradient.addColorStop(0, holeColors.inner); 
-      gradient.addColorStop(1, holeColors.outer);
+      gradient.addColorStop(0, holeInnerColor); // Use inner color prop
+      gradient.addColorStop(1, holeOuterColor);  // Use outer color prop
       ctx.fillStyle = gradient;
 
       ctx.beginPath();
-      ctx.ellipse(outerDisc.x, outerDisc.y, outerDisc.w, outerDisc.h, 0, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.ellipse(
+        outerDisc.x,
+        outerDisc.y,
+        outerDisc.w,
+        outerDisc.h,
+        0,
+        0,
+        Math.PI * 2,
+      );
       ctx.stroke();
       ctx.closePath();
-
       stateRef.current.discs.forEach((disc: any, i: number) => {
         if (i % 5 !== 0) return;
-        if (disc.w < stateRef.current.clip.disc.w - 5) ctx.save();
+        if (disc.w < stateRef.current.clip.disc.w - 5) {
+          ctx.save();
+          ctx.clip(stateRef.current.clip.path);
+        }
         ctx.beginPath();
         ctx.ellipse(disc.x, disc.y, disc.w, disc.h, 0, 0, Math.PI * 2);
         ctx.stroke();
         ctx.closePath();
-        if (disc.w < stateRef.current.clip.disc.w - 5) ctx.restore();
+        if (disc.w < stateRef.current.clip.disc.w - 5) {
+          ctx.restore();
+        }
       });
     },
-    [strokeColor, holeColors], // 💡 drawDiscs depends on holeColors to redraw the gradient
+    [strokeColor, holeInnerColor, holeOuterColor, blobColor],
   );
 
-  const drawLines = React.useCallback(
-    (ctx: CanvasRenderingContext2D) => {
-      if (stateRef.current.linesCanvas) ctx.drawImage(stateRef.current.linesCanvas, 0, 0);
-    },
-    [],
-  );
+  const drawLines = React.useCallback((ctx: CanvasRenderingContext2D) => {
+    if (stateRef.current.linesCanvas) {
+      ctx.drawImage(stateRef.current.linesCanvas, 0, 0);
+    }
+  }, []);
 
-  const drawParticles = React.useCallback(
-    (ctx: CanvasRenderingContext2D) => {
-      ctx.save();
-      ctx.clip(stateRef.current.clip.path);
-      stateRef.current.particles.forEach((particle: any) => {
-        ctx.fillStyle = particle.c;
-        ctx.beginPath();
-        ctx.rect(particle.x, particle.y, particle.r, particle.r);
-        ctx.closePath();
-        ctx.fill();
-      });
-      ctx.restore();
-    },
-    [],
-  );
+  const drawParticles = React.useCallback((ctx: CanvasRenderingContext2D) => {
+    ctx.save();
+    ctx.clip(stateRef.current.clip.path);
+    stateRef.current.particles.forEach((particle: any) => {
+      ctx.fillStyle = particle.c;
+      ctx.beginPath();
+      ctx.rect(particle.x, particle.y, particle.r, particle.r);
+      ctx.closePath();
+      ctx.fill();
+    });
+    ctx.restore();
+  }, []);
 
   const moveDiscs = React.useCallback(() => {
     stateRef.current.discs.forEach((disc: any) => {
@@ -261,7 +285,9 @@ function NewHoleBackground({
       particle.p = 1 - particle.y / stateRef.current.particleArea.h;
       particle.x = particle.sx + particle.dx * particle.p;
       particle.y -= particle.vy;
-      if (particle.y < 0) stateRef.current.particles[idx] = initParticle();
+      if (particle.y < 0) {
+        stateRef.current.particles[idx] = initParticle();
+      }
     });
   }, [initParticle]);
 
@@ -270,7 +296,6 @@ function NewHoleBackground({
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
     ctx.scale(stateRef.current.render.dpi, stateRef.current.render.dpi);
@@ -280,7 +305,6 @@ function NewHoleBackground({
     drawLines(ctx);
     drawParticles(ctx);
     ctx.restore();
-
     animationFrameIdRef.current = requestAnimationFrame(tick);
   }, [moveDiscs, moveParticles, drawDiscs, drawLines, drawParticles]);
 
@@ -289,16 +313,13 @@ function NewHoleBackground({
     setDiscs();
     setLines();
     setParticles();
-  }, [setSize, setDiscs, setLines, setParticles, holeColors]); // 💡 ADDED holeColors
+  }, [setSize, setDiscs, setLines, setParticles]);
 
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
-    // init() runs every time holeColors changes
-    init(); 
+    init();
     tick();
-
     const handleResize = () => {
       setSize();
       setDiscs();
@@ -310,21 +331,33 @@ function NewHoleBackground({
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameIdRef.current);
     };
-    // 💡 The dependency array now includes holeColors, forcing a re-run of init/tick
-  }, [init, tick, setSize, setDiscs, setLines, setParticles, holeColors]); // <-- ADDED holeColors
+  }, [init, tick, setSize, setDiscs, setLines, setParticles, holeInnerColor, holeOuterColor, blobColor]);
 
   return (
     <div
       data-slot="hole-background"
-      className={cn('relative size-full overflow-hidden', className)}
+      className={cn(
+        'relative size-full overflow-hidden',
+        'before:content-[""] before:absolute before:top-1/2 before:left-1/2 before:block before:size-[140%] before:[background:radial-gradient(ellipse_at_50%_55%,var(--hole-inner)_10%,var(--hole-outer)_50%)] before:[transform:translate3d(-50%,-50%,0)]',
+        'after:content-[""] after:absolute after:z-[5] after:top-1/2 after:left-1/2 after:block after:size-full after:[background:radial-gradient(ellipse_at_50%_75%,var(--blob-color)_20%,transparent_75%)] after:[transform:translate3d(-50%,-50%,0)] after:mix-blend-overlay',
+        className,
+      )}
       {...props}
-      style={{ '--hole-inner': holeColors.inner, '--hole-outer': holeColors.outer } as React.CSSProperties}
+      style={{ 
+        '--hole-inner': holeInnerColor, 
+        '--hole-outer': holeOuterColor,
+        '--blob-color': blobColor,
+      } as React.CSSProperties}
     >
       {children}
-      <canvas ref={canvasRef} className="absolute inset-0 block size-full dark:opacity-20 opacity-10" />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 block size-full dark:opacity-20 opacity-10"
+      />
       <motion.div
         className={cn(
           'absolute top-[-71.5%] left-1/2 z-[3] w-[30%] h-[140%] rounded-b-full blur-3xl opacity-75 dark:mix-blend-plus-lighter mix-blend-plus-darker [transform:translate3d(-50%,0,0)] [background-position:0%_100%] [background-size:100%_200%]',
+          'dark:[background:linear-gradient(20deg,#00f8f1,#ffbd1e20_16.5%,#fe848f_33%,#fe848f20_49.5%,#00f8f1_66%,#00f8f160_85.5%,#ffbd1e_100%)_0_100%_/_100%_200%] [background:linear-gradient(20deg,#00f8f1,#ffbd1e40_16.5%,#fe848f_33%,#fe848f40_49.5%,#00f8f1_66%,#00f8f180_85.5%,#ffbd1e_100%)_0_100%_/_100%_200%]',
         )}
         animate={{ backgroundPosition: '0% 300%' }}
         transition={{ duration: 5, ease: 'linear', repeat: Infinity }}

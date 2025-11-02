@@ -16,9 +16,9 @@ export default function NavBar() {
   };
 
   const getNavbarClasses = () => {
-    if (theme === "dark") return "bg-gray-800 border-gray-700 text-white";
-    if (theme === "surprise") return "bg-pink-300 border-pink-400 text-white";
-    return "bg-white border-gray-200 text-gray-900";
+    if (theme === "dark") return "bg-gray-800/50 border-gray-700 text-white";
+    if (theme === "surprise") return "bg-pink-300/50 border-pink-400 text-white";
+    return "bg-white/50 border-gray-200 text-gray-900";
   };
 
   const getButtonClasses = (buttonTheme: string) => {
