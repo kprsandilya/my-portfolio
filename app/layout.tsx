@@ -4,6 +4,8 @@ import NavBar from "./components/navbar"
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 
+import Provider from "./components/providers";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -25,14 +27,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning className="">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <Provider>
           {children}
-          <NavBar/>
-        </ThemeProvider>
+        </Provider>
       </body>
     </html>
   );
