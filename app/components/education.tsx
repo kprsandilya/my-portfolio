@@ -3,6 +3,7 @@ import { useScroll, animated, useSpring } from '@react-spring/web'
 import { useTheme } from "next-themes"
 import { Parallax } from "react-scroll-parallax";
 import styles from './styles.module.scss'
+import { HighlightText } from "@/components/ui/shadcn-io/highlight-text";
 
 import EducationItems from './educationItems';
 
@@ -36,13 +37,19 @@ export default function Education() {
         return 'bg-[#D4F0F3]/50';
     };
 
+    const getTextColors = () => {
+        if (theme === "dark") return 'text-gray-200'; 
+        if (theme === "surprise") return 'text-gray-900';
+        return 'text-gray-900';
+    };
+
     const [textStyles, textApi] = useSpring(() => ({
     y: '100%',
     }))
 
     const { scrollYProgress } = useScroll({
         onChange: ({ value: { scrollYProgress } }) => {
-            if (scrollYProgress > 0.26) {
+            if (scrollYProgress > 0.24 && scrollYProgress < 0.40) {
             textApi.start({ y: '0' })
             } else {
             textApi.start({ y: '100%' })
@@ -121,14 +128,31 @@ export default function Education() {
 
         </animated.div>
       </div>
-        <div className="flex flex-col w-full h-[260vh] gap-4 py-180">
-            <EducationItems className="justify-start pr-100 flex-1" listIndex={1} side={'left'}/> 
+        <div className="flex flex-col w-full h-[260vh] gap-4 py-180 relative overflow-hidden">
+            <div className="absolute top-[139vh] right-[43vh] w-0 h-230 origin-top-left rotate-100 border-l border-l-4 border-dashed border-white/60"></div>
+
+            <div className="absolute top-[154.75vh] left-[44vh] w-0 h-229 origin-top-left -rotate-98 border-l border-l-4 border-dashed border-white/60"></div>
+
+            <div className="absolute top-[173vh] right-[43vh] w-0 h-230 origin-top-left rotate-100 border-l border-l-4 border-dashed border-white/60"></div>
+
+            <div className={`font-serif text-4xl  pb-24 ${getTextColors()} z-20 max-w-7xl mx-auto text-center leading-tight`}>
+                I am currently a Purdue University student pursuing a double major in Computer Science and Data Science, complemented by minors in Mathematics and Statistics, maintaining highest excellence with a   
+                <div className='pl-4'></div>
+                <HighlightText 
+                  text="3.98 GPA"
+                  inView={true}
+                  className="font-semibold"
+                  transition={{ duration: 1.0, ease: "easeOut" }}
+                />
+                .
+            </div>
+            <EducationItems className="justify-start pr-100 flex-1" listIndex={1} side={'left'} grade='Freshman' /> 
             
-            <EducationItems className="justify-end pl-100 flex-1" listIndex={2} side={'right'}/>
+            <EducationItems className="justify-end pl-100 flex-1" listIndex={2} side={'right'} grade='Sophomore' />
             
-            <EducationItems className="justify-start pr-100 flex-1" listIndex={3} side={'left'}/>
+            <EducationItems className="justify-start pr-100 flex-1" listIndex={3} side={'left'} grade='Junior' />
             
-            <EducationItems className="justify-end pl-100 flex-1" listIndex={4} side={'right'}/>
+            <EducationItems className="justify-end pl-100 flex-1" listIndex={4} side={'right'} grade='Senior' />
         </div>
       {new Array(PAGE_COUNT).fill(null).map((_, index) => (
         <div className={styles.full__page} key={index} />

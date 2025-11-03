@@ -17,6 +17,7 @@ interface EducationItemsProps {
   className?: string; // Make it optional, as you don't always use it
   listIndex: 1 | 2 | 3 | 4;
   side: "right" | "left";
+  grade: "Freshman" | "Sophomore" | "Junior" | "Senior";
 }
 
 interface CourseItem {
@@ -26,7 +27,7 @@ interface CourseItem {
   css: string;
 }
 
-const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, side }) => {
+const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, side, grade }) => {
     const [open, set] = useState(false)
 
     const { theme, setTheme } = useTheme();
@@ -100,13 +101,14 @@ const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, s
     };
 
   const springApi = useSpringRef()
-  const { size, ...rest } = useSpring({
+  const { size, opacity: textOpacity, ...rest } = useSpring({
     ref: springApi,
     config: config.stiff,
-    from: { size: '20%', background: getItemColor() },
+    from: { size: '20%', opacity: 1, background: getItemColor() },
     to: {
       size: open ? '100%' : '20%',
       background: open ? getItemColor() : getColor(),
+      opacity: open ? 0: 1
     },
   })
 
@@ -129,27 +131,36 @@ const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, s
 
   return (
     <div className={`${styles.wrapper} flex w-full ${className}`}>
+      
       <animated.div
         style={{ ...rest, width: size }}
         className={styles.container}
         onClick={() => set(open => !open)}>
-        {transition((style, item) => (
+
           <animated.div
-            className={styles.item}
-            style={{ ...style, background: item.css }}
+              style={{ opacity: textOpacity }}
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
-                <div className={styles.itemContent}>
-                {/* Course Name & Title (Left Side) */}
-                <div className={styles.courseDetails}>
-                    <h3 className={styles.courseName}>{item.courseName}</h3>
-                    <p className={styles.courseTitle}>{item.courseTitle}</p>
-                </div>
-                
-                {/* Grade (Right Side) */}
-                <span className={styles.courseGrade}>{item.grade}</span>
-            </div>
-            </animated.div>
-        ))}
+              <span className="text-xl font-medium italic">{grade} Classes</span>
+          </animated.div>
+
+          {transition((style, item) => (
+            <animated.div
+              className={styles.item}
+              style={{ ...style, background: item.css }}
+            >
+                  <div className={styles.itemContent}>
+                  {/* Course Name & Title (Left Side) */}
+                  <div className={styles.courseDetails}>
+                      <h3 className={styles.courseName}>{item.courseName}</h3>
+                      <p className={styles.courseTitle}>{item.courseTitle}</p>
+                  </div>
+                  
+                  {/* Grade (Right Side) */}
+                  <span className={styles.courseGrade}>{item.grade}</span>
+              </div>
+              </animated.div>
+          ))}
       </animated.div>
     </div>
   )

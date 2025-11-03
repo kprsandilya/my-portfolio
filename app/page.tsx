@@ -31,7 +31,7 @@ export default function TestHome() {
       </ParallaxProvider>
 
       <div className="relative z-40 flex flex-col gap-8 py-92">
-        <Info/>
+        <p></p>
       </div>
     </div>
   );
