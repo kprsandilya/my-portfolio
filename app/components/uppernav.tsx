@@ -5,7 +5,7 @@ export default function UpperNavBar() {
     const box = {
         width: "50px",
         height: "50px",
-        backgroundColor: "blue"
+        backgroundColor: "blue",
     }
 
     return (
