@@ -12,7 +12,7 @@ export default function TestHome() {
 
   return (
     <div className="relative w-full min-h-screen">
-      <div className="absolute inset-0 z-0 h-[600px]">
+      <div className="absolute inset-0 z-0 h-[700px]">
         <Header />
       </div>
 
@@ -25,7 +25,7 @@ export default function TestHome() {
       </div>
 
       <ParallaxProvider>
-        <div className="relative z-30 flex flex-col gap-8 py-92">
+        <div className="relative z-30 flex flex-col gap-8 py-58">
           <Education/>
         </div>
       </ParallaxProvider>

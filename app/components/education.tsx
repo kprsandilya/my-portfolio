@@ -12,7 +12,7 @@ const PAGE_COUNT = 2
 
 const INITIAL_WIDTH = 20
 
-const SMOOTHING_FACTOR = 16
+const SMOOTHING_FACTOR = 32
 
 const SCROLLING_FACTOR = 1.5
 
@@ -121,14 +121,14 @@ export default function Education() {
 
         </animated.div>
       </div>
-        <div className="flex flex-col w-full h-[200vh] gap-8 py-150">
-            <EducationItems className="justify-start pr-100 flex-1" /> 
+        <div className="flex flex-col w-full h-[260vh] gap-4 py-180">
+            <EducationItems className="justify-start pr-100 flex-1" listIndex={1} side={'left'}/> 
             
-            <EducationItems className="justify-end pl-100 flex-1" />
+            <EducationItems className="justify-end pl-100 flex-1" listIndex={2} side={'right'}/>
             
-            <EducationItems className="justify-start pr-100 flex-1" />
+            <EducationItems className="justify-start pr-100 flex-1" listIndex={3} side={'left'}/>
             
-            <EducationItems className="justify-end pl-100 flex-1" />
+            <EducationItems className="justify-end pl-100 flex-1" listIndex={4} side={'right'}/>
         </div>
       {new Array(PAGE_COUNT).fill(null).map((_, index) => (
         <div className={styles.full__page} key={index} />
