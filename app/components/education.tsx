@@ -49,7 +49,7 @@ export default function Education() {
 
     const { scrollYProgress } = useScroll({
         onChange: ({ value: { scrollYProgress } }) => {
-            if (scrollYProgress > 0.24 && scrollYProgress < 0.40) {
+            if (scrollYProgress > 0.24 && scrollYProgress < 0.6) {
             textApi.start({ y: '0' })
             } else {
             textApi.start({ y: '100%' })
@@ -59,8 +59,15 @@ export default function Education() {
             immediate: true,
         },
     })
+
+    const [circleStyles] = useSpring(() => ({
+        // Map scroll progress (0.1 to 0.4) to a scale factor (0 to 10)
+        scale: scrollYProgress.to([0.1, 0.4], [0, 15], 'clamp'),
+        // Move the scale and clipPath logic here
+    }))
+
   return (
-    <Parallax className="pb-[20vh] pt-[15vh]" speed={-30}>
+    //<Parallax className="pb-[20vh] pt-[15vh]" speed={-30}>
     <div className={styles.body}>
       <div className={`${styles.animated__layers} ${getBackgroundColors()}`}>
         <animated.div ref={barContainerRef} className={styles.bar__container}>
@@ -97,36 +104,26 @@ export default function Education() {
             />
           ))}
         </animated.div>
-        <animated.div
-            className={styles.dot}
-            style={{
-                clipPath: scrollYProgress.to(val => {
-                    const startPoint = 0.1; 
-                    const endPoint = 0.4; // New point: start disappearing before the end (1.0)
-                    const growthFactor = 2; // Adjusted growth factor to fill the area
-                    
-                    // 1. Calculate growth: Progress from 0.2 to 0.95
-                    const progressRange = endPoint - startPoint; // 0.75
-                    
-                    // 2. Map the scroll value (0 to 1) to the active range (0.2 to 0.95)
-                    const activeProgress = Math.min(1, Math.max(0, (val - startPoint) / progressRange));
-                    
-                    // The circle radius shrinks at the end
-                    const radius = activeProgress * 100;
-                    
-                    return `circle(${radius}%)`;
-                }),
-            }}>
-          <h1 className={`${styles.title} ${getColors()} h-full`}>
-            <span>
-              <animated.span style={textStyles}>My</animated.span>
-            </span>
-            <span>
-              <animated.span style={textStyles}>Educational Journey</animated.span>
-            </span>
-          </h1>
 
+        <animated.div
+          className={`${styles.dot_visual} ${getColors()}`} 
+          style={{
+              transform: circleStyles.scale.to(s => `translate(-50%, -50%) scale(${s})`),
+              opacity: circleStyles.scale.to([0, 0.5, 10], [0, 1, 1]) 
+          }}
+          >
+                
         </animated.div>
+        <div className={styles.content_overlay}>
+            <h1 className={`${styles.title} bg-transparent h-full`}>
+                <span>
+                    <animated.span style={textStyles}>My</animated.span>
+                </span>
+                <span>
+                    <animated.span style={textStyles}>Educational Journey</animated.span>
+                </span>
+            </h1>
+        </div>
       </div>
         <div className="flex flex-col w-full h-[260vh] gap-4 py-180 relative overflow-hidden">
             <div className="absolute top-[139vh] right-[43vh] w-0 h-230 origin-top-left rotate-100 border-l border-l-4 border-dashed border-white/60"></div>
@@ -158,6 +155,6 @@ export default function Education() {
         <div className={styles.full__page} key={index} />
       ))}
     </div>
-    </Parallax>
+    //</Parallax>
   )
 }

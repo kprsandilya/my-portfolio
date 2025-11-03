@@ -167,3 +167,32 @@
   /* Optional: Add a subtle shadow or text-stroke to make it pop even more */
   text-shadow: 1px 1px 3px rgba(204, 153, 102, 0.4); 
 }
+
+.dot_visual {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+    // **🛑 CRITICAL: Initial size, shape, and centering/starting position**
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+
+    transform: translate(-50%,-50%);
+    z-index: 1;
+    will-change: transform, opacity; 
+}
+
+.content_overlay {
+    // 1. Positioning to cover the entire animated area
+    position: absolute;
+    inset: 0; /* Shorthand for top: 0; right: 0; bottom: 0; left: 0; */
+    
+    // 2. Ensure content sits above the growing circle
+    z-index: 3; 
+
+    // 3. Center the content inside the overlay (if needed)
+    display: flex;
+    justify-content: start;
+    align-items: start; 
+}
