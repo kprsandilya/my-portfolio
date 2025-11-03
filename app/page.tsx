@@ -6,7 +6,8 @@ import UpperNavBar from "./components/uppernav";
 import Info from "./components/intro"
 import Education from "./components/education"
 import { ParallaxProvider } from 'react-scroll-parallax';
-import Projects from "./components/projects"
+import Projects from "./components/pictures"
+import Experience from "./components/experience"
 
 export default function TestHome() {
   const { theme } = useTheme();
@@ -25,13 +26,17 @@ export default function TestHome() {
         <Info/>
       </div>
 
-      <div className="relative z-30 flex flex-col gap-8 py-58">
+      <div className="relative z-30 flex flex-col gap-8 pt-58 pb-58">
         <Education/>
       </div>
 
-      <div className="relative z-40 flex flex-col -mt-[92px] gap-8">
-            <Projects/>
-        </div>
+      <div className="relative z-40 flex -mt-[232px] gap-8">
+          <Projects/>
+      </div>
+
+      <div className="relative z-50 flex gap-8">
+        <Experience/>
+      </div>
     </div>
   );
 }

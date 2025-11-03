@@ -13,9 +13,9 @@ const PAGE_COUNT = 2
 
 const INITIAL_WIDTH = 20
 
-const SMOOTHING_FACTOR = 32
+const SMOOTHING_FACTOR = 128
 
-const SCROLLING_FACTOR = 1.5
+const SCROLLING_FACTOR = 0.9
 
 export default function Education() {
     const containerRef = React.useRef<HTMLDivElement>(null!)
@@ -49,7 +49,7 @@ export default function Education() {
 
     const { scrollYProgress } = useScroll({
         onChange: ({ value: { scrollYProgress } }) => {
-            if (scrollYProgress > 0.24 && scrollYProgress < 0.6) {
+            if (scrollYProgress > 0.22 && scrollYProgress < 0.6) {
             textApi.start({ y: '0' })
             } else {
             textApi.start({ y: '100%' })
@@ -60,23 +60,33 @@ export default function Education() {
         },
     })
 
+    const SCROLL_LIMIT = 0.75; // 75%
+
+    // Map the 0 to 0.75 scroll range to 0 to 1.0, and clamp it.
+    const limitedScrollProgress = scrollYProgress.to([0, SCROLL_LIMIT], [0, 1], 'clamp');
+
     const [circleStyles] = useSpring(() => ({
         // Map scroll progress (0.1 to 0.4) to a scale factor (0 to 10)
         scale: scrollYProgress.to([0.1, 0.4], [0, 15], 'clamp'),
         // Move the scale and clipPath logic here
     }))
 
+    const [barFadeStyles] = useSpring(() => ({
+      // Start fade at 70% scroll, end it at 80% scroll
+      opacity: limitedScrollProgress.to([0.5, 0.8], [1, 0], 'clamp'),
+  }));
+
   return (
     //<Parallax className="pb-[20vh] pt-[15vh]" speed={-30}>
     <div className={styles.body}>
       <div className={`${styles.animated__layers} ${getBackgroundColors()}`}>
-        <animated.div ref={barContainerRef} className={styles.bar__container}>
+        <animated.div ref={barContainerRef} className={styles.bar__container} style={barFadeStyles}>
           {Array.from({ length: X_LINES }).map((_, i) => (
             <animated.div
               key={i}
               className={styles.bar}
               style={{
-                width: scrollYProgress.to(scrollP => {
+                width: limitedScrollProgress.to(scrollP => {
                   const percentilePosition = (i + 1) / X_LINES
 
                   const AdjustedScrollP = scrollP * SCROLLING_FACTOR
@@ -87,13 +97,13 @@ export default function Education() {
             />
           ))}
         </animated.div>
-        <animated.div className={styles.bar__container__inverted}>
+        <animated.div className={styles.bar__container__inverted } style={barFadeStyles}>
           {Array.from({ length: X_LINES }).map((_, i) => (
             <animated.div
               key={i}
               className={styles.bar}
               style={{
-                width: scrollYProgress.to(scrollP => {
+                width: limitedScrollProgress.to(scrollP => {
                   const percentilePosition = 1 - (i + 1) / X_LINES
 
                   const AdjustedScrollP = scrollP * SCROLLING_FACTOR

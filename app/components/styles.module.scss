@@ -1,7 +1,7 @@
 .body {
   // CRITICAL FIX: Set height for scrolling (e.g., 5 pages * 100vh = 500vh)
   // This value must match the `pages` prop in your <Parallax> or `PAGE_COUNT` in your component.
-  height: 200vh;
+  height: 220vh;
   width: 100%;
   overflow: hidden;
   position: relative; // Needed to correctly position children
