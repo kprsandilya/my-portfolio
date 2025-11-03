@@ -15,7 +15,7 @@ const INITIAL_WIDTH = 20
 
 const SMOOTHING_FACTOR = 128
 
-const SCROLLING_FACTOR = 0.9
+const SCROLLING_FACTOR = 1.5
 
 export default function Education() {
     const containerRef = React.useRef<HTMLDivElement>(null!)
@@ -49,7 +49,7 @@ export default function Education() {
 
     const { scrollYProgress } = useScroll({
         onChange: ({ value: { scrollYProgress } }) => {
-            if (scrollYProgress > 0.22 && scrollYProgress < 0.6) {
+            if (scrollYProgress > 0.12 && scrollYProgress < 0.6) {
             textApi.start({ y: '0' })
             } else {
             textApi.start({ y: '100%' })
@@ -67,7 +67,7 @@ export default function Education() {
 
     const [circleStyles] = useSpring(() => ({
         // Map scroll progress (0.1 to 0.4) to a scale factor (0 to 10)
-        scale: scrollYProgress.to([0.1, 0.4], [0, 15], 'clamp'),
+        scale: scrollYProgress.to([0.05, 0.3], [0, 15], 'clamp'),
         // Move the scale and clipPath logic here
     }))
 

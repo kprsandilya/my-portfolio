@@ -1,6 +1,8 @@
 import React from 'react';
 import CurvedLoop from "@/components/ui/shadcn-io/curved-loop";
 import { useTheme } from "next-themes"
+import { Image, Divider } from "@heroui/react";
+import { Parallax, ParallaxProvider  } from "react-scroll-parallax";
 
 // Define a simple StraightLoop for contrast
 const StraightLoop = (props: any) => (
@@ -23,62 +25,143 @@ export default function Experience() {
         return `bg-gradient-to-b from-[#00B9B3] to-[#00B9B3]`;
     };
 
-  return (
-    // 1. Main Relative Container (defines the scroll/viewport area)
-    <div className={`relative min-h-[150vh] w-full ${getBackground()} overflow-hidden`}>
-      
-      {/* --- BACKGROUND LAYERS (Z-INDEX 1 - 3) --- */}
+      const comapny_info = [
+    {
+      name: "Cummins Inc.",
+      logo: "profile.jpeg",
+      time: "June 2025 — August 2025",
+      position: "Software Engineering Intern",
+      description:
+        "Placeholder.",
+    },
+    {
+      name: "Indiana State Department of Health",
+      logo: "profile.jpeg",
+      time: "May 2024 — August 2024",
+      position: "Viral Hepatitis Intern",
+      description:
+        "Placeholder.",
+    },
+    {
+      name: "Purdue University",
+      logo: "profile.jpeg",
+      time: "December 2023 — May 2024",
+      position: "Undergraduate Data Science Researcher",
+      description:
+        "Placeholder.",
+    },
+    {
+      name: "Bureau of Cyberspace and Digital Policy, U.S. Department of State",
+      logo: "profile.jpeg",
+      time: "June 2022 — July 2022",
+      position: "Policy Intern",
+      description:
+        "Placeholder.",
+    },
+    {
+      name: "Texavi",
+      logo: "profile.jpeg",
+      time: "June 2021 — July 2021",
+      position: "Software Development Intern",
+      description:
+        "Placeholder.",
+    },
+    {
+      name: "Firestone",
+      logo: "profile.jpeg",
+      time: "June 2021 — July 2021",
+      position: "Engineering Intern",
+      description:
+        "Placeholder.",
+    },
+  ];
 
-      {/* Layer 1: Deep Background (Lowest Z-Index) */}
-      <div className={`${commonClasses} z-10 opacity-30`}>
-        <CurvedLoop
-          marqueeText="PRACTICE MAKES PERFECT CODE"
-          speed={1}
-          direction="right"
-          curveAmount={500}
-          customPathD="M-100,10 Q600,600 1540,10" // Deep U shape
-          className="text-9xl text-green-500"
-          interactive={false}
-        />
-      </div>
+    return (
+        <div className={`relative min-h-[300vh] w-full ${getBackground()} overflow-hidden`}>
 
-      {/* Layer 2: Mid Background (Z-Index 2) */}
-      <div className={`${commonClasses} z-20 opacity-40`}>
-        <CurvedLoop
-          marqueeText="DEVELOPER PORTFOLIO"
-          speed={3}
-          direction="left"
-          curveAmount={-150} // Inverted curve
-          customPathD="M-100,110 Q500,-100 1540,110" 
-          className="text-8xl text-indigo-400"
-          interactive={true}
-        />
-      </div>
+            <div className={`${commonClasses} z-10 opacity-30`}>
+            <CurvedLoop
+                marqueeText="WORK EXPERIENCE"
+                speed={4}
+                direction="right"
+                curveAmount={150}
+                customPathD="M-100,50 Q720,-200 1540,50"
+                className="text-8xl text-green-500"
+                interactive={false}
+            />
+            </div>
 
-      {/* Layer 3: Foreground Marquee (Z-Index 3) */}
-      <div className={`${commonClasses} z-30 opacity-70 mt-10`}>
-        <StraightLoop
-          marqueeText="FRONTEND | BACKEND | FULLSTACK | DEVOPS"
-          speed={5}
-          direction="right"
-          className="text-7xl text-yellow-300"
-          interactive={false}
-        />
-      </div>
+            <div className={`${commonClasses} z-20 opacity-50`}>
+            <CurvedLoop
+                marqueeText="DEVELOPER PORTFOLIO"
+                speed={4}
+                direction="left"
+                curveAmount={-150}
+                customPathD="M-100,500 C300,1300 1140,-300 1540,500"
+                className="text-8xl text-indigo-400"
+                interactive={false}
+            />
+            </div>
 
-      {/* --- FOREGROUND CONTENT (Z-INDEX 10) --- */}
+            <div className={`${commonClasses} z-20 opacity-70`}>
+            <CurvedLoop
+                marqueeText="DEVELOPER PORTFOLIO"
+                speed={4}
+                direction="left"
+                curveAmount={-150}
+                customPathD="M-100,1200 C1140,400 300,2000 1540,1200"
+                className="text-8xl text-indigo-400"
+                interactive={false}
+            />
+            </div>
 
-      {/* The main content div sits on top of all marquees */}
-      <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
-        <div className="max-w-4xl p-12 text-center bg-white/10 backdrop-blur-sm rounded-xl pointer-events-auto">
-          <h1 className="text-7xl font-extrabold text-white mb-4">
-            Hello, I'm Gemini!
-          </h1>
-          <p className="text-2xl text-gray-300">
-            This content is on top (Z-40), allowing the cool curved text to flow seamlessly behind it.
-          </p>
+            <div className={`${commonClasses} z-20 opacity-90`}>
+            <CurvedLoop
+                marqueeText="DEVELOPER PORTFOLIO"
+                speed={4}
+                direction="left"
+                curveAmount={-150}
+                customPathD="M-100,1700 Q720,1950 1540,1700"
+                className="text-8xl text-indigo-400"
+                interactive={false}
+            />
+            </div>
+
+        <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
+            <div className="mt-[15vh] overflow-x-visisble mx-auto w-11/12 overflow-y-visible sm:w-2/3">
+            <ParallaxProvider>
+                {comapny_info.map((company) => (
+                    <Parallax key={company.name} scale={[1, 1.3]}>
+                    <div
+                        className="mb-16 rounded-xl border border-foreground bg-slate-200 p-8 shadow-xl dark:bg-slate-700"
+                        key={company.name}
+                    >
+                        <div className="flex h-36 w-full items-center px-4">
+                        <Image
+                            isZoomed
+                            src={`/company_logos/${company.logo}`}
+                            alt={`Logo for ${company.name}`}
+                            width={80}
+                        />
+                        <Divider className="mx-4 h-full" orientation="vertical" />
+                        <div className="pb-b font-light">
+                            <h3 className="font-semibold sm:text-xl">{company.name}</h3>
+                            <h4 className="text-sm font-light sm:text-lg">
+                            {company.position}
+                            </h4>
+                            <h4 className="text-sm font-light sm:text-lg">
+                            {company.time}
+                            </h4>
+                        </div>
+                        </div>
+                        <Divider className="mb-2" />
+                        <p className="text-sm">{company.description}</p>
+                    </div>
+                    </Parallax>
+                ))}
+            </ParallaxProvider>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+        </div>
+    );
 }

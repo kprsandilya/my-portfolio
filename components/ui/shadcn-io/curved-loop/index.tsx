@@ -40,7 +40,7 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
   const animationRef = useRef<number>(0);
 
   // Calculate how many repetitions we need with some buffer
-  const repetitions = spacing > 0 ? Math.ceil(2000 / spacing) + 3 : 1;
+  const repetitions = spacing > 0 ? Math.ceil(2000 / spacing) + 5 : 1;
   const totalText = Array(repetitions).fill(text).join('');
   const ready = spacing > 0;
 
@@ -76,6 +76,8 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
         const delta = dirRef.current === 'right' ? speed : -speed;
         const currentOffset = parseFloat(textPathRef.current.getAttribute('startOffset') || '0');
         let newOffset = currentOffset + delta;
+
+        const BUFFER = 1;
         
         // Wrap the offset to create seamless loop
         const wrapPoint = spacing;
@@ -84,11 +86,11 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
             newOffset += wrapPoint;
           }
         } else {
-          if (newOffset >= wrapPoint) {
+          if (newOffset >= -wrapPoint + BUFFER) {
             newOffset -= wrapPoint;
           }
         }
-        
+
         textPathRef.current.setAttribute('startOffset', newOffset + 'px');
         setOffset(newOffset);
       }
