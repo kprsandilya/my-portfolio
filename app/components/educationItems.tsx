@@ -11,7 +11,11 @@ import {
 import data from './educationItemsData'
 import styles from './styles.module.scss'
 
-export default function EducationItems() {
+interface EducationItemsProps {
+  className?: string; // Make it optional, as you don't always use it
+}
+
+const EducationItems: React.FC<EducationItemsProps> = ({ className }) => {
   const [open, set] = useState(false)
 
   const springApi = useSpringRef()
@@ -21,7 +25,7 @@ export default function EducationItems() {
     from: { size: '20%', background: 'hotpink' },
     to: {
       size: open ? '100%' : '20%',
-      background: open ? 'white' : 'hotpink',
+      background: open ? 'black' : 'hotpink',
     },
   })
 
@@ -41,9 +45,9 @@ export default function EducationItems() {
   ])
 
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} flex w-full ${className}`}>
       <animated.div
-        style={{ ...rest, width: size, height: size }}
+        style={{ ...rest, width: size }}
         className={styles.container}
         onClick={() => set(open => !open)}>
         {transition((style, item) => (
@@ -56,3 +60,5 @@ export default function EducationItems() {
     </div>
   )
 }
+
+export default EducationItems

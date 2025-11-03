@@ -33,7 +33,7 @@ export default function Education() {
     const getBackgroundColors = () => {
         if (theme === "dark") return 'bg-gray-900/50'; 
         if (theme === "surprise") return 'bg-pink-300/50';
-        return 'bg-[#D4F0F3]/30';
+        return 'bg-[#D4F0F3]/50';
     };
 
     const [textStyles, textApi] = useSpring(() => ({
@@ -121,7 +121,15 @@ export default function Education() {
 
         </animated.div>
       </div>
-      <EducationItems/>
+        <div className="flex flex-col w-full h-[200vh] gap-8 py-150">
+            <EducationItems className="justify-start pr-100 flex-1" /> 
+            
+            <EducationItems className="justify-end pl-100 flex-1" />
+            
+            <EducationItems className="justify-start pr-100 flex-1" />
+            
+            <EducationItems className="justify-end pl-100 flex-1" />
+        </div>
       {new Array(PAGE_COUNT).fill(null).map((_, index) => (
         <div className={styles.full__page} key={index} />
       ))}
