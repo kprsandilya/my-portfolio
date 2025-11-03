@@ -4,6 +4,8 @@ import { useTheme } from "next-themes"
 import { Parallax } from "react-scroll-parallax";
 import styles from './styles.module.scss'
 
+import EducationItems from './educationItems';
+
 const X_LINES = 100
 
 const PAGE_COUNT = 2
@@ -31,7 +33,7 @@ export default function Education() {
     const getBackgroundColors = () => {
         if (theme === "dark") return 'bg-gray-900/50'; 
         if (theme === "surprise") return 'bg-pink-300/50';
-        return 'bg-gray-200/50';
+        return 'bg-[#D4F0F3]/30';
     };
 
     const [textStyles, textApi] = useSpring(() => ({
@@ -108,21 +110,18 @@ export default function Education() {
                     return `circle(${radius}%)`;
                 }),
             }}>
-          <h1 className={`${styles.title} ${getColors()}`}>
+          <h1 className={`${styles.title} ${getColors()} h-full`}>
             <span>
               <animated.span style={textStyles}>My</animated.span>
             </span>
             <span>
               <animated.span style={textStyles}>Educational Journey</animated.span>
             </span>
-            <div>
-                <p>This content slides in right after the main title because it shares the same `textStyles` controlled by the 0.5 scroll trigger.</p>
-                {/* You can place any other components here */}
-            </div>
           </h1>
 
         </animated.div>
       </div>
+      <EducationItems/>
       {new Array(PAGE_COUNT).fill(null).map((_, index) => (
         <div className={styles.full__page} key={index} />
       ))}
