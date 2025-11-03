@@ -22,13 +22,19 @@ export default function Info() {
         return "bg-white/50";
     };
 
+    const getBorderBackground = () => {
+        if (theme === "dark") return "border-black/50";
+        if (theme === "surprise") return "border-pink-300/50";
+        return "border-white/50";
+    };
+
     return (
         <div className="h-[400px] flex flex-col items-center justify-center h-full">
           <div className="flex flex-col items-center justify-center gap-4">
                 <img
-                src="/profile.jpg"
+                src="/profile.jpeg"
                 alt="Profile"
-                className="w-64 h-64 rounded-full border-4 border-white"
+                className={`w-64 h-64 rounded-full border-4 ${getBorderBackground()} object-cover`}
                 />
                 <div className="mx-auto mb-4 flex justify-center gap-8">
                     <Button
