@@ -5,10 +5,10 @@ import Header from './components/header';
 import UpperNavBar from "./components/uppernav";
 import Info from "./components/intro"
 import Education from "./components/education"
-import { ParallaxProvider } from 'react-scroll-parallax';
 import Pictures from "./components/pictures"
 import Experience from "./components/experience"
 import Projects from "./components/projects"
+import Awards from "./components/awards"
 
 export default function TestHome() {
   const { theme } = useTheme();
@@ -41,6 +41,10 @@ export default function TestHome() {
 
       <div className="relative z-50 flex -mt-[200px] gap-8">
         <Projects/>
+      </div>
+
+      <div className="relative z-50 flex gap-8">
+        <Awards/>
       </div>
     </div>
   );

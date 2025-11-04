@@ -1,10 +1,8 @@
 import { PinContainer } from '@/components/ui/shadcn-io/3d-pin';
 import { useTheme } from 'next-themes'
-import GlitchText from "@/components/ui/shadcn-io/glitch-text";
 import { LineShadowText } from '@/components/ui/shadcn-io/line-shadow-text';
-import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 
-const PIN_DATA = [
+const RESEARCH_DATA = [
   {
     id: 1,
     title: "/react.dev",
@@ -39,6 +37,42 @@ const PIN_DATA = [
   },
 ];
 
+// New list for Project items
+const PROJECT_DATA = [
+  {
+    id: 5,
+    title: "/project-alpha.com",
+    href: "#",
+    heading: "Project Alpha: AI Chatbot",
+    description: "A generative AI assistant built with Vercel AI SDK and custom models.",
+    bgClass: "from-red-500 via-pink-500 to-orange-500",
+  },
+  {
+    id: 6,
+    title: "/portfolio-v3.io",
+    href: "#",
+    heading: "Portfolio Website V3",
+    description: "A personal site featuring 3D interactions and dynamic themes.",
+    bgClass: "from-lime-500 via-yellow-500 to-amber-500",
+  },
+  {
+    id: 7,
+    title: "/e-commerce-app.co",
+    href: "#",
+    heading: "E-Commerce Platform",
+    description: "Full-stack application using Stripe for payments and a headless CMS.",
+    bgClass: "from-indigo-500 via-blue-500 to-cyan-500",
+  },
+  {
+    id: 8,
+    title: "/data-dashboard.app",
+    href: "#",
+    heading: "Real-time Analytics Dashboard",
+    description: "Monitoring system with live data fetching and customizable charts.",
+    bgClass: "from-purple-500 via-fuchsia-500 to-rose-500",
+  },
+];
+
 const CLIP_CLASS = "clip-top-curve";
 
 export default function ThreeDPinGrid() {
@@ -66,17 +100,6 @@ export default function ThreeDPinGrid() {
         if (theme === "surprise") return 'rgba(70, 87, 111, 1)';
         return 'rgb(0,0,0)';
     };
-    
-const textGradient = () => {
-    // 1. Dark Theme: Maximum luminosity using white and bright cool tones.
-    if (theme === "dark") return 'linear-gradient(90deg, #48166cff 0%, #c31432 50%, #48166cff 100%)';
-
-    // 2. Surprise Theme: Anchored by white and cool blue against the warm background.
-    if (theme === "surprise") return 'linear-gradient(90deg, #d5ec3cff 0%, #e866ccff 50%, #d5ec3cff 100%)';
-
-    // 3. Default Theme: Uses Teal and Violet for strong color contrast against Peach/Cyan.
-    return 'linear-gradient(90deg, #A5B4FC 0%, #60A5FA 50%, #A5B4FC 100%)';
-};
 
   return (
     <div className='w-full relative'>
@@ -92,7 +115,7 @@ const textGradient = () => {
             />
             </clipPath>
         </svg>
-        <div className={`w-full ${getColors()} ${CLIP_CLASS}`}>
+        <div className={`w-full ${getColors()} ${CLIP_CLASS} pb-96`}>
             <div className='w-full relative text-center pt-32'>
                 <h1 className="text-balance text-8xl font-semibold leading-none tracking-tighter">
                     <LineShadowText 
@@ -102,14 +125,55 @@ const textGradient = () => {
                     >
                     Research
                     </LineShadowText>
-                    {' & '}
-                    <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter" 
-                        gradient={textGradient()} text="Projects"/>
+                    {' '}
+                    <LineShadowText 
+                    className="italic" 
+                    shadowColor={textShadow()}
+                    textColor={textColor()}
+                    >
+                    &
+                    </LineShadowText>
+                    {' '}
+                    <LineShadowText 
+                    className="italic" 
+                    shadowColor={textShadow()}
+                    textColor={textColor()}
+                    >
+                    Projects
+                    </LineShadowText>
+
                 </h1>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4 pt-4 pb-4 items-stretch justify-items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 px-4 pt-24 items-stretch justify-items-center">
                 
-                {PIN_DATA.map((pin) => (
+                {RESEARCH_DATA.map((pin) => (
+                // Each PinContainer needs to be wrapped in a div for consistent grid layout
+                <div key={pin.id} className="flex h-[20rem] w-full items-center justify-center">
+                    <PinContainer
+                    title={pin.title}
+                    href={pin.href}
+                    >
+                    <div className="flex basis-full flex-col p-4 tracking-tight text-slate-100/50 sm:basis-1/2 w-[20rem] h-[20rem]">
+                        <h3 className="max-w-xs !pb-2 !m-0 font-bold text-base text-slate-100">
+                        {pin.heading}
+                        </h3>
+                        <div className="text-base !m-0 !p-0 font-normal">
+                        <span className="text-slate-500">
+                            {pin.description}
+                        </span>
+                        </div>
+                        {/* Dynamic background color class */}
+                        <div 
+                        className={`flex flex-1 w-full rounded-lg mt-4 bg-gradient-to-br ${pin.bgClass}`} 
+                        />
+                    </div>
+                    </PinContainer>
+                </div>
+                ))}  
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 items-stretch justify-items-center">
+                
+                {PROJECT_DATA.map((pin) => (
                 // Each PinContainer needs to be wrapped in a div for consistent grid layout
                 <div key={pin.id} className="flex h-[40rem] w-full items-center justify-center">
                     <PinContainer

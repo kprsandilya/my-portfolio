@@ -110,6 +110,7 @@
     clip-path: inset(30% 0 40% 0);
     }
   }
+  --animate-spin: spin 2s linear infinite
 }
 
 :root {
@@ -191,10 +192,25 @@
 }
 
 .clip-top-curve {
-  /* This links the div to the clipPath defined in the SVG */
   clip-path: url(#top-curve-clip);
-  -webkit-clip-path: url(#top-curve-clip); /* For Safari/old Chrome */
-  
-  /* Add padding-top to ensure the curve is visible above content */
-  padding-top: 50px; /* Adjust this value to match the depth of your curve */
+  -webkit-clip-path: url(#top-curve-clip);
+
+  padding-top: 50px;
+}
+
+.eccentric-curve-clip {
+  clip-path: url(#eccentric-curve-clip);
+  -webkit-clip-path: url(#eccentric-curve-clip);
+
+  padding-top: 50px;
+}
+
+.aurora-text-clip {
+    /* Required for the text to adopt the background */
+    color: transparent; 
+    /* Clip the background to the text's shape */
+    -webkit-background-clip: text; 
+    background-clip: text;
+    /* Important: Remove any pre-existing background to maintain transparency */
+    background-color: transparent !important; 
 }

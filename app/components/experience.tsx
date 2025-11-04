@@ -79,7 +79,7 @@ export default function Experience() {
     return (
         <div className={`relative min-h-[320vh] w-full ${getBackground()} overflow-hidden`}>
 
-            <div className={`${commonClasses} z-10 opacity-30`}>
+            <div className={`${commonClasses} z-10 opacity-90`}>
             <CurvedLoop
                 marqueeText="WORK EXPERIENCE"
                 speed={4}
@@ -91,7 +91,7 @@ export default function Experience() {
             />
             </div>
 
-            <div className={`${commonClasses} z-20 opacity-50`}>
+            <div className={`${commonClasses} z-20 opacity-70`}>
             <CurvedLoop
                 marqueeText="DEVELOPER PORTFOLIO"
                 speed={4}
@@ -103,7 +103,7 @@ export default function Experience() {
             />
             </div>
 
-            <div className={`${commonClasses} z-20 opacity-70`}>
+            <div className={`${commonClasses} z-20 opacity-50`}>
             <CurvedLoop
                 marqueeText="DEVELOPER PORTFOLIO"
                 speed={4}
@@ -115,7 +115,7 @@ export default function Experience() {
             />
             </div>
 
-            <div className={`${commonClasses} z-20 opacity-90`}>
+            <div className={`${commonClasses} z-20 opacity-30`}>
             <CurvedLoop
                 marqueeText="DEVELOPER PORTFOLIO"
                 speed={4}
