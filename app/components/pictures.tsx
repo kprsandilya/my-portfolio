@@ -15,7 +15,7 @@ export default function ThreeDMarqueeDemo() {
     };
 
     const getFadingOverlay = () => {
-        if (theme === "dark") return 'bg-gradient-to-b from-transparent via-transparent to-[#023020]';
+        if (theme === "dark") return 'bg-gradient-to-b from-transparent via-transparent to-[#200210]';
 
         if (theme === "surprise") return 'bg-gradient-to-b from-transparent via-transparent to-[#FFDBBB]';
         

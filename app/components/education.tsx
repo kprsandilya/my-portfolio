@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useScroll, animated, useSpring } from '@react-spring/web'
 import { useTheme } from "next-themes"
-import { Parallax } from "react-scroll-parallax";
 import styles from './styles.module.scss'
 import { HighlightText } from "@/components/ui/shadcn-io/highlight-text";
 
