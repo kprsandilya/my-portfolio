@@ -29,8 +29,8 @@ export default function ThreeDMarqueeDemo() {
   return (
     <div className={`relative h-[150vh] w-full ${getColors()}`}>
       
-      <div className="h-full h-[125vh]">
-        <div className="absolute inset-0 z-1 h-full">
+      <div className="h-full h-[125vh] w-full">
+        <div className="absolute inset-0 z-1 h-full w-full">
             <ThreeDMarquee images={images} />
         </div>
 

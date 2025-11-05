@@ -160,6 +160,7 @@ export default function Education() {
             
             <EducationItems className="justify-end pl-100 flex-1" listIndex={4} side={'right'} grade='Senior' />
         </div>
+        <div className='h-[200px]'/>
       {new Array(PAGE_COUNT).fill(null).map((_, index) => (
         <div className={styles.full__page} key={index} />
       ))}

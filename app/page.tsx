@@ -42,35 +42,45 @@ export default function TestHome() {
         <Info/>
       </div>
 
-      <div className="relative z-30 flex flex-col gap-8 pt-58 pb-58">
+      <div className="relative z-30 flex flex-col gap-8 pt-58">
         <Education/>
       </div>
 
-      <div className="relative z-40 flex -mt-[232px] gap-8">
+      <div className="relative z-40 w-full h-[150vh]"> 
+        <div className="absolute inset-x-0 top-[-232px] flex w-full">
           <Pictures/>
+        </div>
       </div>
 
-      <div className="relative z-50 flex gap-8">
-        <Experience/>
+      <div className="relative z-50 flex gap-8 h-[290vh]">
+        <div className="absolute inset-x-0 top-[-232px] flex w-full">
+          <Experience/>
+        </div>
       </div>
 
-      <div className="relative z-50 flex -mt-[200px] gap-8">
-        <Projects/>
+      <div className="relative z-50 flex gap-8 h-[190vh]">
+        <div className="absolute inset-x-0 top-[-232px] flex w-full">
+          <Projects/>
+        </div>
       </div>
 
-      <div className={`relative z-50 flex gap-8 ${getBackgroundColor()}`}>
-        <Awards/>
+      <div className={`relative z-50 flex gap-8 ${getBackgroundColor()} h-[70vh]`}>
+        <div className="absolute inset-x-0 top-[-232px] flex w-full">
+          <Awards/>
+        </div>
       </div>
 
-      <div className={`relative z-50 h-[400px] gap-8 bg-white flex flex-col items-center justify-center`}>
-        <div className={`w-full relative text-center -mt-[1000px]`}>
+      <div className={`relative z-50 h-[400px] gap-8 flex flex-col items-center justify-center ${getBackgroundColor()}`}>
+        <div className={`w-full relative text-center top-[-260px]`}>
             <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter" 
                 gradient={textGradient()} text="Skills and Frameworks"/>
         </div>
       </div>
 
-      <div className="relative z-50 flex gap-8 -mt-[600px] ">
-        <Skills/>
+      <div className="relative z-50 flex gap-8 h-[40vh]">
+        <div className="absolute inset-x-0 flex w-full top-[-350px]">
+          <Skills/>
+        </div>
       </div>
 
     </div>
