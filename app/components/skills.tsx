@@ -3,8 +3,49 @@ import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 import { SkillLevels } from './skillLevels';
 import SkillLevelDisplay from "./skillLevelsBadges"
 import { ParallaxProvider } from 'react-scroll-parallax';
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 const ECCENTRIC_CLIP_CLASS = "underneath-curve-clip";
+
+const CARD_DATA = [
+  {
+    id: 1,
+    title: "Project Initiation",
+    description: "Define scope and gather initial requirements."
+  },
+  {
+    id: 2,
+    title: "Design Phase",
+    description: "Create mockups and component blueprints."
+  },
+  {
+    id: 3,
+    title: "Development Core",
+    description: "Build out the main functionality and UI structure."
+  },
+  {
+    id: 4,
+    title: "Testing & QA",
+    description: "Verify all features and fix identified bugs."
+  },
+  {
+    id: 5,
+    title: "Deployment Prep",
+    description: "Optimize assets and configure production environment."
+  },
+  {
+    id: 6,
+    title: "Launch Day",
+    description: "Monitor initial usage and system stability."
+  },
+];
 
 export default function Awards() {
     const { theme, setTheme } = useTheme();
@@ -23,7 +64,7 @@ export default function Awards() {
 
     return (
             <ParallaxProvider>
-            <div className="w-full relative -mt-[200px]">
+            <div className="w-full relative">
                 {/* <svg
                     width="0"
                     height="0"
@@ -41,29 +82,70 @@ export default function Awards() {
                 </clipPath>
 
                 </svg> */}
-                <div className={`-mt-[45vh] w-full ${getBackgroundColor()} ${ECCENTRIC_CLIP_CLASS} shadow-2xl `}>
+                <div className={`w-full ${getBackgroundColor()} ${ECCENTRIC_CLIP_CLASS} shadow-2xl`}>
                     <div className={`w-full will-change-transform `}>
                         {/* <BackgroundBeams className="absolute inset-0" /> */}
-                        <div className='w-full relative text-center pt-36'>
-                            <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter" 
-                                gradient={textGradient()} text="Skills and Frameworks"/>
-                        </div>
-                        <div className="relative z-10 pt-12 pr-24 pb-24 w-full">
+                        <div className="relative z-10 pr-24 pb-24 w-full">
                             <div className="grid grid-cols-5 divide-x-10 divide-double divide-yellow-500 h-screen gap-4">
                                 <div className="col-span-3 grid grid-rows-3 gap-4 justify-items-end pr-4">
-                                    <div className="w-21/48 h-full flex justify-end border-fade-right-to-left">
-                                        <div className="bg-gray-600 w-21/21 h-[98%] text-white p-4 rounded-lg flex items-center justify-center text-2xl font-bold text-center">
-                                            Left Row 1
+                                    <div className="w-28/48 h-full flex justify-end border-fade-right-to-left">
+                                        <div className="bg-gray-600 w-full h-[98%] text-white rounded-lg flex items-center justify-center text-2xl font-bold text-center">
+                                            <Carousel className="w-full h-full">
+                                                <CarouselContent className="h-full w-full">
+                                                    {Array.from({ length: 5 }).map((_, index) => (
+                                                        <CarouselItem key={index} className="lg:basis-1/3 h-full">
+                                                            <div className="p-1 h-full">
+                                                            <Card className="h-full">
+                                                                <CardContent className="flex items-center justify-center p-6 h-full text-center">
+                                                                <span className="text-3xl font-semibold">{index + 1}</span>
+                                                                </CardContent>
+                                                            </Card>
+                                                            </div>
+                                                        </CarouselItem>
+                                                    ))}
+                                                </CarouselContent>
+                                                <CarouselPrevious /> 
+                                            </Carousel>
                                         </div>
                                     </div>
-                                    <div className="w-7/8 h-full flex justify-end border-fade-right-to-left">
-                                        <div className="bg-gray-600 w-16/21 h-[98%] text-white p-4 rounded-lg flex items-center justify-center text-2xl font-bold text-center">
-                                            Left Row 2
+                                    <div className="w-36/48 h-full flex justify-end border-fade-right-to-left">
+                                        <div className="bg-gray-600 w-full h-[98%] text-white rounded-lg flex items-center justify-center text-2xl font-bold text-center">
+                                            <Carousel className="w-full h-full">
+                                                <CarouselContent className="h-full w-full">
+                                                    {Array.from({ length: 5 }).map((_, index) => (
+                                                        <CarouselItem key={index} className="lg:basis-1/4 h-full">
+                                                            <div className="p-1 h-full">
+                                                            <Card className="h-full">
+                                                                <CardContent className="flex items-center justify-center p-6 h-full text-center">
+                                                                <span className="text-3xl font-semibold">{index + 1}</span>
+                                                                </CardContent>
+                                                            </Card>
+                                                            </div>
+                                                        </CarouselItem>
+                                                    ))}
+                                                </CarouselContent>
+                                                <CarouselPrevious /> 
+                                            </Carousel>
                                         </div>
                                     </div>
-                                    <div className="w-full h-full flex justify-end border-fade-right-to-left">
-                                        <div className="bg-gray-600 w-18/21 h-[98%] text-white p-4 rounded-lg flex items-center justify-center text-2xl font-bold text-center">
-                                            Left Row 3
+                                    <div className="w-42/48 h-full flex justify-end border-fade-right-to-left">
+                                        <div className="bg-gray-600 w-full h-[98%] text-white rounded-lg flex items-center justify-center text-2xl font-bold text-center">
+                                            <Carousel className="w-full h-full">
+                                                <CarouselContent className="h-full w-full">
+                                                    {Array.from({ length: 5 }).map((_, index) => (
+                                                        <CarouselItem key={index} className="lg:basis-1/5 h-full">
+                                                            <div className="p-1 h-full">
+                                                            <Card className="h-full">
+                                                                <CardContent className="flex items-center justify-center p-6 h-full text-center">
+                                                                <span className="text-3xl font-semibold">{index + 1}</span>
+                                                                </CardContent>
+                                                            </Card>
+                                                            </div>
+                                                        </CarouselItem>
+                                                    ))}
+                                                </CarouselContent>
+                                                <CarouselPrevious /> 
+                                            </Carousel>
                                         </div>
                                     </div>
                                 </div>
