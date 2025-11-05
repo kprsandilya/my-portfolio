@@ -36,6 +36,7 @@ const items: ThreeDCarouselItem[] = [
 ];
 
 const ECCENTRIC_CLIP_CLASS = "eccentric-curve-clip";
+const BOTTOM_CLIP_CLASS = "eccentric-curve-clip-bottom";
 
 export default function Awards() {
     const { theme, setTheme } = useTheme();
@@ -43,7 +44,13 @@ export default function Awards() {
     const getBackgroundColor = () => {
         if (theme === "dark") return 'bg-gradient-to-b from-[#8B6508] to-[#4A3203]';
         if (theme === "surprise") return 'bg-gradient-to-b from-[#FF7F50] to-[#FF1493]';
-        return 'bg-gradient-to-b from-[#103A3C] to-[#15324A]';
+        return 'bg-gradient-to-b from-[#A5E5E7] to-[#A0C5C7]';
+    };
+
+    const getBottomBackgroundColor = () => {
+        if (theme === "dark") return 'bg-gradient-to-b from-[#4A3203] to-[#2C1E00]'; 
+        if (theme === "surprise") return 'bg-gradient-to-b from-[#FF1493] to-[#800080]';
+        return 'bg-gradient-to-b from-[#A0C5C7] to-[#A4C1D4]'; 
     };
 
     const textGradient = () => {
@@ -72,23 +79,40 @@ export default function Awards() {
             />
             </clipPath>
 
+            <clipPath id="eccentric-curve-clip-bottom" clipPathUnits="objectBoundingBox">
+                <path 
+                    d="M0 0 L1 0 
+                    L1 0.8 
+                    C0.75 0.2, 0.25 0.2, 0 0.8 
+                    Z"
+                />
+            </clipPath>
+
             </svg>
-            <Parallax className={`pb-[30vh] -mt-[30vh] w-full ${getBackgroundColor()} ${ECCENTRIC_CLIP_CLASS} shadow-2xl `} speed={30}>
-                <div className={`w-full will-change-transform `}>
-                    {/* <BackgroundBeams className="absolute inset-0" /> */}
-                    <div className='w-full relative text-center pt-48'>
-                        <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter" 
-                            gradient={textGradient()} text="Awards and Certifications"/>
-                    </div>
-                    <div className="relative z-10 pt-32 w-full">
-                        <ThreeDCarousel 
-                        items={items}
-                        autoRotate={true}
-                        rotateInterval={4000}
-                        cardHeight={500}
-                        />
+            <Parallax className={`pb-[20vh] -mt-[30vh] w-full`} speed={30}>
+                <div className={`w-full ${ECCENTRIC_CLIP_CLASS} ${getBackgroundColor()} shadow-2xl `}>
+                    <div className={`w-full will-change-transform `}>
+                        {/* <BackgroundBeams className="absolute inset-0" /> */}
+                        <div className='w-full relative text-center pt-48'>
+                            <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter" 
+                                gradient={textGradient()} text="Awards and Certifications"/>
+                        </div>
+                        <div className="relative z-10 pt-32 w-full">
+                            <ThreeDCarousel 
+                            items={items}
+                            autoRotate={true}
+                            rotateInterval={4000}
+                            cardHeight={500}
+                            />
+                        </div>
                     </div>
                 </div>
+
+                <div 
+                className={`w-full h-[300px] ${getBottomBackgroundColor()} ${BOTTOM_CLIP_CLASS}`}
+                >
+                </div>
+
             </Parallax>
         </div>
         </ParallaxProvider>

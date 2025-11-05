@@ -214,3 +214,15 @@
     /* Important: Remove any pre-existing background to maintain transparency */
     background-color: transparent !important; 
 }
+
+.underneath-curve-clip {
+  clip-path: url(#underneath-curve-clip);
+  -webkit-clip-path: url(#underneath-curve-clip);
+
+  padding-top: 50px;
+}
+
+.eccentric-curve-clip-bottom  {
+  clip-path: url(#eccentric-curve-clip-bottom );
+  -webkit-clip-path: url(#eccentric-curve-clip-bottom );
+}

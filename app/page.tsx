@@ -9,6 +9,7 @@ import Pictures from "./components/pictures"
 import Experience from "./components/experience"
 import Projects from "./components/projects"
 import Awards from "./components/awards"
+import Skills from "./components/skills"
 
 export default function TestHome() {
   const { theme } = useTheme();
@@ -46,6 +47,11 @@ export default function TestHome() {
       <div className="relative z-50 flex gap-8">
         <Awards/>
       </div>
+
+      <div className="relative z-40 flex gap-8">
+        <Skills/>
+      </div>
+
     </div>
   );
 }
