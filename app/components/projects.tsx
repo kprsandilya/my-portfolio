@@ -162,7 +162,6 @@ export default function ThreeDPinGrid() {
                             {pin.description}
                         </span>
                         </div>
-                        {/* Dynamic background color class */}
                         <div 
                         className={`flex flex-1 w-full rounded-lg mt-4 bg-gradient-to-br ${pin.bgClass}`} 
                         />
@@ -189,7 +188,6 @@ export default function ThreeDPinGrid() {
                             {pin.description}
                         </span>
                         </div>
-                        {/* Dynamic background color class */}
                         <div 
                         className={`flex flex-1 w-full rounded-lg mt-4 bg-gradient-to-br ${pin.bgClass}`} 
                         />

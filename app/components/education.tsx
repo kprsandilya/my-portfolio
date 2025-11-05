@@ -78,7 +78,7 @@ export default function Education() {
   return (
     //<Parallax className="pb-[20vh] pt-[15vh]" speed={-30}>
     <div className={styles.body}>
-      <div className={`${styles.animated__layers} ${getBackgroundColors()}`}>
+      <div className={`${styles.animated__layers} ${getBackgroundColors()} pointer-events-none`}>
         <animated.div ref={barContainerRef} className={styles.bar__container} style={barFadeStyles}>
           {Array.from({ length: X_LINES }).map((_, i) => (
             <animated.div

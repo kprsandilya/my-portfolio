@@ -41,7 +41,7 @@ export default function Awards() {
     const { theme, setTheme } = useTheme();
 
     const getBackgroundColor = () => {
-        if (theme === "dark") return 'bg-gradient-to-b from-[#D4AF37] to-[#B87333]';
+        if (theme === "dark") return 'bg-gradient-to-b from-[#8B6508] to-[#4A3203]';
         if (theme === "surprise") return 'bg-gradient-to-b from-[#FF7F50] to-[#FF1493]';
         return 'bg-gradient-to-b from-[#103A3C] to-[#15324A]';
     };
@@ -73,14 +73,14 @@ export default function Awards() {
             </clipPath>
 
             </svg>
-            <Parallax className="pb-[20vh] -mt-[30vh]" speed={30}>
-                <div className={`w-full shadow-2xl ${getBackgroundColor()} ${ECCENTRIC_CLIP_CLASS}`}>
-                    <BackgroundBeams className="absolute inset-0" />
-                    <div className='w-full relative text-center pt-18'>
+            <Parallax className={`pb-[30vh] -mt-[30vh] w-full ${getBackgroundColor()} ${ECCENTRIC_CLIP_CLASS} shadow-2xl `} speed={30}>
+                <div className={`w-full will-change-transform `}>
+                    {/* <BackgroundBeams className="absolute inset-0" /> */}
+                    <div className='w-full relative text-center pt-48'>
                         <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter" 
                             gradient={textGradient()} text="Awards and Certifications"/>
                     </div>
-                    <div className="relative z-10 pt-32">
+                    <div className="relative z-10 pt-32 w-full">
                         <ThreeDCarousel 
                         items={items}
                         autoRotate={true}

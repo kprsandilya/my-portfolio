@@ -85,20 +85,14 @@ const ThreeDCarousel = ({
     }
   };
 
-const getCardAnimationClass = (index: number) => {
-  // 1. Increase the translate-x percentage (e.g., from 40% to 70% or 80%)
-  // to make the cards more spread out.
-  // We'll also reduce the scale slightly more to enhance the 3D effect.
-  if (index === active) return "scale-100 opacity-100 z-20";
-  if (index === (active + 1) % items.length)
-    return "translate-x-[70%] scale-90 opacity-60 z-10"; // Spread out more
-  if (index === (active - 1 + items.length) % items.length)
-    return "translate-x-[-70%] scale-90 opacity-60 z-10"; // Spread out more
-  // 2. Ensure only transform and opacity are transitioned for better performance (less lag).
-  // The 'transition-all duration-500' on the card wrapper already helps,
-  // but keeping the transitioned properties minimal is key.
-  return "scale-85 opacity-0"; // Reduced scale to keep non-visible cards smaller
-};
+  const getCardAnimationClass = (index: number) => {
+    if (index === active) return "scale-100 opacity-100 z-20";
+    if (index === (active + 1) % items.length)
+      return "translate-x-[70%] scale-95 opacity-60 z-10";
+    if (index === (active - 1 + items.length) % items.length)
+      return "translate-x-[-70%] scale-95 opacity-60 z-10";
+    return "scale-90 opacity-0";
+  };
 
   return (
     <section
@@ -107,7 +101,8 @@ const getCardAnimationClass = (index: number) => {
     flex items-center justify-center"
     >
       <div
-        className="w-full px-4 sm:px-6 lg:px-8 "
+        className="w-full px-4 sm:px-6 lg:px-8 
+      min-w-[350px] md:min-w-[1000px] max-w-7xl  "
       >
         <div
           className="relative overflow-hidden h-[550px] "
@@ -122,9 +117,9 @@ const getCardAnimationClass = (index: number) => {
             {items.map((item, index) => (
               <div
                 key={item.id}
-                className={`absolute top-0 w-full max-w-md transform transition-all duration-900 ease-in-out ${getCardAnimationClass( // Add ease-in-out for smoother feel
-        index
-      )}`}
+                className={`absolute top-0 w-full max-w-md transform transition-all duration-500 ${getCardAnimationClass(
+                  index
+                )}`}
               >
                 <Card
                   className={`overflow-hidden bg-background h-[${cardHeight}px] border shadow-sm 
@@ -190,6 +185,25 @@ const getCardAnimationClass = (index: number) => {
               </div>
             ))}
           </div>
+
+          <button
+              className="absolute left-4 w-10 h-10 bg-white/40 rounded-full flex items-center justify-center text-gray-500 hover:bg-white/80 z-30 shadow-md transition-all hover:scale-110"
+              onClick={() =>
+                setActive((prev) => (prev - 1 + items.length) % items.length)
+              }
+              style={{ top: `calc(${cardHeight / 2}px - 40px)` }}
+              aria-label="Previous"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              className="absolute right-4  w-10 h-10 bg-white/40 rounded-full flex items-center justify-center text-gray-500 hover:bg-white/80 z-30 shadow-md transition-all hover:scale-110"
+              onClick={() => setActive((prev) => (prev + 1) % items.length)}
+              style={{ top: `calc(${cardHeight / 2}px - 40px)` }}
+              aria-label="Next"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
 
           <div className="absolute bottom-6 left-0 right-0 flex justify-center items-center space-x-3 z-30">
             {items.map((_, idx) => (
