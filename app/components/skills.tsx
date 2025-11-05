@@ -48,8 +48,43 @@ export default function Awards() {
                             <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter" 
                                 gradient={textGradient()} text="Skills and Frameworks"/>
                         </div>
-                        <div className="relative z-10 pt-32 w-full">
-                            <SkillLevelDisplay levelData={SkillLevels.EXPERT}/>
+                        <div className="relative z-10 pt-12 pr-24 pb-24 w-full">
+                            <div className="grid grid-cols-5 divide-x-10 divide-double divide-yellow-500 h-screen gap-4">
+                                <div className="col-span-3 grid grid-rows-3 gap-4 justify-items-end pr-4">
+                                    <div className="w-21/48 h-full flex justify-end border-fade-right-to-left">
+                                        <div className="bg-gray-600 w-21/21 h-[98%] text-white p-4 rounded-lg flex items-center justify-center text-2xl font-bold text-center">
+                                            Left Row 1
+                                        </div>
+                                    </div>
+                                    <div className="w-7/8 h-full flex justify-end border-fade-right-to-left">
+                                        <div className="bg-gray-600 w-16/21 h-[98%] text-white p-4 rounded-lg flex items-center justify-center text-2xl font-bold text-center">
+                                            Left Row 2
+                                        </div>
+                                    </div>
+                                    <div className="w-full h-full flex justify-end border-fade-right-to-left">
+                                        <div className="bg-gray-600 w-18/21 h-[98%] text-white p-4 rounded-lg flex items-center justify-center text-2xl font-bold text-center">
+                                            Left Row 3
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-span-2 grid grid-cols-2 gap-4">
+                                    
+                                    <div className="col-span-1 flex flex-col gap-4">
+                                        <div className="h-[10%] bg-red-500 text-white p-2 rounded-lg flex items-center justify-center text-xs">Top (10%)</div>
+                                        
+                                        <div className="h-[60%] bg-red-600 text-white p-2 rounded-lg flex items-center justify-center text-sm font-semibold">Middle (60%)</div>
+                                        
+                                        <div className="h-[30%] bg-red-700 text-white p-2 rounded-lg flex items-center justify-center text-xs">Bottom (30%)</div>
+                                    </div>
+
+                                    <div className="col-span-1 flex flex-col gap-4">
+                                        <div className="h-1/2 bg-yellow-400 text-black p-2 rounded-lg flex items-center justify-center text-sm font-semibold">Internal Right Top (50%)</div>
+                                        
+                                        <div className="h-1/2 bg-yellow-500 text-black p-2 rounded-lg flex items-center justify-center text-sm font-semibold">Internal Right Bottom (50%)</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
