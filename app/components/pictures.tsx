@@ -27,16 +27,16 @@ export default function ThreeDMarqueeDemo() {
     "https://assets.aceternity.com/animated-modal.png",
   ];
   return (
-    <div className={`relative h-[150vh] w-full ${getColors()}`}>
+    <div className={`relative h-[1400px] w-full ${getColors()}`}>
       
-      <div className="h-full h-[125vh] w-full">
+      <div className="h-full w-full">
         <div className="absolute inset-0 z-1 h-full w-full">
             <ThreeDMarquee images={images} />
         </div>
 
         <div className={`absolute inset-0 z-[5] ${getFadingOverlay()}`} />
 
-        <div className="absolute inset-0 z-10 flex items-center mt-[-150vh] justify-center p-8 pointer-events-none">
+        <div className="absolute inset-0 z-10 flex items-center lg:top-[-1400px] justify-center p-8 pointer-events-none">
             <div className="max-w-xl text-center p-10 bg-black/50 backdrop-blur-sm rounded-xl">
                 <h1 className="text-6xl font-bold text-white mb-4">
                     But College is More than Academics

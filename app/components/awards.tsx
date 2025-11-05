@@ -89,7 +89,7 @@ export default function Awards() {
             </clipPath>
 
             </svg>
-            <Parallax className={`pb-[20vh] -mt-[30vh] w-full`} speed={30}>
+            <Parallax className={`pb-[200px] -mt-[30vh] w-full`} speed={30}>
                 <div className={`w-full ${ECCENTRIC_CLIP_CLASS} ${getBackgroundColor()} shadow-2xl `}>
                     <div className={`w-full will-change-transform `}>
                         {/* <BackgroundBeams className="absolute inset-0" /> */}

@@ -30,7 +30,7 @@ export default function TestHome() {
 
   return (
     <div className="relative w-full min-h-screen">
-      <div className="absolute inset-0 z-0 h-[700px]">
+      <div className="absolute inset-0 z-0 h-[890px]">
         <Header />
       </div>
 
@@ -46,25 +46,25 @@ export default function TestHome() {
         <Education/>
       </div>
 
-      <div className="relative z-40 w-full h-[150vh]"> 
+      <div className="relative z-40 w-full lg:h-[1200px]"> 
         <div className="absolute inset-x-0 top-[-232px] flex w-full">
           <Pictures/>
         </div>
       </div>
 
-      <div className="relative z-50 flex gap-8 h-[290vh]">
+      <div className="relative z-50 flex gap-8 lg:h-[2600px]">
         <div className="absolute inset-x-0 top-[-232px] flex w-full">
           <Experience/>
         </div>
       </div>
 
-      <div className="relative z-50 flex gap-8 h-[190vh]">
+      <div className="relative z-50 flex gap-8 lg:h-[1600px]">
         <div className="absolute inset-x-0 top-[-232px] flex w-full">
           <Projects/>
         </div>
       </div>
 
-      <div className={`relative z-50 flex gap-8 ${getBackgroundColor()} h-[70vh]`}>
+      <div className={`relative z-50 flex gap-8 ${getBackgroundColor()} lg:h-[600px]`}>
         <div className="absolute inset-x-0 top-[-232px] flex w-full">
           <Awards/>
         </div>
@@ -77,7 +77,7 @@ export default function TestHome() {
         </div>
       </div>
 
-      <div className="relative z-50 flex gap-8 h-[40vh]">
+      <div className="relative z-50 flex gap-8 lg:h-[600px]">
         <div className="absolute inset-x-0 flex w-full top-[-350px]">
           <Skills/>
         </div>

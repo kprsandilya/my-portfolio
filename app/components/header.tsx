@@ -23,7 +23,7 @@ export default function Header() {
   };
 
   return (
-    <div className={`relative w-full h-[100vh] ${theme === "surprise" ? "bg-pink-500" : ""}`}>
+    <div className={`relative w-full h-full ${theme === "surprise" ? "bg-pink-500" : ""}`}>
       <NewHoleBackground
         className={`absolute inset-0 flex items-center justify-center ${
           theme === "surprise" ? "" : ""

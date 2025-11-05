@@ -77,7 +77,7 @@ export default function Experience() {
   ];
 
     return (
-        <div className={`relative min-h-[320vh] w-full ${getBackground()} overflow-hidden`}>
+        <div className={`relative lg:min-h-[2900px] w-full ${getBackground()} overflow-hidden`}>
 
             <div className={`${commonClasses} z-10 opacity-90`}>
             <CurvedLoop
@@ -128,7 +128,7 @@ export default function Experience() {
             </div>
 
         <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
-            <div className="-mt-[10vh] overflow-x-visisble mx-auto w-11/12 overflow-y-visible sm:w-2/3">
+            <div className="relative top-[-50px] overflow-x-visisble mx-auto w-11/12 overflow-y-visible sm:w-2/3">
             <ParallaxProvider>
                 {comapny_info.map((company) => (
                     <Parallax key={company.name} scale={[1, 1.3]}>

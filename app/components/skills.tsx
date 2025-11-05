@@ -86,7 +86,7 @@ export default function Awards() {
                     <div className={`w-full will-change-transform `}>
                         {/* <BackgroundBeams className="absolute inset-0" /> */}
                         <div className="relative z-10 pr-24 pb-24 w-full">
-                            <div className="grid grid-cols-5 divide-x-10 divide-double divide-yellow-500 h-[60vh] gap-4">
+                            <div className="grid grid-cols-5 divide-x-10 divide-double divide-yellow-500 lg:h-[720px] gap-4">
                                 <div className="col-span-3 grid grid-rows-3 gap-4 justify-items-end pr-4">
                                     <div className="w-28/48 h-full flex justify-end border-fade-right-to-left">
                                         <div className="bg-gray-600 w-full h-[98%] text-white rounded-lg flex items-center justify-center text-2xl font-bold text-center">

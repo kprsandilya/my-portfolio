@@ -1,39 +1,37 @@
 import { PinContainer } from '@/components/ui/shadcn-io/3d-pin';
 import { useTheme } from 'next-themes'
 import { LineShadowText } from '@/components/ui/shadcn-io/line-shadow-text';
+import CodeHoverCards from '@/components/ui/3d-hover-gallery';
+import { Github, Code, Dices } from 'lucide-react';
 
 const RESEARCH_DATA = [
   {
-    id: 1,
-    title: "/react.dev",
+    id: "1",
+    icon: Github,
     href: "https://react.dev",
-    heading: "React Documentation",
+    title: "React Documentation",
     description: "The library for web and native user interfaces.",
-    bgClass: "from-blue-500 via-indigo-500 to-sky-500",
   },
   {
-    id: 2,
-    title: "/nextjs.org",
-    href: "https://nextjs.org",
-    heading: "Next.js Framework",
-    description: "The React Framework for Production.",
-    bgClass: "from-gray-700 via-black to-gray-900",
+    id: "2",
+    icon: Github,
+    href: "https://react.dev",
+    title: "React Documentation",
+    description: "The library for web and native user interfaces.",
   },
   {
-    id: 3,
-    title: "/ui.shadcn.io",
-    href: "https://ui.shadcn.com",
-    heading: "shadcn/ui Components",
-    description: "Beautifully designed components built with Radix UI and Tailwind CSS.",
-    bgClass: "from-violet-500 via-purple-500 to-blue-500",
+    id: "3",
+    icon: Github,
+    href: "https://react.dev",
+    title: "React Documentation",
+    description: "The library for web and native user interfaces.",
   },
   {
-    id: 4,
-    title: "/tailwindcss.com",
-    href: "https://tailwindcss.com",
-    heading: "Tailwind CSS",
-    description: "A utility-first CSS framework for rapid UI development.",
-    bgClass: "from-green-500 via-teal-500 to-cyan-500",
+    id: "4",
+    icon: Github,
+    href: "https://react.dev",
+    title: "React Documentation",
+    description: "The library for web and native user interfaces.",
   },
 ];
 
@@ -144,58 +142,18 @@ export default function ThreeDPinGrid() {
 
                 </h1>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 px-4 pt-24 items-stretch justify-items-center">
-                
-                {RESEARCH_DATA.map((pin) => (
-                // Each PinContainer needs to be wrapped in a div for consistent grid layout
-                <div key={pin.id} className="flex h-[20rem] w-full items-center justify-center">
-                    <PinContainer
-                    title={pin.title}
-                    href={pin.href}
-                    >
-                    <div className="flex basis-full flex-col p-4 tracking-tight text-slate-100/50 sm:basis-1/2 w-[20rem] h-[20rem]">
-                        <h3 className="max-w-xs !pb-2 !m-0 font-bold text-base text-slate-100">
-                        {pin.heading}
-                        </h3>
-                        <div className="text-base !m-0 !p-0 font-normal">
-                        <span className="text-slate-500">
-                            {pin.description}
-                        </span>
-                        </div>
-                        <div 
-                        className={`flex flex-1 w-full rounded-lg mt-4 bg-gradient-to-br ${pin.bgClass}`} 
-                        />
-                    </div>
-                    </PinContainer>
-                </div>
-                ))}  
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 items-stretch justify-items-center">
-                
-                {PROJECT_DATA.map((pin) => (
-                // Each PinContainer needs to be wrapped in a div for consistent grid layout
-                <div key={pin.id} className="flex h-[40rem] w-full items-center justify-center">
-                    <PinContainer
-                    title={pin.title}
-                    href={pin.href}
-                    >
-                    <div className="flex basis-full flex-col p-4 tracking-tight text-slate-100/50 sm:basis-1/2 w-[20rem] h-[20rem]">
-                        <h3 className="max-w-xs !pb-2 !m-0 font-bold text-base text-slate-100">
-                        {pin.heading}
-                        </h3>
-                        <div className="text-base !m-0 !p-0 font-normal">
-                        <span className="text-slate-500">
-                            {pin.description}
-                        </span>
-                        </div>
-                        <div 
-                        className={`flex flex-1 w-full rounded-lg mt-4 bg-gradient-to-br ${pin.bgClass}`} 
-                        />
-                    </div>
-                    </PinContainer>
-                </div>
-                ))}  
-            </div>
+            <CodeHoverCards 
+                  cards={RESEARCH_DATA}
+                  className="flex w-full items-center justify-center bg-transparent pt-12"
+                  columns={4}
+                  onCardClick={(card) => console.log('Clicked:', card)}
+                />
+            <CodeHoverCards 
+              cards={RESEARCH_DATA}
+              className="flex w-full items-center justify-center bg-transparent"
+              columns={4}
+              onCardClick={(card) => console.log('Clicked:', card)}
+            />
         </div>
     </div>
   );
