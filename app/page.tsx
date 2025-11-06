@@ -10,6 +10,7 @@ import Experience from "./components/experience"
 import Projects from "./components/projects"
 import Awards from "./components/awards"
 import Skills from "./components/skills"
+import Footer from "./components/footer"
 
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 
@@ -30,6 +31,7 @@ export default function TestHome() {
 
   return (
     <div className="relative w-full min-h-screen">
+      <title>Sandilya Kambhampati</title>
       <div className="absolute inset-0 z-0 h-[890px]">
         <Header />
       </div>
