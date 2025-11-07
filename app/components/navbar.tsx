@@ -29,79 +29,94 @@ export default function NavBar() {
     return theme === buttonTheme ? `${base} ${active}` : `${base} ${inactive}`;
   };
 
-  return (
-    <div className={`fixed bottom-0 left-0 z-50 w-full border ${getNavbarClasses()}`}>
-      <div className="w-full">
-        <div
-          className="mx-auto my-2 grid max-w-xs grid-cols-3 gap-1 rounded-lg bg-gray-100 p-1 dark:bg-gray-600"
-          role="group"
-        >
-          <button onClick={() => setGlobalTheme("dark")} className={getButtonClasses("dark")}>
-            Dark
-          </button>
-          <button onClick={() => setGlobalTheme("light")} className={getButtonClasses("light")}>
-            Light
-          </button>
-          <button onClick={() => setGlobalTheme("surprise")} className={getButtonClasses("surprise")}>
-            Surprise
-          </button>
-        </div>
+return (
+  <header
+    className={`fixed top-0 left-0 z-50 w-full border-b backdrop-blur-lg bg-opacity-80 ${getNavbarClasses()}`}
+  >
+    {/* Inner Container */}
+    <div className="flex items-center justify-between px-6 py-3 max-w-6xl mx-auto">
+      {/* Left: Logo / Title */}
+      <div className="flex items-center gap-3">
+        <img
+          src="/favicon.ico"
+          alt="Logo"
+          className="w-10 h-10  rounded-lg object-contain"
+        />
+        <h1 className="text-xl font-semibold tracking-tight">
+          Sandilya<span className="text-blue-500">.dev</span>
+        </h1>
       </div>
 
-      <div className="mx-auto grid max-w-lg grid-cols-5">
-  <TooltipProvider delayDuration={100}>
-    {[
-      { icon: Home, label: "Home" },
-      { icon: Bookmark, label: "Bookmark" },
-      { icon: Plus, label: "New Post" },
-      { icon: Search, label: "Search" },
-      { icon: Settings, label: "Settings" },
-    ].map(({ icon: Icon, label }) => (
-      <Tooltip key={label}>
-        <TooltipTrigger asChild>
-          <button
-            className={`group inline-flex flex-col items-center justify-center p-4 transition-colors ${
-              theme === "light"
-                ? "hover:bg-gray-100 text-gray-500 group-hover:text-blue-600"
-                : theme === "dark"
-                ? "hover:bg-gray-900 text-gray-400 group-hover:text-blue-500"
-                : theme === "surprise"
-                ? "hover:bg-pink-400 text-white group-hover:text-yellow-200"
-                : ""
-            }`}
-          >
-            <Icon
-              className={`mb-1 h-5 w-5 ${
-                theme === "light"
-                  ? "text-gray-500 group-hover:text-blue-600"
-                  : theme === "dark"
-                  ? "text-gray-400 group-hover:text-blue-500"
-                  : theme === "surprise"
-                  ? "text-white group-hover:text-yellow-200"
-                  : ""
-              }`}
-            />
-            <span className="sr-only">{label}</span>
-          </button>
-        </TooltipTrigger>
-        <TooltipContent
-          side="top"
-          className={`rounded-md px-2 py-1 text-xs ${
-            theme === "light"
-              ? "bg-gray-900 text-white"
-              : theme === "dark"
-              ? "bg-gray-900 text-white"
-              : theme === "surprise"
-              ? "bg-pink-500 text-white"
-              : ""
-          }`}
+      {/* Center: Navigation Icons */}
+      <div className="flex items-center justify-center gap-6">
+        <TooltipProvider delayDuration={100}>
+          {[
+            { icon: Home, label: "Home" },
+            { icon: Bookmark, label: "Bookmark" },
+            { icon: Plus, label: "New Post" },
+            { icon: Search, label: "Search" },
+            { icon: Settings, label: "Settings" },
+          ].map(({ icon: Icon, label }) => (
+            <Tooltip key={label}>
+              <TooltipTrigger asChild>
+                <button
+                  className={`group relative inline-flex flex-col items-center justify-center transition-all duration-200 ${
+                    theme === "light"
+                      ? "text-gray-600 hover:text-blue-600"
+                      : theme === "dark"
+                      ? "text-gray-400 hover:text-blue-400"
+                      : "text-white hover:text-yellow-200"
+                  }`}
+                >
+                  <Icon className="h-6 w-6" />
+                  <span
+                    className={`absolute -bottom-1 h-[2px] w-0 bg-current transition-all duration-200 group-hover:w-5`}
+                  />
+                  <span className="sr-only">{label}</span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="bottom"
+                className={`rounded-md px-2 py-1 text-xs shadow-md ${
+                  theme === "light"
+                    ? "bg-gray-900 text-white"
+                    : theme === "dark"
+                    ? "bg-gray-800 text-white"
+                    : "bg-pink-500 text-white"
+                }`}
+              >
+                {label}
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </TooltipProvider>
+      </div>
+
+      {/* Right: Theme Switcher */}
+      <div
+        className="grid grid-cols-3 gap-1 rounded-lg bg-gray-200 dark:bg-gray-700 p-1 shadow-inner"
+        role="group"
+      >
+        <button
+          onClick={() => setGlobalTheme("dark")}
+          className={getButtonClasses("dark")}
         >
-          {label}
-        </TooltipContent>
-      </Tooltip>
-    ))}
-  </TooltipProvider>
-</div>
+          🌙
+        </button>
+        <button
+          onClick={() => setGlobalTheme("light")}
+          className={getButtonClasses("light")}
+        >
+          ☀️
+        </button>
+        <button
+          onClick={() => setGlobalTheme("surprise")}
+          className={getButtonClasses("surprise")}
+        >
+          🎉
+        </button>
+      </div>
     </div>
-  );
+  </header>
+);
 }
