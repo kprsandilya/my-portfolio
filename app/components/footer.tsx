@@ -61,7 +61,7 @@ export default function Footer() {
       {/* Center: Logo */}
       <div className="md:w-1/3 flex justify-center items-center mb-6 md:mb-0">
         <img
-          src="/logo.png"
+          src="/Logo.png"
           alt="Logo"
           className="object-contain w-40 h-40 scale-x-[1.3]"
         />

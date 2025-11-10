@@ -11,6 +11,7 @@ import Projects from "./components/projects"
 import Awards from "./components/awards"
 import Skills from "./components/skills"
 import Footer from "./components/footer"
+import Skate from "./components/hobbies"
 
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 
@@ -85,6 +86,10 @@ export default function TestHome() {
           <Skills />
         </div>
       </div>
+{/* 
+      <div className="relative z-50 -mt-100">
+        <Skate />
+      </div> */}
 
       {/* Footer */}
       <div className="relative z-50">
