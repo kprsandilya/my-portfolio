@@ -7,7 +7,7 @@ import { useRef } from "react";
 import * as THREE from "three";
 
 function SkateboardModel({ scrollYProgress }: { scrollYProgress: any }) {
-  const { scene } = useGLTF("/skateboard.glb");
+  const { scene } = useGLTF("/skateboard-opt.glb");
   const ref = useRef<THREE.Group>(null);
 
   // Map scroll progress (0 → 1) to position and rotation
