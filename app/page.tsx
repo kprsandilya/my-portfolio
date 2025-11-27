@@ -33,39 +33,37 @@ export default function TestHome() {
   return (
     <div className="relative w-full min-h-screen">
 
+      {/*
       <div className="absolute inset-0 z-0 h-[890px]">
         <Header />
       </div>
 
-      {/* Info Section */}
+      {/* Info Section *}
       <div className="relative z-20 pt-40">
         <Info />
       </div>
 
-      {/* Education Section */}
+      {/* Education Section *}
       <div className="relative z-30 mt-40 w-full">
         <Education />
       </div>
 
-      {/* Pictures Section */}
+      {/* Pictures Section *}
       <div className="relative z-40 -mt-32 ">
         <Pictures />
       </div>
 
-      {/* Experience Section */}
+      {/* Experience Section *}
       <div className="relative z-50 -mt-32 ">
         <Experience />
       </div>
 
-      {/* Projects Section */}
+      {/* Projects Section *}
       <div className="relative z-50 -mt-40 ">
         <Projects />
       </div>
 
-      {/* Awards Section */}
-
-
-      {/* Awards content overlapping Projects */}
+      {/* Awards content overlapping Projects *}
       <div className="relative z-50 -mt-100">
         <Awards />
       </div>
@@ -75,7 +73,7 @@ export default function TestHome() {
         </div>
       </div>
 
-      {/* Skills Section */}
+      {/* Skills Section *}
       <div className={`relative z-50 ${getBackgroundColor()}  flex flex-col items-center`}>
         <GradientText
           className="text-6xl md:text-8xl font-semibold leading-none tracking-tighter text-center"
@@ -85,16 +83,16 @@ export default function TestHome() {
         <div className="w-full mt-16">
           <Skills />
         </div>
-      </div>
-{/* 
-      <div className="relative z-50 -mt-100">
-        <Skate />
       </div> */}
 
-      {/* Footer */}
       <div className="relative z-50">
-        <Footer />
+        <Skate />
       </div>
+
+      {/* Footer */}
+      {/* <div className="relative z-50">
+        <Footer />
+      </div> */}
 
     </div>
   );
