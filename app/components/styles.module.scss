@@ -1,18 +1,10 @@
 .body {
-  // CRITICAL FIX: Set height for scrolling (e.g., 5 pages * 100vh = 500vh)
-  // This value must match the `pages` prop in your <Parallax> or `PAGE_COUNT` in your component.
-  height: 250vh;
+  // Height is driven by the content inside the section so it scales with the
+  // amount of content instead of being pinned to a magic viewport multiple.
   width: 100%;
   overflow: hidden;
   position: relative; // Needed to correctly position children
   transform: translateZ(0);
-}
-
-.full__page {
-  width: 100%;
-  height: 100vh;
-  // Use scroll-snap to make the sections feel like distinct pages
-  scroll-snap-align: start;
 }
 
 .bar__container {
@@ -33,8 +25,12 @@
 }
 
 .bar {
+  // Fixed base width; the wave is produced by animating `transform: scaleX()`
+  // (compositor only) rather than `width` (which forces layout every frame).
+  width: 45px;
   height: 1vh;
   background-color: rgba(255, 255, 255, 0.4);
+  will-change: transform;
 }
 
 .animated__layers {
@@ -68,8 +64,10 @@
 .title {
   font-size: 8vw;
   padding-left: 8vw;
+  padding-top: 6vh;
+  padding-bottom: 4vh;
   z-index: 10;
-  padding-top: 200;
+  line-height: 1.05;
   & > span {
     display: block;
     overflow: hidden;
@@ -82,7 +80,7 @@
 
 .wrapper {
   width: 100%;
-  height: 100%;
+  height: auto;
   background: transparent;
   padding-left: 70px;
   padding-right: 70px;
@@ -96,6 +94,9 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(100px, 1fr));
   grid-gap: 25px;
+  // Intrinsic height so the collapsed "year" stays a visible, clickable button
+  // even without a giant parent forcing its size.
+  min-height: 150px;
   background: white;
   border-radius: 25px;
   cursor: pointer;

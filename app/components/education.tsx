@@ -1,113 +1,227 @@
+"use client";
+
 import * as React from 'react'
-import { useScroll, animated, useSpring } from '@react-spring/web'
+import { animated, useSpring } from '@react-spring/web'
 import { useTheme } from "next-themes"
 import styles from './styles.module.scss'
 import { HighlightText } from "@/components/ui/shadcn-io/highlight-text";
 
 import EducationItems from './educationItems';
 
-const X_LINES = 100
+const X_LINES = 60
 
-const PAGE_COUNT = 2
+// Largest width (in px) a bar reaches; bars are scaled down from this so the
+// animation runs on the compositor (transform) instead of triggering layout.
+const BAR_MAX = 45
 
 const INITIAL_WIDTH = 20
 
-const SMOOTHING_FACTOR = 128
+const SMOOTHING_FACTOR = 72
 
 const SCROLLING_FACTOR = 1.5
 
-export default function Education() {
-    const containerRef = React.useRef<HTMLDivElement>(null!)
-    const barContainerRef = React.useRef<HTMLDivElement>(null!)
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
 
-    const { theme, setTheme } = useTheme();
+// Smooth Catmull-Rom spline through the measured card centers -> a winding
+// "road". Coordinates are in pixels relative to the content container, so the
+// path stays sharp and rescales whenever we re-measure on resize.
+function buildRoadPath(points: { x: number; y: number }[]) {
+  if (points.length < 2) return ''
+  const d = [`M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`]
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i - 1] ?? points[i]
+    const p1 = points[i]
+    const p2 = points[i + 1]
+    const p3 = points[i + 2] ?? p2
+    const c1x = p1.x + (p2.x - p0.x) / 6
+    const c1y = p1.y + (p2.y - p0.y) / 6
+    const c2x = p2.x - (p3.x - p1.x) / 6
+    const c2y = p2.y - (p3.y - p1.y) / 6
+    d.push(
+      `C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`
+    )
+  }
+  return d.join(' ')
+}
+
+const YEARS = [
+  { grade: 'Freshman', side: 'left', listIndex: 1 },
+  { grade: 'Sophomore', side: 'right', listIndex: 2 },
+  { grade: 'Junior', side: 'left', listIndex: 3 },
+  { grade: 'Senior', side: 'right', listIndex: 4 },
+] as const
+
+export default function Education() {
+    const [mounted, setMounted] = React.useState(false);
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const containerRef = React.useRef<HTMLDivElement>(null!)
+    const contentRef = React.useRef<HTMLDivElement>(null!)
+    const introRef = React.useRef<HTMLDivElement>(null!)
+    const cardRefs = React.useRef<(HTMLDivElement | null)[]>([])
+
+    const { theme } = useTheme();
 
     const getColors = () => {
         if (theme === "dark") return 'bg-gradient-to-r from-gray-700 to-black';
-
         if (theme === "surprise") return 'bg-gradient-to-r from-pink-500 to-yellow-300';
-        
         return 'bg-gradient-to-r from-indigo-400 to-cyan-400';
     };
 
     const getBackgroundColors = () => {
-        if (theme === "dark") return 'bg-gray-900/50'; 
+        if (theme === "dark") return 'bg-gray-900/50';
         if (theme === "surprise") return 'bg-pink-300/50';
         return 'bg-[#D4F0F3]/50';
     };
 
     const getTextColors = () => {
-        if (theme === "dark") return 'text-gray-200'; 
+        if (theme === "dark") return 'text-gray-200';
         if (theme === "surprise") return 'text-gray-900';
         return 'text-gray-900';
     };
 
-    const [textStyles, textApi] = useSpring(() => ({
-    y: '100%',
-    }))
+    const getRoadColor = () => {
+        if (theme === "dark") return '#CFB991';
+        if (theme === "surprise") return '#ffffff';
+        return '#0E7490';
+    };
 
-    const { scrollYProgress } = useScroll({
-        onChange: ({ value: { scrollYProgress } }) => {
-            if (scrollYProgress > 0.12 && scrollYProgress < 0.6) {
-            textApi.start({ y: '0' })
-            } else {
-            textApi.start({ y: '100%' })
-            }
-        },
-        default: {
-            immediate: true,
-        },
+    // Single spring that tracks how far the section has scrolled through the
+    // viewport (0 = just entering at the bottom, 1 = fully scrolled past the
+    // top). Every visual is derived from this, so timing is tied to the
+    // section itself rather than the whole page.
+    const [{ p }, pApi] = useSpring(() => ({ p: 0 }))
+
+    // Title reveal: slides in as the section reaches the viewport and out as
+    // it leaves. Tied to section progress so it never fires "off time".
+    const titleY = p.to((v: number) => {
+        if (v < 0.14) return '100%'
+        if (v < 0.24) return `${(1 - (v - 0.14) / 0.1) * 100}%`
+        if (v < 0.46) return '0%'
+        if (v < 0.56) return `${((v - 0.46) / 0.1) * 100}%`
+        return '100%'
     })
 
-    const SCROLL_LIMIT = 0.75; // 75%
+    const barOpacity = p.to((v: number) => (v <= 0.5 ? 1 : clamp01(1 - (v - 0.5) / 0.2)))
 
-    // Map the 0 to 0.75 scroll range to 0 to 1.0, and clamp it.
-    const limitedScrollProgress = scrollYProgress.to([0, SCROLL_LIMIT], [0, 1], 'clamp');
+    React.useEffect(() => {
+        let raf = 0
+        const update = () => {
+            raf = 0
+            const el = containerRef.current
+            if (!el) return
+            const rect = el.getBoundingClientRect()
+            const vh = window.innerHeight || 1
+            const progress = clamp01((vh - rect.top) / (vh + rect.height))
+            pApi.start({ p: progress, immediate: true })
+        }
+        const onScroll = () => {
+            if (!raf) raf = requestAnimationFrame(update)
+        }
+        update()
+        window.addEventListener('scroll', onScroll, { passive: true })
+        window.addEventListener('resize', onScroll)
+        return () => {
+            window.removeEventListener('scroll', onScroll)
+            window.removeEventListener('resize', onScroll)
+            if (raf) cancelAnimationFrame(raf)
+        }
+    }, [pApi, mounted])
 
-    const [circleStyles] = useSpring(() => ({
-        // Map scroll progress (0.1 to 0.4) to a scale factor (0 to 10)
-        scale: scrollYProgress.to([0.05, 0.3], [0, 15], 'clamp'),
-        // Move the scale and clipPath logic here
-    }))
+    // Measure the intro + each card and rebuild the road. Re-runs on resize so
+    // the connectors always line up regardless of screen size.
+    const [roadPath, setRoadPath] = React.useState('')
+    const [roadPoints, setRoadPoints] = React.useState<{ x: number; y: number }[]>([])
 
-    const [barFadeStyles] = useSpring(() => ({
-      // Start fade at 70% scroll, end it at 80% scroll
-      opacity: limitedScrollProgress.to([0.5, 0.8], [1, 0], 'clamp'),
-  }));
+    React.useEffect(() => {
+        if (!mounted) return
+        const measure = () => {
+            const content = contentRef.current
+            if (!content) return
+            const base = content.getBoundingClientRect()
+            const points: { x: number; y: number }[] = []
+            if (introRef.current) {
+                const r = introRef.current.getBoundingClientRect()
+                points.push({ x: r.left + r.width / 2 - base.left, y: r.bottom - base.top })
+            }
+            // Anchor each node to the card's *inner* edge (the side facing the
+            // road) so the marker sits next to the button instead of being
+            // hidden behind its center.
+            const NODE_GAP = 16
+            cardRefs.current.forEach((el, i) => {
+                if (!el) return
+                const r = el.getBoundingClientRect()
+                const x = YEARS[i].side === 'left'
+                    ? r.right - base.left + NODE_GAP
+                    : r.left - base.left - NODE_GAP
+                points.push({ x, y: r.top + r.height / 2 - base.top })
+            })
+            setRoadPoints(points)
+            setRoadPath(buildRoadPath(points))
+        }
+
+        measure()
+        // Re-measure after fonts/layout settle.
+        const timers = [120, 400, 1000].map((t) => setTimeout(measure, t))
+        window.addEventListener('resize', measure)
+        return () => {
+            window.removeEventListener('resize', measure)
+            timers.forEach(clearTimeout)
+        }
+    }, [mounted, theme])
+
+    if (!mounted) {
+        return <div className={styles.body} />;
+    }
 
   return (
-    //<Parallax className="pb-[20vh] pt-[15vh]" speed={-30}>
-    <div className={styles.body}>
+    <div ref={containerRef} className={styles.body}>
       <div className={`${styles.animated__layers} ${getBackgroundColors()} pointer-events-none`}>
-        <animated.div ref={barContainerRef} className={styles.bar__container} style={barFadeStyles}>
+        <animated.div
+          className={styles.bar__container}
+          style={{ opacity: barOpacity }}
+        >
           {Array.from({ length: X_LINES }).map((_, i) => (
             <animated.div
               key={i}
               className={styles.bar}
               style={{
-                width: limitedScrollProgress.to(scrollP => {
+                transformOrigin: 'right center',
+                transform: p.to((scrollP: number) => {
                   const percentilePosition = (i + 1) / X_LINES
-
-                  const AdjustedScrollP = scrollP * SCROLLING_FACTOR
-
-                  return INITIAL_WIDTH / 4 + 40 * Math.cos(((percentilePosition - AdjustedScrollP) * Math.PI) / 1.5) ** SMOOTHING_FACTOR
+                  const adjustedScrollP = scrollP * SCROLLING_FACTOR
+                  const widthPx =
+                    INITIAL_WIDTH / 4 +
+                    40 *
+                      Math.cos((((percentilePosition - adjustedScrollP) * Math.PI) / 1.5)) **
+                        SMOOTHING_FACTOR
+                  return `scaleX(${widthPx / BAR_MAX})`
                 }),
               }}
             />
           ))}
         </animated.div>
-        <animated.div className={styles.bar__container__inverted } style={barFadeStyles}>
+        <animated.div
+          className={styles.bar__container__inverted}
+          style={{ opacity: barOpacity }}
+        >
           {Array.from({ length: X_LINES }).map((_, i) => (
             <animated.div
               key={i}
               className={styles.bar}
               style={{
-                width: limitedScrollProgress.to(scrollP => {
+                transformOrigin: 'left center',
+                transform: p.to((scrollP: number) => {
                   const percentilePosition = 1 - (i + 1) / X_LINES
-
-                  const AdjustedScrollP = scrollP * SCROLLING_FACTOR
-
-                  return INITIAL_WIDTH / 4 + 40 * Math.cos(((percentilePosition - AdjustedScrollP) * Math.PI) / 1.5) ** SMOOTHING_FACTOR
+                  const adjustedScrollP = scrollP * SCROLLING_FACTOR
+                  const widthPx =
+                    INITIAL_WIDTH / 4 +
+                    40 *
+                      Math.cos((((percentilePosition - adjustedScrollP) * Math.PI) / 1.5)) **
+                        SMOOTHING_FACTOR
+                  return `scaleX(${widthPx / BAR_MAX})`
                 }),
               }}
             />
@@ -115,56 +229,80 @@ export default function Education() {
         </animated.div>
 
         <animated.div
-          className={`${styles.dot_visual} ${getColors()}`} 
+          className={`${styles.dot_visual} ${getColors()}`}
           style={{
-              transform: circleStyles.scale.to(s => `translate(-50%, -50%) scale(${s})`),
-              opacity: circleStyles.scale.to([0, 0.5, 10], [0, 1, 1]) 
+            transform: p.to((v: number) => {
+              const s = v <= 0.08 ? 0 : v >= 0.3 ? 15 : ((v - 0.08) / (0.3 - 0.08)) * 15
+              return `translate(-50%, -50%) scale(${s})`
+            }),
+            opacity: p.to((v: number) => clamp01((v - 0.08) / 0.05)),
           }}
-          >
-                
-        </animated.div>
-        <div className={styles.content_overlay}>
-            <h1 className={`${styles.title} bg-transparent h-full`}>
-                <span>
-                    <animated.span style={textStyles}>My</animated.span>
-                </span>
-                <span>
-                    <animated.span style={textStyles}>Educational Journey</animated.span>
-                </span>
-            </h1>
+        />
+      </div>
+
+      <div ref={contentRef} className="relative z-10 w-full">
+        <h1 className={`${styles.title} relative z-20 bg-transparent`}>
+            <span>
+                <animated.span style={{ y: titleY }}>My</animated.span>
+            </span>
+            <span>
+                <animated.span style={{ y: titleY }}>Educational Journey</animated.span>
+            </span>
+        </h1>
+
+        {/* Winding "road" that connects the years. Measured in px and rebuilt
+            on resize, so it scales with the layout. */}
+        <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full" aria-hidden="true">
+          {roadPath && (
+            <path
+              d={roadPath}
+              fill="none"
+              stroke={getRoadColor()}
+              strokeWidth={4}
+              strokeLinecap="round"
+              strokeDasharray="2 16"
+              opacity={0.75}
+            />
+          )}
+          {roadPoints.map((pt, i) =>
+            i === 0 ? null : (
+              <g key={i}>
+                <circle cx={pt.x} cy={pt.y} r={11} fill={getRoadColor()} opacity={0.9} />
+                <circle cx={pt.x} cy={pt.y} r={4.5} fill="#ffffff" />
+              </g>
+            )
+          )}
+        </svg>
+
+        <div
+          ref={introRef}
+          className={`font-serif text-3xl md:text-4xl pb-16 ${getTextColors()} relative z-20 max-w-5xl mx-auto px-6 text-center leading-tight`}
+        >
+            I am currently a Purdue University student pursuing a double major in Computer Science and Data Science, complemented by minors in Mathematics and Statistics, maintaining highest excellence with a{' '}
+            <HighlightText
+              text="3.98 GPA"
+              inView={true}
+              className="font-semibold"
+              transition={{ duration: 1.0, ease: "easeOut" }}
+            />
+            .
+        </div>
+
+        <div className="relative z-10 flex flex-col gap-[14vh] py-[10vh]">
+          {YEARS.map((year, i) => (
+            <EducationItems
+              key={year.grade}
+              className={year.side === 'left' ? 'justify-start' : 'justify-end'}
+              listIndex={year.listIndex}
+              side={year.side}
+              grade={year.grade}
+              registerRef={(el) => {
+                cardRefs.current[i] = el
+              }}
+            />
+          ))}
         </div>
       </div>
-        <div className="flex flex-col w-full h-[260vh] gap-4 py-180 relative overflow-hidden">
-            <div className="absolute top-[139vh] right-[43vh] w-0 h-230 origin-top-left rotate-100 border-l border-l-4 border-dashed border-white/60"></div>
-
-            <div className="absolute top-[154.75vh] left-[44vh] w-0 h-229 origin-top-left -rotate-98 border-l border-l-4 border-dashed border-white/60"></div>
-
-            <div className="absolute top-[173vh] right-[43vh] w-0 h-230 origin-top-left rotate-100 border-l border-l-4 border-dashed border-white/60"></div>
-
-            <div className={`font-serif text-4xl  pb-24 ${getTextColors()} z-20 max-w-7xl mx-auto text-center leading-tight`}>
-                I am currently a Purdue University student pursuing a double major in Computer Science and Data Science, complemented by minors in Mathematics and Statistics, maintaining highest excellence with a   
-                <div className='pl-4'></div>
-                <HighlightText 
-                  text="3.98 GPA"
-                  inView={true}
-                  className="font-semibold"
-                  transition={{ duration: 1.0, ease: "easeOut" }}
-                />
-                .
-            </div>
-            <EducationItems className="justify-start pr-100 flex-1" listIndex={1} side={'left'} grade='Freshman' /> 
-            
-            <EducationItems className="justify-end pl-100 flex-1" listIndex={2} side={'right'} grade='Sophomore' />
-            
-            <EducationItems className="justify-start pr-100 flex-1" listIndex={3} side={'left'} grade='Junior' />
-            
-            <EducationItems className="justify-end pl-100 flex-1" listIndex={4} side={'right'} grade='Senior' />
-        </div>
-        <div className='h-[200px]'/>
-      {new Array(PAGE_COUNT).fill(null).map((_, index) => (
-        <div className={styles.full__page} key={index} />
-      ))}
     </div>
-    //</Parallax>
   )
 }

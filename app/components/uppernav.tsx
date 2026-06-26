@@ -1,5 +1,4 @@
 import * as motion from "motion/react-client"
-import { useTheme } from "next-themes"
 
 // Assuming this SVG import provides the URL path for the <img> tag
 import SvgComponent from "./logo" 

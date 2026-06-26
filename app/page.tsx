@@ -1,6 +1,6 @@
 "use client";
 
-import { useTheme } from "next-themes";
+import { useThemeReady } from "./components/useThemeReady";
 import Header from './components/header';
 import UpperNavBar from "./components/uppernav";
 import Info from "./components/intro"
@@ -16,7 +16,7 @@ import Skate from "./components/hobbies"
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 
 export default function TestHome() {
-  const { theme } = useTheme();
+  const { theme } = useThemeReady();
 
   const textGradient = () => {
     if (theme === "dark") return 'linear-gradient(90deg, #48166cff 0%, #c31432 50%, #48166cff 100%)';
@@ -33,66 +33,60 @@ export default function TestHome() {
   return (
     <div className="relative w-full min-h-screen">
 
-      {/*
       <div className="absolute inset-0 z-0 h-[890px]">
         <Header />
       </div>
 
-      {/* Info Section *}
-      <div className="relative z-20 pt-40">
+      <div className="relative z-20 pt-32 md:pt-40">
         <Info />
       </div>
 
-      {/* Education Section *}
-      <div className="relative z-30 mt-40 w-full">
+      <div className="relative z-30 mt-24 md:mt-40 w-full">
         <Education />
       </div>
 
-      {/* Pictures Section *}
-      <div className="relative z-40 -mt-32 ">
+      <div className="relative z-40 mt-0">
         <Pictures />
       </div>
 
-      {/* Experience Section *}
-      <div className="relative z-50 -mt-32 ">
+      <div className="relative z-50 mt-0">
         <Experience />
       </div>
 
-      {/* Projects Section *}
-      <div className="relative z-50 -mt-40 ">
+      <div className="relative z-50 mt-0">
         <Projects />
       </div>
 
-      {/* Awards content overlapping Projects *}
-      <div className="relative z-50 -mt-100">
+      <div className="relative z-50 mt-0">
         <Awards />
       </div>
 
-      <div className={`relative z-40 ${getBackgroundColor()} -mt-150 flex flex-col items-center`}>
-        <div className='h-[300px]'>
+      <div className={`relative z-40 ${getBackgroundColor()} mt-0 flex flex-col items-center`}>
+        <div className='h-32 md:h-[clamp(170px,22vh,300px)]'>
         </div>
       </div>
 
-      {/* Skills Section *}
-      <div className={`relative z-50 ${getBackgroundColor()}  flex flex-col items-center`}>
-        <GradientText
-          className="text-6xl md:text-8xl font-semibold leading-none tracking-tighter text-center"
-          gradient={textGradient()}
-          text="Skills and Frameworks"
-        />
-        <div className="w-full mt-16">
+      <div className={`relative z-50 ${getBackgroundColor()} flex flex-col items-center`}>
+        <div className="flex flex-col items-center px-6 pt-20 pb-6 text-center">
+          <GradientText
+            className="text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter text-center"
+            gradient={textGradient()}
+            text="Skills and Frameworks"
+          />
+        </div>
+        <div className="w-full mt-8">
           <Skills />
         </div>
+      </div>
+
+
+      {/* <div className="relative z-50">
+        <Skate />
       </div> */}
 
       <div className="relative z-50">
-        <Skate />
-      </div>
-
-      {/* Footer */}
-      {/* <div className="relative z-50">
         <Footer />
-      </div> */}
+      </div>
 
     </div>
   );

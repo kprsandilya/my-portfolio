@@ -1,8 +1,8 @@
-import { useTheme } from "next-themes";
+import { useThemeReady } from "./useThemeReady";
 import { NewHoleBackground } from '@/components/animate-ui/components/backgrounds/newhole';
 
 export default function Header() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useThemeReady();
 
   const getHoleInner = () => {
     if (theme === "dark") return "transparent";

@@ -1,10 +1,10 @@
 "use client";
 
-import { useTheme } from "next-themes"
+import { useThemeReady } from "./useThemeReady"
 
 import { ThreeDMarquee } from "@/components/ui/shadcn-io/3d-marquee";
 export default function ThreeDMarqueeDemo() {
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme } = useThemeReady();
 
     const getColors = () => {
         if (theme === "dark") return 'bg-gradient-to-r from-gray-700 to-black';

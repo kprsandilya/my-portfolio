@@ -2,12 +2,12 @@
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Home, Bookmark, Plus, Search, Settings } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useThemeReady } from "./useThemeReady";
 
 const themes = ["light", "dark", "surprise"];
 
 export default function NavBar() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useThemeReady();
 
   const setGlobalTheme = (theme: string) => {
     setTheme(theme)

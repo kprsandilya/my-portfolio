@@ -1,8 +1,9 @@
 import { PinContainer } from '@/components/ui/shadcn-io/3d-pin';
-import { useTheme } from 'next-themes'
+import { useThemeReady } from './useThemeReady'
 import { LineShadowText } from '@/components/ui/shadcn-io/line-shadow-text';
 import CodeHoverCards from '@/components/ui/3d-hover-gallery';
 import { Github, Code, Dices } from 'lucide-react';
+import { Parallax } from 'react-scroll-parallax';
 
 const RESEARCH_DATA = [
   {
@@ -74,7 +75,7 @@ const PROJECT_DATA = [
 const CLIP_CLASS = "clip-top-curve";
 
 export default function ThreeDPinGrid() {
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme } = useThemeReady();
 
     const getColors = () => {
         // New Dark Theme: Deep Slate to Black with a mid-tone for depth.
@@ -100,7 +101,11 @@ export default function ThreeDPinGrid() {
     };
 
   return (
-    <div className='w-full relative'>
+    // Static block (no scroll-translate parallax) that tucks its curved top up
+    // over the section above. The negative margin is scalable and large enough
+    // to cover the curve depth, and the section above shares this top color so
+    // the seam is seamless.
+    <div className='w-full relative mt-[clamp(-240px,-18vh,-140px)]'>
          <svg
             width="0"
             height="0"
@@ -113,8 +118,8 @@ export default function ThreeDPinGrid() {
             />
             </clipPath>
         </svg>
-        <div className={`w-full ${getColors()} ${CLIP_CLASS} pb-96`}>
-            <div className='w-full relative text-center pt-32'>
+        <div className={`w-full ${getColors()} ${CLIP_CLASS} pb-96 overflow-hidden`}>
+            <Parallax speed={8} className='w-full relative text-center pt-32'>
                 <h1 className="text-balance text-8xl font-semibold leading-none tracking-tighter">
                     <LineShadowText 
                     className="italic" 
@@ -141,19 +146,21 @@ export default function ThreeDPinGrid() {
                     </LineShadowText>
 
                 </h1>
-            </div>
-            <CodeHoverCards 
-                  cards={RESEARCH_DATA}
-                  className="flex w-full items-center justify-center bg-transparent pt-12"
-                  columns={4}
-                  onCardClick={(card) => console.log('Clicked:', card)}
-                />
-            <CodeHoverCards 
-              cards={RESEARCH_DATA}
-              className="flex w-full items-center justify-center bg-transparent"
-              columns={4}
-              onCardClick={(card) => console.log('Clicked:', card)}
-            />
+            </Parallax>
+            <Parallax speed={8}>
+              <CodeHoverCards 
+                    cards={RESEARCH_DATA}
+                    className="flex w-full items-center justify-center bg-transparent pt-12"
+                    columns={4}
+                    onCardClick={(card) => console.log('Clicked:', card)}
+                  />
+              <CodeHoverCards 
+                cards={RESEARCH_DATA}
+                className="flex w-full items-center justify-center bg-transparent"
+                columns={4}
+                onCardClick={(card) => console.log('Clicked:', card)}
+              />
+            </Parallax>
         </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import React from 'react';
 import CurvedLoop from "@/components/ui/shadcn-io/curved-loop";
-import { useTheme } from "next-themes"
+import { useThemeReady } from "./useThemeReady"
 import { Image, Divider } from "@heroui/react";
-import { Parallax, ParallaxProvider  } from "react-scroll-parallax";
+import { Parallax } from "react-scroll-parallax";
 
 // Define a simple StraightLoop for contrast
 const StraightLoop = (props: any) => (
@@ -15,14 +15,16 @@ const StraightLoop = (props: any) => (
 
 export default function Experience() {
     const commonClasses = "absolute inset-0 w-full h-full";
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme } = useThemeReady();
 
+    // Background flows from the color Pictures fades into (top) down to the
+    // color Projects starts with (bottom), so the section seams are invisible.
     const getBackground = () => {
-        if (theme === "dark") return 'bg-gradient-to-b from-[#200210] to-[#200210]';
+        if (theme === "dark") return 'bg-gradient-to-b from-[#200210] to-[#121B21]';
 
-        if (theme === "surprise") return 'bg-gradient-to-b from-[#FFDBBB] to-[#FFDBBB]';
-        
-        return `bg-gradient-to-b from-[#00B9B3] to-[#00B9B3]`;
+        if (theme === "surprise") return 'bg-gradient-to-b from-[#FFDBBB] to-[#FFB69B]';
+
+        return `bg-gradient-to-b from-[#00B9B3] to-[#91EAE4]`;
     };
 
       const comapny_info = [
@@ -129,7 +131,6 @@ export default function Experience() {
 
         <div className="absolute inset-0 z-40 flex items-center justify-center pointer-events-none">
             <div className="relative top-[-50px] overflow-x-visisble mx-auto w-11/12 overflow-y-visible sm:w-2/3">
-            <ParallaxProvider>
                 {comapny_info.map((company) => (
                     <Parallax key={company.name} scale={[1, 1.3]}>
                     <div
@@ -159,7 +160,6 @@ export default function Experience() {
                     </div>
                     </Parallax>
                 ))}
-            </ParallaxProvider>
             </div>
         </div>
         </div>

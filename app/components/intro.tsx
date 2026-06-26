@@ -7,14 +7,14 @@ import {
 
 import { Image, Link, Button } from "@heroui/react";
 
-import { useTheme } from "next-themes";
+import { useThemeReady } from "./useThemeReady";
 import GraphemeSplitter from 'grapheme-splitter';
 import { TypeAnimation } from 'react-type-animation';
 
 const splitter = new GraphemeSplitter();
 
 export default function Info() {
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme } = useThemeReady();
 
     const getBackground = () => {
         if (theme === "dark") return "bg-black/50";

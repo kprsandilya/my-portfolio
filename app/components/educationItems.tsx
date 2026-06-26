@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react'
 import {
   useTransition,
@@ -18,6 +20,8 @@ interface EducationItemsProps {
   listIndex: 1 | 2 | 3 | 4;
   side: "right" | "left";
   grade: "Freshman" | "Sophomore" | "Junior" | "Senior";
+  // Lets a parent measure the card's position (used to draw the roadmap).
+  registerRef?: (el: HTMLDivElement | null) => void;
 }
 
 interface CourseItem {
@@ -27,7 +31,12 @@ interface CourseItem {
   css: string;
 }
 
-const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, side, grade }) => {
+const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, side, grade, registerRef }) => {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
     const [open, set] = useState(false)
 
     const { theme, setTheme } = useTheme();
@@ -101,14 +110,18 @@ const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, s
     };
 
   const springApi = useSpringRef()
-  const { size, opacity: textOpacity, ...rest } = useSpring({
+  // NOTE: `background` is intentionally NOT animated here. The closed state is a
+  // solid color and the open state is a gradient, and react-spring cannot
+  // interpolate between a solid color and a gradient (their parsed value arrays
+  // have different lengths -> "The arity of each output value must be equal").
+  // We switch it as a plain style instead.
+  const { size, opacity: textOpacity } = useSpring({
     ref: springApi,
     config: config.stiff,
-    from: { size: '20%', opacity: 1, background: getItemColor() },
+    from: { size: '20%', opacity: 1 },
     to: {
       size: open ? '100%' : '20%',
-      background: open ? getItemColor() : getColor(),
-      opacity: open ? 0: 1
+      opacity: open ? 0 : 1,
     },
   })
 
@@ -129,11 +142,18 @@ const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, s
     open ? 0.1 : 0.6,
   ])
 
+  if (!mounted) {
+    return (
+      <div className={`${styles.wrapper} flex w-full ${className ?? ""}`} />
+    );
+  }
+
   return (
     <div className={`${styles.wrapper} flex w-full ${className}`}>
       
       <animated.div
-        style={{ ...rest, width: size }}
+        ref={registerRef}
+        style={{ width: size, background: open ? getItemColor() : getColor() }}
         className={styles.container}
         onClick={() => set(open => !open)}>
 

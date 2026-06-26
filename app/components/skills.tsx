@@ -1,9 +1,8 @@
-import { useTheme } from "next-themes"
-import { useState } from "react"
+import { useThemeReady } from "./useThemeReady"
+import { useState, type ReactNode } from "react"
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 import { SkillLevels } from './skillLevels';
 import SkillLevelDisplay from "./skillLevelsBadges"
-import { ParallaxProvider } from 'react-scroll-parallax';
 import { Card, CardContent } from "@/components/ui/card"
 import {
   Carousel,
@@ -86,6 +85,28 @@ const CAROUSEL_CARD_CONTENT: CardSections[][] = [
 ];
 
 
+// Cohesive glass panel used for the detail column. Keeps the section on-theme
+// instead of the raw red/yellow placeholder blocks.
+function DetailPanel({
+  children,
+  className = "",
+  emphasis = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  emphasis?: boolean;
+}) {
+  return (
+    <div
+      className={`${className} flex items-center justify-center rounded-2xl border border-white/15 ${
+        emphasis ? "bg-white/15" : "bg-white/8"
+      } px-3 py-2 text-center text-sm font-medium text-white/90 shadow-lg backdrop-blur-md transition-colors`}
+    >
+      {children}
+    </div>
+  );
+}
+
 interface CarouselSectionProps {
   carouselId: number;
   widthClass: string;
@@ -128,14 +149,16 @@ function CarouselSection({
                     onMouseDown={() => handleMouseDown(cardId)}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={handleMouseUp}
-                    className={`h-full transition-all duration-200 ease-in-out cursor-pointer 
-                    ${isSelected ? "outline-4 outline-yellow-400 bg-yellow-100 text-black" : "outline outline-transparent bg-white/10 text-white"}
+                    className={`h-full cursor-pointer rounded-2xl border backdrop-blur-md transition-all duration-200 ease-in-out
+                    ${isSelected
+                        ? "border-amber-300/80 bg-amber-50/95 text-black shadow-xl ring-2 ring-amber-300/60"
+                        : "border-white/15 bg-white/10 text-white shadow-lg hover:-translate-y-1 hover:bg-white/20 hover:shadow-xl"}
                     ${isPressed ? "scale-95" : "scale-100"}
                     `}
                 >
-                    <CardContent className="flex flex-col items-center justify-center h-full text-center">
-                    <span className="text-2xl font-semibold mb-2">{title}</span>
-                    <p className="text-sm opacity-80">{description}</p>
+                    <CardContent className="flex h-full flex-col items-center justify-center p-4 text-center">
+                    <span className="mb-2 text-xl font-semibold tracking-tight md:text-2xl">{title}</span>
+                    <p className="text-sm leading-snug opacity-80">{description}</p>
                     </CardContent>
                 </Card>
                 </div>
@@ -151,7 +174,7 @@ function CarouselSection({
 
 
 export default function Awards() {
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme } = useThemeReady();
 
     const getBackgroundColor = () => {
         if (theme === "dark") return 'bg-[radial-gradient(circle_at_50%,_#FFD700_0%,_#1A001C_400px)]';
@@ -184,11 +207,10 @@ export default function Awards() {
             : { top: null, middle: null, bottom: null, rightTop: null, rightBottom: null };
 
     return (
-        <ParallaxProvider>
         <div className="w-full relative">
             <div className={`w-full ${getBackgroundColor()} shadow-2xl`}>
-            <div className="relative z-10 pr-24 pb-24 w-full">
-                <div className="grid grid-cols-5 lg:h-[720px] gap-4">
+            <div className="relative z-10 w-full px-6 py-16 md:px-16">
+                <div className="grid grid-cols-5 lg:h-[720px] gap-6">
                 {/* ✅ Left Column with generated carousels */}
                 <div className="col-span-3 grid grid-rows-3 gap-4 justify-items-end pr-4">
                         {carousels.map((c, carouselId) => {
@@ -213,33 +235,32 @@ export default function Awards() {
                         })}
                 </div>
 
-                {/* ✅ Right Column (unchanged) */}
+                {/* ✅ Right Column: detail panels for the selected card */}
                 <div className="col-span-2 grid grid-cols-2 gap-4">
                     <div className="col-span-1 flex flex-col gap-4">
-                        <div className="h-[10%] bg-red-500 text-white p-2 rounded-lg flex items-center justify-center text-xs">
+                        <DetailPanel className="h-[10%] text-xs">
                         {sections.top || "Top placeholder"}
-                        </div>
-                        <div className="h-[60%] bg-red-600 text-white p-2 rounded-lg flex items-center justify-center text-sm font-semibold">
+                        </DetailPanel>
+                        <DetailPanel className="h-[60%]" emphasis>
                         {sections.middle || "Middle placeholder"}
-                        </div>
-                        <div className="h-[30%] bg-red-700 text-white p-2 rounded-lg flex items-center justify-center text-xs">
+                        </DetailPanel>
+                        <DetailPanel className="h-[30%] text-xs">
                         {sections.bottom || "Bottom placeholder"}
-                        </div>
+                        </DetailPanel>
                     </div>
 
                     <div className="col-span-1 flex flex-col gap-4">
-                        <div className="h-1/2 bg-yellow-400 text-black p-2 rounded-lg flex items-center justify-center text-sm font-semibold">
+                        <DetailPanel className="h-1/2">
                         {sections.rightTop || "Right top placeholder"}
-                        </div>
-                        <div className="h-1/2 bg-yellow-500 text-black p-2 rounded-lg flex items-center justify-center text-sm font-semibold">
+                        </DetailPanel>
+                        <DetailPanel className="h-1/2">
                         {sections.rightBottom || "Right bottom placeholder"}
-                        </div>
+                        </DetailPanel>
                     </div>
                     </div>
                 </div>
             </div>
             </div>
         </div>
-        </ParallaxProvider>
     );
 }

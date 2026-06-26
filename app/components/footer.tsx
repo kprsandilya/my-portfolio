@@ -7,10 +7,10 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-import { useTheme } from "next-themes"
+import { useThemeReady } from "./useThemeReady"
 
 export default function Footer() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useThemeReady();
 
   const getBackground = () => {
     // New Dark Theme: Deep Slate to Black with a mid-tone for depth.
@@ -34,17 +34,16 @@ export default function Footer() {
     return 'border-[#86A8E7]';
   };
 
+  // Top color matches the Skills section above so the footer flows out of it,
+  // then settles into the footer's own base tone at the bottom.
   const getFooterBackground = () => {
-    // Dark Theme: Deep plum-to-slate gradient with subtle glow.
     if (theme === "dark")
-      return "bg-gradient-to-t from-[#0D0E10] via-[#1A1720] to-[#241427]";
+      return "bg-gradient-to-b from-[#1A001C] to-[#0D0E10]";
 
-    // Surprise Theme: Warm sunset vibe that grounds the brighter page tones.
     if (theme === "surprise")
-      return "bg-gradient-to-t from-[#F0CC95] via-[#FFB69B] to-[#F28585]";
+      return "bg-gradient-to-b from-[#BA5370] to-[#F0CC95]";
 
-    // Default Theme: Calm ocean dusk gradient to mirror header tones but darker at the base.
-    return "bg-[#D3CCE3]";
+    return "bg-gradient-to-b from-[#006473] to-[#D3CCE3]";
   };
 
   return (

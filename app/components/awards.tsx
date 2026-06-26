@@ -1,9 +1,8 @@
 import ThreeDCarousel, { ThreeDCarouselItem } from "@/components/ui/ThreeDCarousel";
 import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams";
-import { useTheme } from "next-themes"
+import { useThemeReady } from "./useThemeReady"
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
-
-import { ParallaxBanner, Parallax, ParallaxProvider } from 'react-scroll-parallax';
+import { Parallax } from 'react-scroll-parallax';
 
 const items: ThreeDCarouselItem[] = [
   {
@@ -36,21 +35,24 @@ const items: ThreeDCarouselItem[] = [
 ];
 
 const ECCENTRIC_CLIP_CLASS = "eccentric-curve-clip";
-const BOTTOM_CLIP_CLASS = "eccentric-curve-clip-bottom";
 
 export default function Awards() {
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme } = useThemeReady();
 
+    // Top color matches Projects' bottom; bottom color matches the Skills
+    // section that follows, so Awards blends seamlessly between the two.
     const getBackgroundColor = () => {
-        if (theme === "dark") return 'bg-gradient-to-b from-[#8B6508] to-[#4A3203]';
-        if (theme === "surprise") return 'bg-gradient-to-b from-[#FF7F50] to-[#FF1493]';
-        return 'bg-gradient-to-b from-[#A5E5E7] to-[#A0C5C7]';
+        if (theme === "dark") return 'bg-gradient-to-b from-[#241427] to-[#1A001C]';
+        if (theme === "surprise") return 'bg-gradient-to-b from-[#F0CC95] to-[#BA5370]';
+        return 'bg-gradient-to-b from-[#86A8E7] to-[#006473]';
     };
 
+    // The bottom curved panel is the same solid color as the Skills section, so
+    // the bottom curve reveals a matching color (a seamless transition).
     const getBottomBackgroundColor = () => {
-        if (theme === "dark") return 'bg-gradient-to-b from-[#4A3203] to-[#2C1E00]'; 
-        if (theme === "surprise") return 'bg-gradient-to-b from-[#FF1493] to-[#800080]';
-        return 'bg-gradient-to-b from-[#A0C5C7] to-[#A4C1D4]'; 
+        if (theme === "dark") return 'bg-[#1A001C]';
+        if (theme === "surprise") return 'bg-[#BA5370]';
+        return 'bg-[#006473]';
     };
 
     const textGradient = () => {
@@ -60,8 +62,9 @@ export default function Awards() {
     };
 
     return (
-        <ParallaxProvider>
-        <div className="w-full relative -mt-[200px]">
+        // Static block: it tucks its curved top up over Projects via a scalable
+        // negative margin (sized to cover the eccentric curve's depth).
+        <div className="w-full relative mt-[clamp(-260px,-20vh,-150px)]">
             <svg
                 width="0"
                 height="0"
@@ -69,52 +72,36 @@ export default function Awards() {
             >
 
             <clipPath id="eccentric-curve-clip" clipPathUnits="objectBoundingBox">
-            <path 
-                d="M0 0.2 
-                C0.15 0.05, 0.35 0.1, 0.5 0.05
-                S0.85 0.0, 1 0.2 
-                L1 1 
-                L0 1 
-                Z"
-            />
-            </clipPath>
-
-            <clipPath id="eccentric-curve-clip-bottom" clipPathUnits="objectBoundingBox">
-                <path 
-                    d="M0 0 L1 0 
-                    L1 0.8 
-                    C0.75 0.2, 0.25 0.2, 0 0.8 
-                    Z"
-                />
+            <path d="M0 0.2 C0.15 0.05, 0.35 0.1, 0.5 0.05 S0.85 0.0, 1 0.2 L1 1 L0 1 Z" />
             </clipPath>
 
             </svg>
-            <Parallax className={`pb-[200px] w-full`} speed={30}>
-                <div className={`w-full ${ECCENTRIC_CLIP_CLASS} ${getBackgroundColor()} shadow-2xl `}>
-                    <div className={`w-full will-change-transform `}>
-                        {/* <BackgroundBeams className="absolute inset-0" /> */}
-                        <div className='w-full relative text-center pt-48'>
-                            <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter" 
-                                gradient={textGradient()} text="Awards and Certifications"/>
-                        </div>
-                        <div className="relative z-10 pt-32 w-full">
-                            <ThreeDCarousel 
-                            items={items}
-                            autoRotate={true}
-                            rotateInterval={4000}
-                            cardHeight={500}
-                            />
-                        </div>
-                    </div>
+            <div className={`w-full ${ECCENTRIC_CLIP_CLASS} ${getBackgroundColor()} shadow-2xl pb-[clamp(100px,14vh,200px)] overflow-hidden`}>
+                <div className={`w-full will-change-transform `}>
+                    {/* <BackgroundBeams className="absolute inset-0" /> */}
+                    <Parallax speed={6} className='w-full relative text-center pt-48'>
+                        <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter"
+                            gradient={textGradient()} text="Awards and Certifications"/>
+                    </Parallax>
+                    <Parallax speed={6} className="relative z-10 pt-32 w-full">
+                        <ThreeDCarousel
+                        items={items}
+                        autoRotate={true}
+                        rotateInterval={4000}
+                        cardHeight={500}
+                        />
+                    </Parallax>
                 </div>
+            </div>
 
-                <div 
-                className={`w-full h-[300px] ${getBottomBackgroundColor()} ${BOTTOM_CLIP_CLASS}`}
-                >
-                </div>
+            {/* Flat same-color block that continues straight into the Skills
+                section below (no bottom curve -> nothing for a notch to show
+                through). */}
+            <div
+            className={`w-full h-[clamp(120px,16vh,240px)] ${getBottomBackgroundColor()} -mt-px`}
+            >
+            </div>
 
-            </Parallax>
         </div>
-        </ParallaxProvider>
     )
 }
