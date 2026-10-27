@@ -10,7 +10,10 @@ import NavBar from "./navbar";
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     // 2. Wrap the dynamic component with ThemeProvider, as it also needs client-side execution
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+    // List every theme so next-themes removes the previous theme's class when
+    // switching. Without "surprise" here, its class stayed on <html> and its
+    // colors overrode light and dark.
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} themes={["light", "dark", "surprise"]}>
       {/* Single app-level parallax controller so any section can use <Parallax>
           on its inner content (the colored section blocks stay static). */}
       <ParallaxProvider>
