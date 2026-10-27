@@ -21,7 +21,7 @@ export default function Footer() {
   const getFooterBackground = () => "bg-gradient-to-b from-[var(--pf-term)] to-[var(--pf-term-2)]";
 
   return (
-    <footer className={`w-full ${getFooterBackground()} text-[var(--pf-term-fg)] py-8 px-12 flex flex-col md:flex-row items-center justify-between`}>
+    <footer className={`w-full border-t border-white/10 ${getFooterBackground()} text-[var(--pf-term-fg)] py-8 px-12 flex flex-col md:flex-row items-center justify-between`}>
       {/* Left Side: Text */}
       <div className="md:w-1/3 text-center md:text-left mb-6 md:mb-0">
         <h2 className="text-2xl font-semibold">Let’s Build Something Great</h2>

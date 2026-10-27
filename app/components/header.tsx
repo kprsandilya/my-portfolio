@@ -26,6 +26,12 @@ export default function Header() {
         holeOuterColor={getHoleOuter()}
         blobColor={getHoleBlob()}
       />
+      {/* Fades the grid and glow into the page color, so the header doesn't
+          end in a hard line above Education. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-72 bg-gradient-to-b from-transparent to-[var(--pf-bg)]"
+      />
     </div>
   );
 }

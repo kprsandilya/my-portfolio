@@ -3,6 +3,7 @@ import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams";
 import { useThemeReady } from "./useThemeReady"
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 import { Parallax } from 'react-scroll-parallax';
+import SectionKicker from './sectionKicker';
 import { FaAws } from "react-icons/fa";
 import { ShieldCheck, ChartCandlestick, GraduationCap } from "lucide-react";
 
@@ -74,11 +75,11 @@ export default function Awards() {
 
     // Top color matches Projects' bottom (seamless), bottom is the lighter
     // Awards tone that the bottom curve carves into.
-    const getBackgroundColor = () => 'bg-gradient-to-b from-[var(--pf-bg-alt)] to-[var(--pf-bg-deep)]';
+    const getBackgroundColor = () => 'bg-[var(--pf-bg)]';
 
     // The curved panel keeps the Awards tone; its carved bottom reveals the
     // Skills color behind it, so the curve reads as a contrasting transition.
-    const getBottomBackgroundColor = () => 'bg-[var(--pf-bg-deep)]';
+    const getBottomBackgroundColor = () => 'bg-[var(--pf-bg)]';
 
     // Color of the Skills section that follows (kept in sync with page.tsx).
     // Used as the layer the bottom curve reveals, so the seam stays clean.
@@ -117,7 +118,8 @@ export default function Awards() {
             <div className={`relative w-full ${ECCENTRIC_CLIP_CLASS} ${getBackgroundColor()} shadow-2xl pb-[clamp(100px,14vh,200px)] overflow-hidden`}>
                 <div className={`w-full will-change-transform `}>
                     {/* <BackgroundBeams className="absolute inset-0" /> */}
-                    <Parallax speed={6} className='w-full relative text-center pt-48'>
+                    <SectionKicker index="04" path="awards" className="relative z-10 pt-36" />
+                    <Parallax speed={6} className='w-full relative text-center pt-10'>
                         <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter"
                             gradient={textGradient()} text="Awards and Certifications"/>
                     </Parallax>

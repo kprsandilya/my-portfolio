@@ -12,6 +12,8 @@ import Awards from "./components/awards"
 import Skills from "./components/skills"
 import Footer from "./components/footer"
 import Skate from "./components/hobbies"
+import SectionKicker from "./components/sectionKicker"
+import { ChevronDown } from "lucide-react"
 
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 
@@ -33,7 +35,20 @@ export default function TestHome() {
         <Info />
       </div>
 
-      <div className="relative z-30 mt-24 md:mt-40 w-full">
+      {/* Scroll cue: leads from the header into Education */}
+      <div className="relative z-20 mt-10 flex justify-center">
+        <a
+          href="#education"
+          className="group inline-flex flex-col items-center gap-1 font-mono text-sm text-[var(--pf-fg-muted)] transition-colors hover:text-[var(--pf-accent)]"
+        >
+          <span>
+            <span className="text-[var(--pf-accent)]">$</span> scroll --down
+          </span>
+          <ChevronDown className="h-5 w-5 animate-bounce" aria-hidden="true" />
+        </a>
+      </div>
+
+      <div id="education" className="relative z-30 mt-16 md:mt-24 w-full scroll-mt-16">
         <Education />
       </div>
 
@@ -55,7 +70,8 @@ export default function TestHome() {
 
       <div className={`relative z-50 ${getBackgroundColor()} flex flex-col items-center`}>
         <div className="w-full mt-8">
-          <div className="flex flex-col items-center px-6 pt-20 pb-6 text-center">
+          <SectionKicker index="05" path="skills" className="pt-16" />
+          <div className="flex flex-col items-center px-6 pt-10 pb-6 text-center">
             <GradientText
               className="text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter text-center"
               gradient={textGradient()}

@@ -4,6 +4,7 @@ import { LineShadowText } from '@/components/ui/shadcn-io/line-shadow-text';
 import CodeHoverCards, { type CardData } from '@/components/ui/3d-hover-gallery';
 import { Github, Code, Dices } from 'lucide-react';
 import { Parallax } from 'react-scroll-parallax';
+import SectionKicker from './sectionKicker';
 
 // First row: projects from the resume. Clicking a card flips it to show
 // details; the repo link only appears for public repositories.
@@ -154,7 +155,7 @@ const CLIP_CLASS = "clip-top-curve";
 export default function ThreeDPinGrid() {
     const { theme, setTheme } = useThemeReady();
 
-    const getColors = () => 'bg-gradient-to-b from-[var(--pf-bg)] to-[var(--pf-bg-alt)]';
+    const getColors = () => 'bg-[var(--pf-bg-alt)]';
 
     const textShadow = () => 'var(--pf-accent)';
 
@@ -179,7 +180,8 @@ export default function ThreeDPinGrid() {
             </clipPath>
         </svg>
         <div className={`w-full ${getColors()} ${CLIP_CLASS} pb-96 overflow-hidden`}>
-            <Parallax speed={8} className='w-full relative text-center pt-32'>
+            <SectionKicker index="03" path="projects" className="relative z-10 pt-24" />
+            <Parallax speed={8} className='w-full relative text-center pt-10'>
                 <h1 className="text-balance text-8xl font-semibold leading-none tracking-tighter">
                     <LineShadowText 
                     className="italic" 

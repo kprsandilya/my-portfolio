@@ -2,6 +2,7 @@ import React from 'react';
 import CurvedLoop from "@/components/ui/shadcn-io/curved-loop";
 import { useThemeReady } from "./useThemeReady"
 import { Divider } from "@heroui/react";
+import SectionKicker from "./sectionKicker";
 import { FaAws } from "react-icons/fa";
 import { Truck, HeartPulse, CodeXml, GraduationCap, Landmark, Wrench } from "lucide-react";
 
@@ -115,7 +116,7 @@ export default function Experience() {
 
     // Background flows from the color Pictures fades into (top) down to the
     // color Projects starts with (bottom), so the section seams are invisible.
-    const getBackground = () => 'bg-gradient-to-b from-[var(--pf-bg-alt)] to-[var(--pf-bg)]';
+    const getBackground = () => 'bg-[var(--pf-bg)]';
 
     // The marquee's own wrapper is a full screen tall; these overrides let it
     // size to the curve instead.
@@ -151,8 +152,10 @@ export default function Experience() {
                 />
             </div>
 
+            <SectionKicker index="02" path="experience" className="relative z-30 pt-20" />
+
             {/* Header: its own row, so the cards can never cover it. */}
-            <div className={`relative z-20 pt-[12vw] ${loopFit}`}>
+            <div className={`relative z-20 pt-[8vw] ${loopFit}`}>
                 <CurvedLoop
                     marqueeText="WORK EXPERIENCE"
                     speed={2}

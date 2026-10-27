@@ -7,6 +7,7 @@ import styles from './styles.module.scss'
 import { HighlightText } from "@/components/ui/shadcn-io/highlight-text";
 
 import EducationItems from './educationItems';
+import SectionKicker from './sectionKicker';
 
 const X_LINES = 60
 
@@ -19,6 +20,9 @@ const INITIAL_WIDTH = 20
 const SMOOTHING_FACTOR = 72
 
 const SCROLLING_FACTOR = 1.5
+
+// Fades the Education band in over its first 220px.
+const EDGE_FADE = 'linear-gradient(to bottom, transparent 0, #000 220px)'
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
 
@@ -173,7 +177,11 @@ export default function Education() {
 
   return (
     <div ref={containerRef} className={styles.body}>
-      <div className={`${styles.animated__layers} ${getBackgroundColors()} pointer-events-none`}>
+      {/* The band fades in from the top instead of starting with a hard edge. */}
+      <div
+        className={`${styles.animated__layers} ${getBackgroundColors()} pointer-events-none`}
+        style={{ maskImage: EDGE_FADE, WebkitMaskImage: EDGE_FADE }}
+      >
         <animated.div
           className={styles.bar__container}
           style={{ opacity: barOpacity }}
@@ -236,6 +244,7 @@ export default function Education() {
       </div>
 
       <div ref={contentRef} className="relative z-10 w-full">
+        <SectionKicker index="01" path="education" className="relative z-20 pt-24" />
         <h1 className={`${styles.title} relative z-20 bg-transparent`}>
             <span>
                 <animated.span style={{ y: titleY }}>My</animated.span>

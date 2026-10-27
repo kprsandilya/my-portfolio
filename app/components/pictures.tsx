@@ -8,7 +8,7 @@ export default function ThreeDMarqueeDemo() {
 
     const getColors = () => 'bg-gradient-to-b from-[var(--pf-bg-deep)] to-[var(--pf-bg-alt)]';
 
-    const getFadingOverlay = () => 'bg-gradient-to-b from-transparent via-transparent to-[var(--pf-bg-alt)]';
+    const getFadingOverlay = () => 'bg-gradient-to-b from-transparent via-transparent to-[var(--pf-bg)]';
 
   const images = [
     "https://assets.aceternity.com/cloudinary_bkp/3d-card.png",
