@@ -340,7 +340,7 @@ const CodeHoverCards: React.FC<CodeHoverCardsProps> = ({
 
                   {/* Back */}
                   {card.details && isFlipped && (
-                    <div className={cn(faceClass, 'bg-background text-foreground')} style={radius}>
+                    <div className={cn(faceClass, 'bg-card text-card-foreground')} style={radius}>
                       <CardBack card={card as CardData & { details: CardDetails }} active={!isTurning} />
                     </div>
                   )}

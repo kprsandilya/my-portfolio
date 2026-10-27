@@ -74,42 +74,22 @@ export default function Awards() {
 
     // Top color matches Projects' bottom (seamless), bottom is the lighter
     // Awards tone that the bottom curve carves into.
-    const getBackgroundColor = () => {
-        if (theme === "dark") return 'bg-gradient-to-b from-[#241427] to-[#4A3203]';
-        if (theme === "surprise") return 'bg-gradient-to-b from-[#F0CC95] to-[#FF7F50]';
-        return 'bg-gradient-to-b from-[#86A8E7] to-[#A0C5C7]';
-    };
+    const getBackgroundColor = () => 'bg-gradient-to-b from-[var(--pf-bg-alt)] to-[var(--pf-bg-deep)]';
 
     // The curved panel keeps the Awards tone; its carved bottom reveals the
     // Skills color behind it, so the curve reads as a contrasting transition.
-    const getBottomBackgroundColor = () => {
-        if (theme === "dark") return 'bg-[#4A3203]';
-        if (theme === "surprise") return 'bg-[#FF7F50]';
-        return 'bg-[#A0C5C7]';
-    };
+    const getBottomBackgroundColor = () => 'bg-[var(--pf-bg-deep)]';
 
     // Color of the Skills section that follows (kept in sync with page.tsx).
     // Used as the layer the bottom curve reveals, so the seam stays clean.
-    const getSkillsColor = () => {
-        if (theme === "dark") return 'bg-[#120016]';
-        if (theme === "surprise") return 'bg-[#8A2F4E]';
-        return 'bg-[#013A46]';
-    };
+    const getSkillsColor = () => 'bg-[color:var(--pf-term)]';
 
     // Projects' bottom color (kept in sync with projects.tsx). The curved top
     // is cut deeper than Awards overlaps Projects, so this fills the cut-out
     // corners below Projects instead of letting the page background show.
-    const getProjectsBottomColor = () => {
-        if (theme === "dark") return 'bg-[#241427]';
-        if (theme === "surprise") return 'bg-[#F0CC95]';
-        return 'bg-[#86A8E7]';
-    };
+    const getProjectsBottomColor = () => 'bg-[var(--pf-bg-alt)]';
 
-    const textGradient = () => {
-        if (theme === "dark") return 'linear-gradient(90deg, #48166cff 0%, #c31432 50%, #48166cff 100%)';
-        if (theme === "surprise") return 'linear-gradient(90deg, #d5ec3cff 0%, #e866ccff 50%, #d5ec3cff 100%)';
-        return 'linear-gradient(90deg, #A5B4FC 0%, #60A5FA 50%, #A5B4FC 100%)';
-    };
+    const textGradient = () => 'linear-gradient(90deg, var(--pf-accent) 0%, var(--pf-accent-2) 50%, var(--pf-accent) 100%)';
 
     return (
         // Static block: it tucks its curved top up over Projects via a scalable

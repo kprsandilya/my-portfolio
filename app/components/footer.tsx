@@ -12,47 +12,21 @@ import { useThemeReady } from "./useThemeReady"
 export default function Footer() {
   const { theme, setTheme } = useThemeReady();
 
-  const getBackground = () => {
-    // New Dark Theme: Deep Slate to Black with a mid-tone for depth.
-    if (theme === "dark") return 'bg-gradient-to-b from-[#121B21] to-[#241427]';
+  const getBackground = () => 'bg-white/10 hover:bg-white/20 text-[var(--pf-term-fg)]';
 
-    // New Surprise Theme: High-energy Rose to Purple.
-    if (theme === "surprise") return 'bg-gradient-to-b from-[#FFB69B] to-[#F0CC95]';
-    
-    // New Default Theme: Clean, modern Teal/Sky to Blue.
-    return 'bg-gradient-to-b from-[#91EAE4] to-[#86A8E7]';
-  };
-
-  const getBorderBackground = () => {
-    // New Dark Theme: Deep Slate to Black with a mid-tone for depth.
-    if (theme === "dark") return 'border-[#241427]';
-
-    // New Surprise Theme: High-energy Rose to Purple.
-    if (theme === "surprise") return 'border-[#F0CC95]';
-    
-    // New Default Theme: Clean, modern Teal/Sky to Blue.
-    return 'border-[#86A8E7]';
-  };
+  const getBorderBackground = () => 'border-[var(--pf-accent)]';
 
   // Top color matches the Skills section above so the footer flows out of it,
   // then settles into the footer's own base tone at the bottom.
-  const getFooterBackground = () => {
-    if (theme === "dark")
-      return "bg-gradient-to-b from-[#120016] to-[#0D0E10]";
-
-    if (theme === "surprise")
-      return "bg-gradient-to-b from-[#8A2F4E] to-[#F0CC95]";
-
-    return "bg-gradient-to-b from-[#013A46] to-[#D3CCE3]";
-  };
+  const getFooterBackground = () => "bg-gradient-to-b from-[var(--pf-term)] to-[var(--pf-term-2)]";
 
   return (
-    <footer className={`w-full ${getFooterBackground()} text-white py-8 px-12 flex flex-col md:flex-row items-center justify-between`}>
+    <footer className={`w-full ${getFooterBackground()} text-[var(--pf-term-fg)] py-8 px-12 flex flex-col md:flex-row items-center justify-between`}>
       {/* Left Side: Text */}
       <div className="md:w-1/3 text-center md:text-left mb-6 md:mb-0">
         <h2 className="text-2xl font-semibold">Let’s Build Something Great</h2>
-        <p className="text-gray-400 mt-2">
-          Crafted with <span className="text-red-500">♥</span> by Sandilya Kambhampati.  
+        <p className="mt-2 text-[var(--pf-term-fg)]/70">
+          Crafted with <span className="text-[var(--pf-accent)]">♥</span> by Sandilya Kambhampati.  
           All rights reserved, unless the footer rebels.
         </p>
       </div>

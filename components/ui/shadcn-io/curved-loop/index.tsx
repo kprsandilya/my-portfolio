@@ -157,7 +157,7 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
         <text 
           ref={measureRef} 
           xmlSpace="preserve" 
-          className={`fill-white ${className}`}
+          className={`fill-current ${className}`}
           style={{ visibility: 'hidden', opacity: 0, pointerEvents: 'none', position: 'absolute' }}
         >
           {text}
@@ -168,7 +168,7 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
         </defs>
         
         {ready && (
-          <text xmlSpace="preserve" className={`fill-white ${className}`}>
+          <text xmlSpace="preserve" className={`fill-current ${className}`}>
             <textPath ref={textPathRef} href={`#${pathId}`} startOffset={offset + 'px'} xmlSpace="preserve">
               {totalText}
             </textPath>

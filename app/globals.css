@@ -113,73 +113,126 @@
   --animate-spin: spin 2s linear infinite
 }
 
+/* Site palette. Every section reads these tokens, so the three themes stay
+   cohesive and neighboring sections always blend at their seams.
+     light    - Tokyo Night Day
+     dark     - Tokyo Night
+     surprise - Monokai
+   --pf-bg / --pf-bg-alt / --pf-bg-deep : the section backgrounds the page steps through
+   --pf-raised                          : cards and panels on top of a section
+   --pf-term / --pf-term-2              : the dark "terminal" blocks (greeting, Skills, footer)
+   --pf-chip                            : closed class buttons (must stand out from --pf-bg)
+   --pf-accent / -2 / -3                : one primary accent plus two supporting colors
+   --pf-prompt                          : the terminal prompt color (greeting text)
+   --pf-sel / --pf-sel-2                : selected-card fills on dark terminal blocks */
 :root {
+  --pf-bg: #e1e2e7;
+  --pf-bg-alt: #d5d6db;
+  --pf-bg-deep: #c4c8da;
+  --pf-raised: #f2f3f7;
+  --pf-fg: #343b58;
+  --pf-fg-muted: #6172b0;
+  --pf-border: #a8aecb;
+  --pf-accent: #2e7de9;
+  --pf-accent-2: #9854f1;
+  --pf-accent-3: #007197;
+  --pf-on-accent: #ffffff;
+  --pf-chip: #24283b;
+  --pf-term: #24283b;
+  --pf-term-2: #1f2335;
+  --pf-term-fg: #c0caf5;
+  --pf-prompt: #9ece6a;
+  --pf-glow: #7aa2f7;
+  --pf-sel: #dbe6fb;
+  --pf-sel-2: #c2d4f8;
+  --pf-sel-fg: #1f2335;
+
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --background: var(--pf-bg);
+  --foreground: var(--pf-fg);
+  --card: var(--pf-raised);
+  --card-foreground: var(--pf-fg);
+  --popover: var(--pf-raised);
+  --popover-foreground: var(--pf-fg);
+  --primary: var(--pf-accent);
+  --primary-foreground: var(--pf-on-accent);
+  --secondary: var(--pf-bg-alt);
+  --secondary-foreground: var(--pf-fg);
+  --muted: var(--pf-bg-alt);
+  --muted-foreground: var(--pf-fg-muted);
+  --accent: var(--pf-bg-alt);
+  --accent-foreground: var(--pf-fg);
+  --destructive: #f52a65;
+  --border: var(--pf-border);
+  --input: var(--pf-border);
+  --ring: var(--pf-accent);
+  --chart-1: var(--pf-accent);
+  --chart-2: var(--pf-accent-2);
+  --chart-3: var(--pf-accent-3);
+  --chart-4: #587539;
+  --chart-5: #b15c00;
+  --sidebar: var(--pf-raised);
+  --sidebar-foreground: var(--pf-fg);
+  --sidebar-primary: var(--pf-accent);
+  --sidebar-primary-foreground: var(--pf-on-accent);
+  --sidebar-accent: var(--pf-bg-alt);
+  --sidebar-accent-foreground: var(--pf-fg);
+  --sidebar-border: var(--pf-border);
+  --sidebar-ring: var(--pf-accent);
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --pf-bg: #1a1b26;
+  --pf-bg-alt: #1f2335;
+  --pf-bg-deep: #16161e;
+  --pf-raised: #24283b;
+  --pf-fg: #c0caf5;
+  --pf-fg-muted: #a9b1d6;
+  --pf-border: #3b4261;
+  --pf-accent: #7aa2f7;
+  --pf-accent-2: #bb9af7;
+  --pf-accent-3: #7dcfff;
+  --pf-on-accent: #16161e;
+  --pf-chip: #292e42;
+  --pf-term: #16161e;
+  --pf-term-2: #1a1b26;
+  --pf-term-fg: #c0caf5;
+  --pf-prompt: #9ece6a;
+  --pf-glow: #bb9af7;
+  --pf-sel: #c0caf5;
+  --pf-sel-2: #a9b8f0;
+  --pf-sel-fg: #16161e;
+
+  --destructive: #f7768e;
+  --chart-4: #9ece6a;
+  --chart-5: #ff9e64;
+}
+
+.surprise {
+  --pf-bg: #272822;
+  --pf-bg-alt: #2d2e27;
+  --pf-bg-deep: #1e1f1c;
+  --pf-raised: #3e3d32;
+  --pf-fg: #f8f8f2;
+  --pf-fg-muted: #cfcfc2;
+  --pf-border: #49483e;
+  --pf-accent: #f92672;
+  --pf-accent-2: #a6e22e;
+  --pf-accent-3: #66d9ef;
+  --pf-on-accent: #ffffff;
+  --pf-chip: #3e3d32;
+  --pf-term: #1e1f1c;
+  --pf-term-2: #171814;
+  --pf-term-fg: #f8f8f2;
+  --pf-prompt: #a6e22e;
+  --pf-glow: #f92672;
+  --pf-sel: #f8f8f2;
+  --pf-sel-2: #e6db74;
+  --pf-sel-fg: #272822;
+
+  --destructive: #f92672;
+  --chart-4: #fd971f;
+  --chart-5: #ae81ff;
 }
 
 @layer base {

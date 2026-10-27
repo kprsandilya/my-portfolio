@@ -13,7 +13,7 @@ import { TypeAnimation } from 'react-type-animation';
 
 const splitter = new GraphemeSplitter();
 
-const GREETING_CLASSES = "text-5xl font-bold font-mono tracking-wider text-[#1bbc68] drop-shadow-[0_0_5px_#1bbc68] max-w-4xl bg-black leading-tight";
+const GREETING_CLASSES = "text-5xl font-bold font-mono tracking-wider text-[var(--pf-prompt)] drop-shadow-[0_0_5px_var(--pf-prompt)] max-w-4xl bg-[var(--pf-term)] leading-tight";
 
 const GREETINGS = [
     "Hi! I'm Sandilya Kambhampati, a student at Purdue University!",
@@ -34,17 +34,9 @@ const GREETINGS = [
 export default function Info() {
     const { theme, setTheme } = useThemeReady();
 
-    const getBackground = () => {
-        if (theme === "dark") return "bg-black/50";
-        if (theme === "surprise") return "bg-pink-300/50";
-        return "bg-white/50";
-    };
+    const getBackground = () => "bg-[var(--pf-raised)]/70 text-[var(--pf-fg)]";
 
-    const getBorderBackground = () => {
-        if (theme === "dark") return "border-black/50";
-        if (theme === "surprise") return "border-pink-300/50";
-        return "border-white/50";
-    };
+    const getBorderBackground = () => "border-[var(--pf-accent)]/60";
 
     return (
         <div className="h-[400px] flex flex-col items-center justify-center h-full">

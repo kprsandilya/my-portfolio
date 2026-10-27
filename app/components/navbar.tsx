@@ -15,17 +15,13 @@ export default function NavBar() {
     return;
   };
 
-  const getNavbarClasses = () => {
-    if (theme === "dark") return "bg-gray-800/50 border-gray-700 text-white";
-    if (theme === "surprise") return "bg-pink-300/50 border-pink-400 text-white";
-    return "bg-white/50 border-gray-200 text-gray-900";
-  };
+  const getNavbarClasses = () => "bg-[var(--pf-bg)]/70 border-[var(--pf-border)] text-[var(--pf-fg)]";
 
   const getButtonClasses = (buttonTheme: string) => {
     const base = "rounded-lg px-5 py-1.5 text-xs font-medium transition-colors";
-    const active = "bg-blue-500 text-white";
+    const active = "bg-[var(--pf-accent)] text-[var(--pf-on-accent)]";
     const inactive =
-      "hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white";
+      "hover:bg-[var(--pf-bg-deep)] text-[var(--pf-fg)]";
     return theme === buttonTheme ? `${base} ${active}` : `${base} ${inactive}`;
   };
 
@@ -43,7 +39,7 @@ return (
           className="w-10 h-10  rounded-lg object-contain"
         />
         <h1 className="text-xl font-semibold tracking-tight">
-          Sandilya<span className="text-blue-500">.dev</span>
+          Sandilya<span className="text-[var(--pf-accent)]">.dev</span>
         </h1>
       </div>
 
@@ -60,13 +56,7 @@ return (
             <Tooltip key={label}>
               <TooltipTrigger asChild>
                 <button
-                  className={`group relative inline-flex flex-col items-center justify-center transition-all duration-200 ${
-                    theme === "light"
-                      ? "text-gray-600 hover:text-blue-600"
-                      : theme === "dark"
-                      ? "text-gray-400 hover:text-blue-400"
-                      : "text-white hover:text-yellow-200"
-                  }`}
+                  className={"group relative inline-flex flex-col items-center justify-center transition-all duration-200 text-[var(--pf-fg-muted)] hover:text-[var(--pf-accent)]"}
                 >
                   <Icon className="h-6 w-6" />
                   <span
@@ -77,13 +67,7 @@ return (
               </TooltipTrigger>
               <TooltipContent
                 side="bottom"
-                className={`rounded-md px-2 py-1 text-xs shadow-md ${
-                  theme === "light"
-                    ? "bg-gray-900 text-white"
-                    : theme === "dark"
-                    ? "bg-gray-800 text-white"
-                    : "bg-pink-500 text-white"
-                }`}
+                className={"rounded-md px-2 py-1 text-xs shadow-md bg-[var(--pf-term)] text-[var(--pf-term-fg)]"}
               >
                 {label}
               </TooltipContent>
@@ -94,7 +78,7 @@ return (
 
       {/* Right: Theme Switcher */}
       <div
-        className="grid grid-cols-3 gap-1 rounded-lg bg-gray-200 dark:bg-gray-700 p-1 shadow-inner"
+        className="grid grid-cols-3 gap-1 rounded-lg bg-[var(--pf-bg-alt)] p-1 shadow-inner"
         role="group"
       >
         <button

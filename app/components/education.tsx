@@ -64,29 +64,13 @@ export default function Education() {
 
     const { theme } = useTheme();
 
-    const getColors = () => {
-        if (theme === "dark") return 'bg-gradient-to-r from-gray-700 to-black';
-        if (theme === "surprise") return 'bg-gradient-to-r from-pink-500 to-yellow-300';
-        return 'bg-gradient-to-r from-indigo-400 to-cyan-400';
-    };
+    const getColors = () => 'bg-gradient-to-r from-[var(--pf-bg-alt)] to-[var(--pf-bg-deep)]';
 
-    const getBackgroundColors = () => {
-        if (theme === "dark") return 'bg-gray-900/50';
-        if (theme === "surprise") return 'bg-pink-300/50';
-        return 'bg-[#D4F0F3]/50';
-    };
+    const getBackgroundColors = () => 'bg-[var(--pf-bg-alt)]/60';
 
-    const getTextColors = () => {
-        if (theme === "dark") return 'text-gray-200';
-        if (theme === "surprise") return 'text-gray-900';
-        return 'text-gray-900';
-    };
+    const getTextColors = () => 'text-[var(--pf-fg)]';
 
-    const getRoadColor = () => {
-        if (theme === "dark") return '#CFB991';
-        if (theme === "surprise") return '#ffffff';
-        return '#0E7490';
-    };
+    const getRoadColor = () => 'var(--pf-accent)';
 
     // Single spring that tracks how far the section has scrolled through the
     // viewport (0 = just entering at the bottom, 1 = fully scrolled past the
@@ -268,7 +252,7 @@ export default function Education() {
             <path
               d={roadPath}
               fill="none"
-              stroke={getRoadColor()}
+              style={{ stroke: getRoadColor() }}
               strokeWidth={4}
               strokeLinecap="round"
               strokeDasharray="2 16"
@@ -278,7 +262,7 @@ export default function Education() {
           {roadPoints.map((pt, i) =>
             i === 0 ? null : (
               <g key={i}>
-                <circle cx={pt.x} cy={pt.y} r={11} fill={getRoadColor()} opacity={0.9} />
+                <circle cx={pt.x} cy={pt.y} r={11} style={{ fill: getRoadColor() }} opacity={0.9} />
                 <circle cx={pt.x} cy={pt.y} r={4.5} fill="#ffffff" />
               </g>
             )

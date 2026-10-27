@@ -1,13 +1,10 @@
 // Course highlights for each year, taken from the Purdue transcript.
-// Gradients taken from: https://webgradients.com/
 
-const GOLD = 'linear-gradient(135deg, #FFD700 0%, #CC9966 100%)'; // Purdue gold
-const SILVER = 'linear-gradient(135deg, #FFFFFF 0%, #D3D3D3 100%)'; // white to light gray
-const DUST = 'linear-gradient(135deg, #F5ECD0 0%, #CFB991 100%)'; // Purdue "dust" tan
+// Course cards are tinted with the three theme accents (see globals.css).
+const TINT = (accent: string) => `color-mix(in srgb, var(${accent}) 18%, var(--pf-raised))`;
 
-// Cards cycle through these so neighboring courses look different. All are
-// light, because the course text is dark.
-const CARD_STYLES = [GOLD, SILVER, DUST];
+// Cards cycle through these so neighboring courses look different.
+const CARD_STYLES = [TINT('--pf-accent'), TINT('--pf-accent-2'), TINT('--pf-accent-3')];
 
 interface Course {
   courseName: string;

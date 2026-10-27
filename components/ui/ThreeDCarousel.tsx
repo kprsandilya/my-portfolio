@@ -122,10 +122,10 @@ const ThreeDCarousel = ({
                 )}`}
               >
                 <Card
-                  className={`overflow-hidden bg-background h-[${cardHeight}px] border shadow-sm hover:shadow-md flex flex-col`}
+                  className={`overflow-hidden bg-card h-[${cardHeight}px] border shadow-sm hover:shadow-md flex flex-col`}
                 >
                   <div
-                    className="relative bg-black p-6 flex items-center justify-center h-48 overflow-hidden"
+                    className="relative bg-[var(--pf-term)] p-6 flex items-center justify-center h-48 overflow-hidden"
                     style={{
                       backgroundImage: item.imageUrl ? `url(${item.imageUrl})` : undefined,
                       backgroundSize: "cover",
@@ -147,10 +147,10 @@ const ThreeDCarousel = ({
                     <h3 className="text-xl font-bold mb-1 text-foreground">
                       {item.title}
                     </h3>
-                    <p className="text-gray-500 text-sm font-medium mb-2">
+                    <p className="text-muted-foreground text-sm font-medium mb-2">
                       {item.brand}
                     </p>
-                    <p className="text-gray-600 text-sm flex-grow">
+                    <p className="text-muted-foreground text-sm flex-grow">
                       {item.description}
                     </p>
 
@@ -159,7 +159,7 @@ const ThreeDCarousel = ({
                         {item.tags.map((tag, idx) => (
                           <span
                             key={idx}
-                            className="px-2 py-1 bg-gray-50 text-gray-600 rounded-full text-xs animate-pulse-slow"
+                            className="px-2 py-1 bg-muted text-muted-foreground rounded-full text-xs animate-pulse-slow"
                           >
                             {tag}
                           </span>

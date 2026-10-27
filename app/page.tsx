@@ -18,17 +18,9 @@ import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 export default function TestHome() {
   const { theme } = useThemeReady();
 
-  const textGradient = () => {
-    if (theme === "dark") return 'linear-gradient(90deg, #48166cff 0%, #c31432 50%, #48166cff 100%)';
-    if (theme === "surprise") return 'linear-gradient(90deg, #d5ec3cff 0%, #e866ccff 50%, #d5ec3cff 100%)';
-    return 'linear-gradient(90deg, #A5B4FC 0%, #60A5FA 50%, #A5B4FC 100%)';
-  };
+  const textGradient = () => 'linear-gradient(90deg, var(--pf-accent) 0%, var(--pf-accent-2) 50%, var(--pf-accent) 100%)';
 
-  const getBackgroundColor = () => {
-    if (theme === "dark") return 'bg-[#120016]';
-    if (theme === "surprise") return 'bg-[#8A2F4E]';
-    return 'bg-[#013A46]';
-  };
+  const getBackgroundColor = () => 'bg-[color:var(--pf-term)]';
 
   return (
     <div className="relative w-full min-h-screen">

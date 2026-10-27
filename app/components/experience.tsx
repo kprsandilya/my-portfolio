@@ -96,12 +96,12 @@ const EARLIER_ROLES: EarlierRole[] = [
   },
 ];
 
-const CARD_CLASSES = "rounded-xl border border-foreground/20 bg-slate-200/90 p-6 shadow-xl backdrop-blur-sm dark:bg-slate-700/90 sm:p-8";
+const CARD_CLASSES = "rounded-xl border border-[var(--pf-border)] bg-[var(--pf-raised)]/90 p-6 text-[var(--pf-fg)] shadow-xl backdrop-blur-sm sm:p-8";
 
 function IconBadge({ icon: IconComponent, small = false }: { icon: Icon; small?: boolean }) {
   return (
     <div
-      className={`flex shrink-0 items-center justify-center rounded-xl bg-white/70 text-slate-800 shadow-inner dark:bg-slate-900/60 dark:text-slate-100 ${
+      className={`flex shrink-0 items-center justify-center rounded-xl bg-[var(--pf-bg-alt)] text-[var(--pf-accent)] shadow-inner ${
         small ? "h-11 w-11" : "h-16 w-16"
       }`}
     >
@@ -115,13 +115,7 @@ export default function Experience() {
 
     // Background flows from the color Pictures fades into (top) down to the
     // color Projects starts with (bottom), so the section seams are invisible.
-    const getBackground = () => {
-        if (theme === "dark") return 'bg-gradient-to-b from-[#200210] to-[#121B21]';
-
-        if (theme === "surprise") return 'bg-gradient-to-b from-[#FFDBBB] to-[#FFB69B]';
-
-        return `bg-gradient-to-b from-[#00B9B3] to-[#91EAE4]`;
-    };
+    const getBackground = () => 'bg-gradient-to-b from-[var(--pf-bg-alt)] to-[var(--pf-bg)]';
 
     // The marquee's own wrapper is a full screen tall; these overrides let it
     // size to the curve instead.
@@ -141,7 +135,7 @@ export default function Experience() {
                     direction="left"
                     curveAmount={-150}
                     customPathD="M-100,500 C300,1300 1140,-300 1540,500"
-                    className="text-8xl text-indigo-400"
+                    className="text-8xl text-[var(--pf-accent-2)]"
                     interactive={false}
                 />
             </div>
@@ -152,7 +146,7 @@ export default function Experience() {
                     direction="left"
                     curveAmount={-150}
                     customPathD="M-100,1200 C1140,400 300,2000 1540,1200"
-                    className="text-8xl text-indigo-400"
+                    className="text-8xl text-[var(--pf-accent-2)]"
                     interactive={false}
                 />
             </div>
@@ -165,7 +159,7 @@ export default function Experience() {
                     direction="right"
                     curveAmount={150}
                     customPathD="M-100,50 Q720,-200 1540,50"
-                    className="text-8xl text-green-500"
+                    className="text-8xl text-[var(--pf-accent)]"
                     interactive={false}
                 />
             </div>

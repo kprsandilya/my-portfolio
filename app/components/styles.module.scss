@@ -143,8 +143,7 @@
   font-weight: 800; /* Extra bold for visibility */
   margin-bottom: 4px; /* Increased separation from title */
   /* Using a deep, modern gray for high contrast */
-  color: #1a1a1a; 
-  /* If in a dark theme, this color should be light, like #EEEEEE */
+  color: var(--pf-fg);
 }
 
 /* 📝 Course Title: Secondary Description */
@@ -153,7 +152,7 @@
   font-weight: 400; /* Regular weight */
   line-height: 1.3;
   /* Muted dark gray for professionalism */
-  color: #595959; 
+  color: var(--pf-fg-muted);
 }
 
 /* ⭐ Course Grade: Highlighting the Achievement */
@@ -162,11 +161,11 @@
   font-weight: 900; /* Black font weight */
   padding-left: 20px; /* More space for visual separation */
   /* Use Purdue Old Gold for high emphasis */
-  color: #CC9966; 
+  color: var(--pf-accent); 
   min-width: 50px; /* Ensure grade column is wide enough for 'A+' or 'B-' */
   text-align: right;
   /* Optional: Add a subtle shadow or text-stroke to make it pop even more */
-  text-shadow: 1px 1px 3px rgba(204, 153, 102, 0.4); 
+  text-shadow: none;
 }
 
 .dot_visual {

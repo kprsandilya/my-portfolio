@@ -450,7 +450,7 @@ function SkillFrame({
   selected: boolean;
 }) {
   const tone = selected
-    ? "border-amber-300/80 bg-amber-50/95 text-black"
+    ? "border-[var(--pf-accent)] bg-[var(--pf-sel)] text-[var(--pf-sel-fg)]"
     : "border-white/15 bg-white/10 text-white group-hover:bg-white/20";
 
   if (variant === "code") {
@@ -459,7 +459,7 @@ function SkillFrame({
         {/* Editor title bar: window dots and a file tab */}
         <div
           className={`flex shrink-0 items-center gap-0.5 border-b px-1.5 py-1 xl:gap-1 xl:px-2 ${
-            selected ? "border-amber-300/60 bg-amber-100" : "border-white/10 bg-black/25"
+            selected ? "border-[var(--pf-accent)]/60 bg-[var(--pf-sel-2)]" : "border-white/10 bg-black/25"
           }`}
         >
           <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-red-400 xl:h-2 xl:w-2" />
@@ -475,7 +475,7 @@ function SkillFrame({
   }
 
   if (variant === "stack") {
-    const layer = selected ? "border-amber-300/60 bg-amber-100/40" : "border-white/10 bg-white/5";
+    const layer = selected ? "border-[var(--pf-accent)]/60 bg-[var(--pf-sel-2)]/40" : "border-white/10 bg-white/5";
     return (
       <div className="relative h-full">
         {/* Two sheets peeking out behind the card, like a stack of building blocks */}
@@ -486,7 +486,7 @@ function SkillFrame({
         >
           <span
             className={`mb-2 max-w-full truncate rounded-md px-1.5 py-0.5 font-mono text-[10px] ${
-              selected ? "bg-amber-200/80" : "bg-black/25"
+              selected ? "bg-[var(--pf-sel-2)]" : "bg-black/25"
             }`}
           >
             <span className="hidden xl:inline">import </span>
@@ -505,14 +505,14 @@ function SkillFrame({
       <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="block h-9 w-full shrink-0 xl:h-12" aria-hidden="true">
         <path
           d={CLOUD_PATH + " Z"}
-          className={`transition-colors ${selected ? "fill-amber-50/95" : "fill-white/10 group-hover:fill-white/20"}`}
+          className={`transition-colors ${selected ? "fill-[var(--pf-sel)]" : "fill-white/10 group-hover:fill-white/20"}`}
         />
         <path
           d={CLOUD_PATH}
           fill="none"
           strokeWidth={1}
           vectorEffect="non-scaling-stroke"
-          className={selected ? "stroke-amber-300/80" : "stroke-white/30"}
+          className={selected ? "stroke-[var(--pf-accent)]" : "stroke-white/30"}
         />
       </svg>
       <div
@@ -620,11 +620,7 @@ function CarouselSection({
 export default function Skills() {
     const { theme, setTheme } = useThemeReady();
 
-    const getBackgroundColor = () => {
-        if (theme === "dark") return 'bg-[radial-gradient(circle_at_50%,_#FFD700_0%,_#120016_400px)]';
-        if (theme === "surprise") return 'bg-[radial-gradient(circle_at_50%_500px,_#D69EBA_0%,_#8A2F4E_400px)]';
-        return 'bg-[radial-gradient(circle_at_50%_500px,_#06beb6,_#013A46_400px)]';
-    };
+    const getBackgroundColor = () => 'bg-[color:var(--pf-term)] bg-[image:radial-gradient(circle_at_50%_500px,color-mix(in_srgb,var(--pf-glow)_28%,transparent),transparent_440px)]';
         
     const [selectedCard, setSelectedCard] = useState<string | null>(null);
     const [pressedCard, setPressedCard] = useState<string | null>(null);

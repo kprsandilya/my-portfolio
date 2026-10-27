@@ -154,28 +154,11 @@ const CLIP_CLASS = "clip-top-curve";
 export default function ThreeDPinGrid() {
     const { theme, setTheme } = useThemeReady();
 
-    const getColors = () => {
-        // New Dark Theme: Deep Slate to Black with a mid-tone for depth.
-        if (theme === "dark") return 'bg-gradient-to-b from-[#121B21] to-[#241427]';
+    const getColors = () => 'bg-gradient-to-b from-[var(--pf-bg)] to-[var(--pf-bg-alt)]';
 
-        // New Surprise Theme: High-energy Rose to Purple.
-        if (theme === "surprise") return 'bg-gradient-to-b from-[#FFB69B] to-[#F0CC95]';
-        
-        // New Default Theme: Clean, modern Teal/Sky to Blue.
-        return 'bg-gradient-to-b from-[#91EAE4] to-[#86A8E7]';
-    };
+    const textShadow = () => 'var(--pf-accent)';
 
-    const textShadow = () => {
-        if (theme === "dark") return 'rgb(255, 255, 255)';
-        if (theme === "surprise") return 'rgba(53, 53, 70, 1)';
-        return 'rgb(0,0,0)';
-    };
-
-    const textColor = () => {
-        if (theme === "dark") return 'rgb(255, 255, 255)';
-        if (theme === "surprise") return 'rgba(70, 87, 111, 1)';
-        return 'rgb(0,0,0)';
-    };
+    const textColor = () => 'var(--pf-fg)';
 
   return (
     // Static block (no scroll-translate parallax) that tucks its curved top up
