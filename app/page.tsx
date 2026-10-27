@@ -25,9 +25,9 @@ export default function TestHome() {
   };
 
   const getBackgroundColor = () => {
-    if (theme === "dark") return 'bg-[#1A001C]';
-    if (theme === "surprise") return 'bg-[#BA5370]';
-    return 'bg-[#006473]';
+    if (theme === "dark") return 'bg-[#120016]';
+    if (theme === "surprise") return 'bg-[#8A2F4E]';
+    return 'bg-[#013A46]';
   };
 
   return (
@@ -61,20 +61,15 @@ export default function TestHome() {
         <Awards />
       </div>
 
-      <div className={`relative z-40 ${getBackgroundColor()} mt-0 flex flex-col items-center`}>
-        <div className='h-32 md:h-[clamp(170px,22vh,300px)]'>
-        </div>
-      </div>
-
       <div className={`relative z-50 ${getBackgroundColor()} flex flex-col items-center`}>
-        <div className="flex flex-col items-center px-6 pt-20 pb-6 text-center">
-          <GradientText
-            className="text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter text-center"
-            gradient={textGradient()}
-            text="Skills and Frameworks"
-          />
-        </div>
         <div className="w-full mt-8">
+          <div className="flex flex-col items-center px-6 pt-20 pb-6 text-center">
+            <GradientText
+              className="text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter text-center"
+              gradient={textGradient()}
+              text="Skills and Frameworks"
+            />
+          </div>
           <Skills />
         </div>
       </div>

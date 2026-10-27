@@ -38,12 +38,12 @@ export default function Footer() {
   // then settles into the footer's own base tone at the bottom.
   const getFooterBackground = () => {
     if (theme === "dark")
-      return "bg-gradient-to-b from-[#1A001C] to-[#0D0E10]";
+      return "bg-gradient-to-b from-[#120016] to-[#0D0E10]";
 
     if (theme === "surprise")
-      return "bg-gradient-to-b from-[#BA5370] to-[#F0CC95]";
+      return "bg-gradient-to-b from-[#8A2F4E] to-[#F0CC95]";
 
-    return "bg-gradient-to-b from-[#006473] to-[#D3CCE3]";
+    return "bg-gradient-to-b from-[#013A46] to-[#D3CCE3]";
   };
 
   return (

@@ -463,9 +463,9 @@ export default function Skills() {
     const { theme, setTheme } = useThemeReady();
 
     const getBackgroundColor = () => {
-        if (theme === "dark") return 'bg-[radial-gradient(circle_at_50%,_#FFD700_0%,_#1A001C_400px)]';
-        if (theme === "surprise") return 'bg-[radial-gradient(circle_at_50%_500px,_#D69EBA_0%,_#BA5370_400px)]';
-        return 'bg-[radial-gradient(circle_at_50%_500px,_#06beb6,_#006473_400px)]';
+        if (theme === "dark") return 'bg-[radial-gradient(circle_at_50%,_#FFD700_0%,_#120016_400px)]';
+        if (theme === "surprise") return 'bg-[radial-gradient(circle_at_50%_500px,_#D69EBA_0%,_#8A2F4E_400px)]';
+        return 'bg-[radial-gradient(circle_at_50%_500px,_#06beb6,_#013A46_400px)]';
     };
         
     const [selectedCard, setSelectedCard] = useState<string | null>(null);
