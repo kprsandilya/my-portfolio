@@ -245,7 +245,8 @@ export default function Education() {
 
       <div ref={contentRef} className="relative z-10 w-full">
         <SectionKicker index="01" path="education" className="relative z-20 pt-24" />
-        <h1 className={`${styles.title} relative z-20 bg-transparent`}>
+        {/* 40px below the label, matching the other sections */}
+        <h1 className={`${styles.title} relative z-20 bg-transparent`} style={{ paddingTop: 40 }}>
             <span>
                 <animated.span style={{ y: titleY }}>My</animated.span>
             </span>

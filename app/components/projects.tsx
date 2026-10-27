@@ -180,8 +180,10 @@ export default function ThreeDPinGrid() {
             </clipPath>
         </svg>
         <div className={`w-full ${getColors()} ${CLIP_CLASS} pb-96 overflow-hidden`}>
-            <SectionKicker index="03" path="projects" className="relative z-10 pt-24" />
-            <Parallax speed={8} className='w-full relative text-center pt-10'>
+            {/* The label sits inside the parallax wrapper so it moves with the
+                title and the gap between them stays the same. */}
+            <Parallax speed={8} className='w-full relative text-center pt-24'>
+                <SectionKicker index="03" path="projects" className="relative z-10 mb-10" />
                 <h1 className="text-balance text-8xl font-semibold leading-none tracking-tighter">
                     <LineShadowText 
                     className="italic" 

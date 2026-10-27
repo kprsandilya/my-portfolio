@@ -118,8 +118,9 @@ export default function Awards() {
             <div className={`relative w-full ${ECCENTRIC_CLIP_CLASS} ${getBackgroundColor()} shadow-2xl pb-[clamp(100px,14vh,200px)] overflow-hidden`}>
                 <div className={`w-full will-change-transform `}>
                     {/* <BackgroundBeams className="absolute inset-0" /> */}
-                    <SectionKicker index="04" path="awards" className="relative z-10 pt-36" />
-                    <Parallax speed={6} className='w-full relative text-center pt-10'>
+                    {/* Label inside the parallax wrapper so it moves with the title. */}
+                    <Parallax speed={6} className='w-full relative text-center pt-36'>
+                        <SectionKicker index="04" path="awards" className="relative z-10 mb-10" />
                         <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter"
                             gradient={textGradient()} text="Awards and Certifications"/>
                     </Parallax>

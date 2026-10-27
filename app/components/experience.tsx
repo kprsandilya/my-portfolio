@@ -154,8 +154,10 @@ export default function Experience() {
 
             <SectionKicker index="02" path="experience" className="relative z-30 pt-20" />
 
-            {/* Header: its own row, so the cards can never cover it. */}
-            <div className={`relative z-20 pt-[8vw] ${loopFit}`}>
+            {/* Header: its own row, so the cards can never cover it. The curved
+                text rises about 10.6% of the width above its box, so the top
+                padding is that plus the 40px gap used under every section label. */}
+            <div className={`relative z-20 pt-[calc(10.6vw+40px)] ${loopFit}`}>
                 <CurvedLoop
                     marqueeText="WORK EXPERIENCE"
                     speed={2}
