@@ -173,7 +173,7 @@ function CarouselSection({
 }
 
 
-export default function Awards() {
+export default function Skills() {
     const { theme, setTheme } = useThemeReady();
 
     const getBackgroundColor = () => {

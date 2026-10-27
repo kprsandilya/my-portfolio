@@ -109,7 +109,7 @@ export default function Footer() {
             variant="ghost"
             className={`flex h-14 w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
           >
-            <Link href="/resume.pdf" target="_blank">
+            <Link href="/Resume.pdf" target="_blank">
               <FileIcon width={44} height={44} />
             </Link>
           </Button>

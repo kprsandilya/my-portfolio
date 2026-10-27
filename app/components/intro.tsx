@@ -72,7 +72,7 @@ export default function Info() {
                     isIconOnly={true}
                     variant="solid"
                     className={`flex h-14 w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
-                    href="/resume.pdf"
+                    href="/Resume.pdf"
                     target="_blank"
                     >
                     <FileIcon size={44} />
