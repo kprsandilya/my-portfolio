@@ -4,34 +4,57 @@ import { useThemeReady } from "./useThemeReady"
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 import { Parallax } from 'react-scroll-parallax';
 
+// Certifications from the resume, plus Dean's List honors from the transcript.
 const items: ThreeDCarouselItem[] = [
   {
     id: 1,
-    title: "6th SENSE Safety System",
-    brand: "FireCat Group",
-    description: "AI-driven smart uniform tech for law enforcement, military & firefighters.",
-    tags: ["Safety", "Military", "AI Sensors", "Monitoring"],
-    imageUrl: "/profile.jpeg",
-    link: "/projects/firecat"
+    title: "AWS Certified Solutions Architect – Associate",
+    brand: "Amazon Web Services",
+    description: "Designing secure, resilient, and cost-effective architectures on AWS.",
+    tags: ["AWS", "Cloud", "Architecture"],
   },
-    {
+  {
     id: 2,
-    title: "6th SENSE Safety System",
-    brand: "FireCat Group",
-    description: "AI-driven smart uniform tech for law enforcement, military & firefighters.",
-    tags: ["Safety", "Military", "AI Sensors", "Monitoring"],
-    imageUrl: "/profile.jpeg",
-    link: "/projects/firecat"
+    title: "AWS Certified Machine Learning Engineer – Associate",
+    brand: "Amazon Web Services",
+    description: "Building, deploying, and operating machine learning workloads on AWS.",
+    tags: ["AWS", "Machine Learning", "MLOps"],
   },
-    {
+  {
     id: 3,
-    title: "6th SENSE Safety System",
-    brand: "FireCat Group",
-    description: "AI-driven smart uniform tech for law enforcement, military & firefighters.",
-    tags: ["Safety", "Military", "AI Sensors", "Monitoring"],
-    imageUrl: "/profile.jpeg",
-    link: "/projects/firecat"
-  }
+    title: "AWS Certified AI Practitioner",
+    brand: "Amazon Web Services",
+    description: "Foundations of AI, machine learning, and generative AI services on AWS.",
+    tags: ["AWS", "AI", "Generative AI"],
+  },
+  {
+    id: 4,
+    title: "AWS Certified Cloud Practitioner",
+    brand: "Amazon Web Services",
+    description: "Core AWS services, security, pricing, and cloud concepts.",
+    tags: ["AWS", "Cloud"],
+  },
+  {
+    id: 5,
+    title: "GIAC Foundational Cybersecurity Technologies (GFACT)",
+    brand: "GIAC",
+    description: "Foundations of computing, networking, and cybersecurity.",
+    tags: ["Security", "Networking"],
+  },
+  {
+    id: 6,
+    title: "Options 101",
+    brand: "Akuna Capital",
+    description: "Options pricing, trading fundamentals, and market-making concepts.",
+    tags: ["Finance", "Options", "Trading"],
+  },
+  {
+    id: 7,
+    title: "Dean's List & Semester Honors",
+    brand: "Purdue University",
+    description: "Earned every semester from Fall 2023 through Spring 2026, with a 3.98 cumulative GPA.",
+    tags: ["Academics", "Honors"],
+  },
 ];
 
 const ECCENTRIC_CLIP_CLASS = "eccentric-curve-clip";

@@ -16,8 +16,8 @@ export interface ThreeDCarouselItem {
   brand: string;
   description: string;
   tags: string[];
-  imageUrl: string;
-  link: string;
+  imageUrl?: string;
+  link?: string;
 }
 
 interface ThreeDCarouselProps {
@@ -125,7 +125,7 @@ const ThreeDCarousel = ({
                   <div
                     className="relative bg-black p-6 flex items-center justify-center h-48 overflow-hidden"
                     style={{
-                      backgroundImage: `url(${item.imageUrl})`,
+                      backgroundImage: item.imageUrl ? `url(${item.imageUrl})` : undefined,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
@@ -163,19 +163,21 @@ const ThreeDCarousel = ({
                         ))}
                       </div>
 
-                      <a
-                        href={item.link}
-                        className="text-gray-500 flex items-center hover:underline relative group"
-                        onClick={() => {
-                          if (item.link.startsWith("/")) {
-                            window.scrollTo(0, 0);
-                          }
-                        }}
-                      >
-                        <span className="relative z-10">Learn more</span>
-                        <ArrowRight className="ml-2 w-4 h-4 relative z-10 transition-transform group-hover:translate-x-1" />
-                        <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gray-500 transition-all duration-300 group-hover:w-full"></span>
-                      </a>
+                      {item.link && (
+                        <a
+                          href={item.link}
+                          className="text-gray-500 flex items-center hover:underline relative group"
+                          onClick={() => {
+                            if (item.link?.startsWith("/")) {
+                              window.scrollTo(0, 0);
+                            }
+                          }}
+                        >
+                          <span className="relative z-10">Learn more</span>
+                          <ArrowRight className="ml-2 w-4 h-4 relative z-10 transition-transform group-hover:translate-x-1" />
+                          <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gray-500 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

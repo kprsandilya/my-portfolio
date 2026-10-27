@@ -278,7 +278,7 @@ export default function Education() {
           ref={introRef}
           className={`font-serif text-3xl md:text-4xl pb-16 ${getTextColors()} relative z-20 max-w-5xl mx-auto px-6 text-center leading-tight`}
         >
-            I am currently a Purdue University student pursuing a double major in Computer Science and Data Science, complemented by minors in Mathematics and Statistics, maintaining highest excellence with a{' '}
+            I am a Purdue University student double majoring in Computer Science (Machine Intelligence) and Data Science with minors in Mathematics and Statistics, now also pursuing an M.S. in Computer Science, with a{' '}
             <HighlightText
               text="3.98 GPA"
               inView={true}

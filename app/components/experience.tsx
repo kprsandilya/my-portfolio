@@ -27,54 +27,83 @@ export default function Experience() {
         return `bg-gradient-to-b from-[#00B9B3] to-[#91EAE4]`;
     };
 
-      const comapny_info = [
+    // Roles and bullets from the resume. Older roles that aren't on the
+    // resume keep their dates but have no bullets yet.
+    const comapny_info: {
+      name: string;
+      logo: string;
+      time: string;
+      position: string;
+      location?: string;
+      bullets: string[];
+    }[] = [
+    {
+      name: "Amazon Web Services (AWS)",
+      logo: "profile.jpeg",
+      time: "May 2026 — August 2026",
+      position: "Cloud Consultant Intern",
+      location: "Arlington, Virginia",
+      bullets: [
+        "Designed and developed a cloud-native geospatial tile delivery API on Amazon ECS Fargate, Amazon S3, and Amazon Aurora, serving over 1 billion detections with sub-second response times for 100+ concurrent users.",
+        "Engineered an AI-powered analytics interface to monitor API usage and analyze overall system performance.",
+        "Developed a pipeline that regenerates map tiles as detections enter Amazon Aurora, enabling real-time API data.",
+      ],
+    },
     {
       name: "Cummins Inc.",
       logo: "profile.jpeg",
-      time: "June 2025 — August 2025",
+      time: "July 2025 — December 2025",
       position: "Software Engineering Intern",
-      description:
-        "Placeholder.",
+      location: "West Lafayette, Indiana",
+      bullets: [
+        "Developed a company-specific transformer in Python to interpret customer messages and retrieve relevant products.",
+        "Created auditing dashboards and automations in Jira that streamlined intake workflows and improved efficiency by 40%.",
+        "Conducted audits and built internal company pages to improve the usability and accessibility of resources.",
+      ],
     },
     {
       name: "Indiana State Department of Health",
       logo: "profile.jpeg",
-      time: "May 2024 — August 2024",
-      position: "Viral Hepatitis Intern",
-      description:
-        "Placeholder.",
+      time: "May 2025 — July 2025",
+      position: "Data Science Intern",
+      location: "Indianapolis, Indiana",
+      bullets: [
+        "Created an address lookup system that automated 150,000+ data entries, running on an Apache server containerized with Docker.",
+        "Used Selenium to enter thousands of lab details into the National Electronic Disease Surveillance System (NEDSS).",
+      ],
+    },
+    {
+      name: "Texavi",
+      logo: "profile.jpeg",
+      time: "June 2024 — August 2024",
+      position: "Software Development Intern",
+      location: "Remote",
+      bullets: [
+        "Built a dynamic WordPress CMS for a UK archery organization to support easy updates and user engagement.",
+        "Improved website structure, layout, and navigation for better usability, accessibility, and user experience.",
+        "Implemented email management strategies to streamline customer communication and improve outreach.",
+      ],
     },
     {
       name: "Purdue University",
       logo: "profile.jpeg",
       time: "December 2023 — May 2024",
       position: "Undergraduate Data Science Researcher",
-      description:
-        "Placeholder.",
+      bullets: [],
     },
     {
       name: "Bureau of Cyberspace and Digital Policy, U.S. Department of State",
       logo: "profile.jpeg",
       time: "June 2022 — July 2022",
       position: "Policy Intern",
-      description:
-        "Placeholder.",
-    },
-    {
-      name: "Texavi",
-      logo: "profile.jpeg",
-      time: "June 2021 — July 2021",
-      position: "Software Development Intern",
-      description:
-        "Placeholder.",
+      bullets: [],
     },
     {
       name: "Firestone",
       logo: "profile.jpeg",
       time: "June 2021 — July 2021",
       position: "Engineering Intern",
-      description:
-        "Placeholder.",
+      bullets: [],
     },
   ];
 
@@ -152,11 +181,20 @@ export default function Experience() {
                             </h4>
                             <h4 className="text-sm font-light sm:text-lg">
                             {company.time}
+                            {company.location ? ` · ${company.location}` : ""}
                             </h4>
                         </div>
                         </div>
-                        <Divider className="mb-2" />
-                        <p className="text-sm">{company.description}</p>
+                        {company.bullets.length > 0 && (
+                            <>
+                            <Divider className="mb-2" />
+                            <ul className="list-disc space-y-1 pl-5 text-sm">
+                                {company.bullets.map((bullet) => (
+                                    <li key={bullet}>{bullet}</li>
+                                ))}
+                            </ul>
+                            </>
+                        )}
                     </div>
                     </Parallax>
                 ))}

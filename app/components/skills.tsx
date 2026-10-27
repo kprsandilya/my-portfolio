@@ -22,67 +22,248 @@ interface CardSections {
   rightBottom: string | null;
 }
 
-// Cards for each carousel
-const CAROUSEL_CARD_DATA: { title: string; description: string }[][] = [
-  // Carousel 0
-  [
-    { title: "C0 Card 1", description: "C0 Card 1 description" },
-    { title: "C0 Card 2", description: "C0 Card 2 description" },
-    { title: "C0 Card 3", description: "C0 Card 3 description" },
-    { title: "C0 Card 4", description: "C0 Card 4 description" },
-    { title: "C0 Card 5", description: "C0 Card 5 description" },
-    { title: "C0 Card 6", description: "C0 Card 6 description" },
-  ],
-  // Carousel 1
-  [
-    { title: "C1 Card 1", description: "C1 Card 1 description" },
-    { title: "C1 Card 2", description: "C1 Card 2 description" },
-    { title: "C1 Card 3", description: "C1 Card 3 description" },
-    { title: "C1 Card 4", description: "C1 Card 4 description" },
-    { title: "C1 Card 5", description: "C1 Card 5 description" },
-    { title: "C1 Card 6", description: "C1 Card 6 description" },
-  ],
-  // Carousel 2
-  [
-    { title: "C2 Card 1", description: "C2 Card 1 description" },
-    { title: "C2 Card 2", description: "C2 Card 2 description" },
-    { title: "C2 Card 3", description: "C2 Card 3 description" },
-    { title: "C2 Card 4", description: "C2 Card 4 description" },
-    { title: "C2 Card 5", description: "C2 Card 5 description" },
-    { title: "C2 Card 6", description: "C2 Card 6 description" },
-  ],
+interface Skill {
+  title: string;
+  description: string;
+  usage: string;
+  coursework: string;
+  experience: string;
+  projects: string;
+}
+
+// One carousel per group. Details come from the resume and transcript, and
+// show in the side panels when a card is clicked.
+const SKILL_GROUPS: { category: string; skills: Skill[] }[] = [
+  {
+    category: "Languages",
+    skills: [
+      {
+        title: "Python",
+        description: "ML, data, and automation",
+        usage: "Main language for machine learning, data pipelines, and automation.",
+        coursework: "CS 38003 Python Programming, CS 37300 Data Mining & ML",
+        experience: "Cummins, Indiana State Department of Health",
+        projects: "AI-Driven Nurse Assistant, Tradify, ReciPic, Ports",
+      },
+      {
+        title: "TypeScript",
+        description: "Typed web and mobile apps",
+        usage: "Front ends for web and mobile apps, including this site.",
+        coursework: "Self-taught through projects",
+        experience: "AWS",
+        projects: "AI-Driven Nurse Assistant, DM Workbench, this portfolio",
+      },
+      {
+        title: "JavaScript",
+        description: "Web apps and extensions",
+        usage: "Interactive web apps, browser extensions, and small Node.js tools.",
+        coursework: "Self-taught through projects",
+        experience: "Texavi",
+        projects: "Estimathon, link-opener, ReciPic",
+      },
+      {
+        title: "Java",
+        description: "Object-oriented programming",
+        usage: "Object-oriented design and backend logic.",
+        coursework: "CS 18000 Problem Solving & OOP",
+        experience: "—",
+        projects: "Ports",
+      },
+      {
+        title: "C / C++",
+        description: "Systems programming",
+        usage: "Low-level and systems programming.",
+        coursework: "CS 24000 Programming in C, CS 25200 Systems Programming",
+        experience: "—",
+        projects: "Coursework",
+      },
+      {
+        title: "R",
+        description: "Statistics",
+        usage: "Statistical analysis and modeling.",
+        coursework: "STAT 35500 Statistics for Data Science",
+        experience: "—",
+        projects: "Coursework",
+      },
+      {
+        title: "GDScript",
+        description: "Godot games",
+        usage: "Game development in the Godot engine.",
+        coursework: "HONR 29900 C3 Game Jam",
+        experience: "—",
+        projects: "Pirate Software Game Jam, Boilermake 2024, C3 Game",
+      },
+      {
+        title: "HTML / CSS",
+        description: "Web layout and styling",
+        usage: "Accessible, responsive layouts and styling.",
+        coursework: "Self-taught through projects",
+        experience: "Texavi, Cummins",
+        projects: "This portfolio",
+      },
+    ],
+  },
+  {
+    category: "Frameworks & Libraries",
+    skills: [
+      {
+        title: "React",
+        description: "Component-based UIs",
+        usage: "Interactive front ends built from reusable components.",
+        coursework: "Self-taught through projects",
+        experience: "—",
+        projects: "ReciPic, this portfolio",
+      },
+      {
+        title: "Next.js",
+        description: "Full-stack React",
+        usage: "Server-rendered React sites deployed on Vercel.",
+        coursework: "Self-taught through projects",
+        experience: "—",
+        projects: "This portfolio",
+      },
+      {
+        title: "React Native",
+        description: "Mobile apps",
+        usage: "Cross-platform mobile apps.",
+        coursework: "Self-taught through projects",
+        experience: "—",
+        projects: "AI-Driven Nurse Assistant, ReciPic",
+      },
+      {
+        title: "Tailwind CSS",
+        description: "Utility-first styling",
+        usage: "Fast, consistent styling for React apps.",
+        coursework: "Self-taught through projects",
+        experience: "—",
+        projects: "This portfolio",
+      },
+      {
+        title: "PyTorch",
+        description: "Deep learning",
+        usage: "Training and running custom deep learning models.",
+        coursework: "CS 47100 Intro to AI, CS 37300 Data Mining & ML",
+        experience: "Cummins",
+        projects: "ReciPic (YOLOv8)",
+      },
+      {
+        title: "LangChain",
+        description: "LLM pipelines",
+        usage: "LLM pipelines with Ollama and Pydantic-based parsing.",
+        coursework: "Self-taught through projects",
+        experience: "—",
+        projects: "AI-Driven Nurse Assistant",
+      },
+      {
+        title: "FastAPI / Flask",
+        description: "Python APIs",
+        usage: "Python web APIs for ML-backed apps.",
+        coursework: "Self-taught through projects",
+        experience: "—",
+        projects: "AI-Driven Nurse Assistant, ReciPic",
+      },
+      {
+        title: "Bootstrap",
+        description: "Responsive layouts",
+        usage: "Quick responsive layouts for websites.",
+        coursework: "Self-taught through projects",
+        experience: "Texavi",
+        projects: "Earlier websites",
+      },
+    ],
+  },
+  {
+    category: "Cloud & Tools",
+    skills: [
+      {
+        title: "AWS",
+        description: "Four AWS certifications",
+        usage: "ECS Fargate, S3, and Aurora for large-scale, low-latency APIs.",
+        coursework: "Solutions Architect, ML Engineer, AI Practitioner, and Cloud Practitioner certifications",
+        experience: "AWS",
+        projects: "Geospatial tile delivery API",
+      },
+      {
+        title: "Docker",
+        description: "Containers",
+        usage: "Containerizing services for consistent deployment.",
+        coursework: "Self-taught through work",
+        experience: "Indiana State Department of Health",
+        projects: "Address lookup system",
+      },
+      {
+        title: "PostgreSQL",
+        description: "Relational databases",
+        usage: "Storing app, market, and analytics data.",
+        coursework: "CS 44000 Large Scale Data Analytics (in progress)",
+        experience: "AWS (Aurora)",
+        projects: "AI-Driven Nurse Assistant, Tradify",
+      },
+      {
+        title: "Firebase",
+        description: "App backend and storage",
+        usage: "Storage and backend services for apps.",
+        coursework: "Self-taught through projects",
+        experience: "—",
+        projects: "ReciPic",
+      },
+      {
+        title: "Selenium",
+        description: "Browser automation",
+        usage: "Automating data entry in web systems.",
+        coursework: "Self-taught through work",
+        experience: "Indiana State Department of Health",
+        projects: "NEDSS lab data entry",
+      },
+      {
+        title: "Jira",
+        description: "Workflow automation",
+        usage: "Dashboards and automations for intake workflows.",
+        coursework: "—",
+        experience: "Cummins",
+        projects: "Auditing dashboards (40% efficiency gain)",
+      },
+      {
+        title: "Linux",
+        description: "Development environment",
+        usage: "Daily development and systems work.",
+        coursework: "CS 19300 Tools, CS 25200 Systems Programming",
+        experience: "—",
+        projects: "Coursework and projects",
+      },
+      {
+        title: "Git / GitHub",
+        description: "Version control",
+        usage: "Version control and collaboration on every project.",
+        coursework: "CS 19300 Tools",
+        experience: "All roles",
+        projects: "github.com/kprsandilya",
+      },
+      {
+        title: "Maven",
+        description: "Java builds",
+        usage: "Building and testing Java projects.",
+        coursework: "—",
+        experience: "—",
+        projects: "Ports",
+      },
+    ],
+  },
 ];
 
-// Sections content for each carousel
-const CAROUSEL_CARD_CONTENT: CardSections[][] = [
-  // Carousel 0
-  [
-    { top: "Top C0-1", middle: "Middle C0-1", bottom: "Bottom C0-1", rightTop: "RTop C0-1", rightBottom: "RBottom C0-1" },
-    { top: "Top C0-2", middle: "Middle C0-2", bottom: "Bottom C0-2", rightTop: "RTop C0-2", rightBottom: "RBottom C0-2" },
-    { top: "Top C0-3", middle: "Middle C0-3", bottom: "Bottom C0-3", rightTop: "RTop C0-3", rightBottom: "RBottom C0-3" },
-    { top: "Top C0-4", middle: "Middle C0-4", bottom: "Bottom C0-4", rightTop: "RTop C0-4", rightBottom: "RBottom C0-4" },
-    { top: "Top C0-5", middle: "Middle C0-5", bottom: "Bottom C0-5", rightTop: "RTop C0-5", rightBottom: "RBottom C0-5" },
-    { top: "Top C0-6", middle: "Middle C0-6", bottom: "Bottom C0-6", rightTop: "RTop C0-6", rightBottom: "RBottom C0-6" },
-  ],
-  // Carousel 1
-  [
-    { top: "Top C1-1", middle: "Middle C1-1", bottom: "Bottom C1-1", rightTop: "RTop C1-1", rightBottom: "RBottom C1-1" },
-    { top: "Top C1-2", middle: "Middle C1-2", bottom: "Bottom C1-2", rightTop: "RTop C1-2", rightBottom: "RBottom C1-2" },
-    { top: "Top C1-3", middle: "Middle C1-3", bottom: "Bottom C1-3", rightTop: "RTop C1-3", rightBottom: "RBottom C1-3" },
-    { top: "Top C1-4", middle: "Middle C1-4", bottom: "Bottom C1-4", rightTop: "RTop C1-4", rightBottom: "RBottom C1-4" },
-    { top: "Top C1-5", middle: "Middle C1-5", bottom: "Bottom C1-5", rightTop: "RTop C1-5", rightBottom: "RBottom C1-5" },
-    { top: "Top C1-6", middle: "Middle C1-6", bottom: "Bottom C1-6", rightTop: "RTop C1-6", rightBottom: "RBottom C1-6" },
-  ],
-  // Carousel 2
-  [
-    { top: "Top C2-1", middle: "Middle C2-1", bottom: "Bottom C2-1", rightTop: "RTop C2-1", rightBottom: "RBottom C2-1" },
-    { top: "Top C2-2", middle: "Middle C2-2", bottom: "Bottom C2-2", rightTop: "RTop C2-2", rightBottom: "RBottom C2-2" },
-    { top: "Top C2-3", middle: "Middle C2-3", bottom: "Bottom C2-3", rightTop: "RTop C2-3", rightBottom: "RBottom C2-3" },
-    { top: "Top C2-4", middle: "Middle C2-4", bottom: "Bottom C2-4", rightTop: "RTop C2-4", rightBottom: "RBottom C2-4" },
-    { top: "Top C2-5", middle: "Middle C2-5", bottom: "Bottom C2-5", rightTop: "RTop C2-5", rightBottom: "RBottom C2-5" },
-    { top: "Top C2-6", middle: "Middle C2-6", bottom: "Bottom C2-6", rightTop: "RTop C2-6", rightBottom: "RBottom C2-6" },
-  ],
-];
+const CAROUSEL_CARD_DATA = SKILL_GROUPS.map((group) =>
+  group.skills.map(({ title, description }) => ({ title, description }))
+);
+
+const CAROUSEL_CARD_CONTENT: CardSections[][] = SKILL_GROUPS.map((group) =>
+  group.skills.map((skill) => ({
+    top: `${group.category} · ${skill.title}`,
+    middle: skill.usage,
+    bottom: `Coursework: ${skill.coursework}`,
+    rightTop: `Experience: ${skill.experience}`,
+    rightBottom: `Projects: ${skill.projects}`,
+  }))
+);
 
 
 // Cohesive glass panel used for the detail column. Keeps the section on-theme
@@ -239,22 +420,22 @@ export default function Skills() {
                 <div className="col-span-2 grid grid-cols-2 gap-4">
                     <div className="col-span-1 flex flex-col gap-4">
                         <DetailPanel className="h-[10%] text-xs">
-                        {sections.top || "Top placeholder"}
+                        {sections.top || "Skill details"}
                         </DetailPanel>
                         <DetailPanel className="h-[60%]" emphasis>
-                        {sections.middle || "Middle placeholder"}
+                        {sections.middle || "Click a skill on the left to see how I have used it."}
                         </DetailPanel>
                         <DetailPanel className="h-[30%] text-xs">
-                        {sections.bottom || "Bottom placeholder"}
+                        {sections.bottom || "Coursework"}
                         </DetailPanel>
                     </div>
 
                     <div className="col-span-1 flex flex-col gap-4">
                         <DetailPanel className="h-1/2">
-                        {sections.rightTop || "Right top placeholder"}
+                        {sections.rightTop || "Experience"}
                         </DetailPanel>
                         <DetailPanel className="h-1/2">
-                        {sections.rightBottom || "Right bottom placeholder"}
+                        {sections.rightBottom || "Projects"}
                         </DetailPanel>
                     </div>
                     </div>

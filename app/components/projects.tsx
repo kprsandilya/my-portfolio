@@ -5,70 +5,64 @@ import CodeHoverCards from '@/components/ui/3d-hover-gallery';
 import { Github, Code, Dices } from 'lucide-react';
 import { Parallax } from 'react-scroll-parallax';
 
-const RESEARCH_DATA = [
+// First row: projects from the resume.
+const RESUME_PROJECTS = [
   {
-    id: "1",
-    icon: Github,
-    href: "https://react.dev",
-    title: "React Documentation",
-    description: "The library for web and native user interfaces.",
+    id: "nurse-assistant",
+    icon: Code,
+    title: "AI-Driven Nurse Assistant",
+    description: "LLM pipeline that turns nurse feedback into staffing insights.",
   },
   {
-    id: "2",
-    icon: Github,
-    href: "https://react.dev",
-    title: "React Documentation",
-    description: "The library for web and native user interfaces.",
+    id: "tradify",
+    icon: Code,
+    title: "Tradify",
+    description: "ML-driven trading pipeline that trades live through Alpaca.",
   },
   {
-    id: "3",
+    id: "recipic",
     icon: Github,
-    href: "https://react.dev",
-    title: "React Documentation",
-    description: "The library for web and native user interfaces.",
+    href: "https://github.com/kprsandilya/ReciPic",
+    title: "ReciPic",
+    description: "Finds recipes from fridge photos with YOLOv8 and Gemini.",
   },
   {
-    id: "4",
-    icon: Github,
-    href: "https://react.dev",
-    title: "React Documentation",
-    description: "The library for web and native user interfaces.",
+    id: "ports",
+    icon: Code,
+    title: "Ports",
+    description: "Portfolio risk and Sharpe ratio models for a fintech startup.",
   },
 ];
 
-// New list for Project items
-const PROJECT_DATA = [
+// Second row: other public GitHub repositories.
+const GITHUB_PROJECTS = [
   {
-    id: 5,
-    title: "/project-alpha.com",
-    href: "#",
-    heading: "Project Alpha: AI Chatbot",
-    description: "A generative AI assistant built with Vercel AI SDK and custom models.",
-    bgClass: "from-red-500 via-pink-500 to-orange-500",
+    id: "sailing-simulator",
+    icon: Dices,
+    href: "https://github.com/kprsandilya/Tia-s-Sailing-Simulator",
+    title: "Tia's Sailing Simulator",
+    description: "Sailing game with a live Llama 3.1 voice companion.",
   },
   {
-    id: 6,
-    title: "/portfolio-v3.io",
-    href: "#",
-    heading: "Portfolio Website V3",
-    description: "A personal site featuring 3D interactions and dynamic themes.",
-    bgClass: "from-lime-500 via-yellow-500 to-amber-500",
+    id: "dm-workbench",
+    icon: Github,
+    href: "https://github.com/kprsandilya/GMDND",
+    title: "DM Workbench",
+    description: "Offline desktop toolkit for running D&D 5e campaigns.",
   },
   {
-    id: 7,
-    title: "/e-commerce-app.co",
-    href: "#",
-    heading: "E-Commerce Platform",
-    description: "Full-stack application using Stripe for payments and a headless CMS.",
-    bgClass: "from-indigo-500 via-blue-500 to-cyan-500",
+    id: "estimathon",
+    icon: Github,
+    href: "https://estimathon-pearl.vercel.app",
+    title: "Estimathon",
+    description: "Live scoreboard and team app for Estimathon events.",
   },
   {
-    id: 8,
-    title: "/data-dashboard.app",
-    href: "#",
-    heading: "Real-time Analytics Dashboard",
-    description: "Monitoring system with live data fetching and customizable charts.",
-    bgClass: "from-purple-500 via-fuchsia-500 to-rose-500",
+    id: "link-opener",
+    icon: Github,
+    href: "https://github.com/kprsandilya/link-opener",
+    title: "link-opener",
+    description: "Firefox extension that saves and reopens link sessions.",
   },
 ];
 
@@ -149,16 +143,14 @@ export default function ThreeDPinGrid() {
             </Parallax>
             <Parallax speed={8}>
               <CodeHoverCards 
-                    cards={RESEARCH_DATA}
+                    cards={RESUME_PROJECTS}
                     className="flex w-full items-center justify-center bg-transparent pt-12"
                     columns={4}
-                    onCardClick={(card) => console.log('Clicked:', card)}
                   />
               <CodeHoverCards 
-                cards={RESEARCH_DATA}
+                cards={GITHUB_PROJECTS}
                 className="flex w-full items-center justify-center bg-transparent"
                 columns={4}
-                onCardClick={(card) => console.log('Clicked:', card)}
               />
             </Parallax>
         </div>
