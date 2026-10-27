@@ -59,6 +59,38 @@ const SKILL_ICONS: Record<string, IconType> = {
   "Maven": SiApachemaven,
 };
 
+type SkillLevelKey = keyof typeof SkillLevels;
+
+// Expertise level (see skillLevels.js), a short explanation of what the
+// skill is, and its official site. Shown in the detail panels.
+const SKILL_DETAILS: Record<string, { level: SkillLevelKey; about: string; url: string }> = {
+  "Python": { level: "EXPERT", about: "A general-purpose, high-level programming language known for readable syntax and a huge ecosystem for data science, machine learning, and automation.", url: "https://www.python.org" },
+  "TypeScript": { level: "ADVANCED", about: "JavaScript with static types. It catches mistakes before the code runs and compiles to plain JavaScript.", url: "https://www.typescriptlang.org" },
+  "JavaScript": { level: "ADVANCED", about: "The programming language of the web. It runs in every browser and, with Node.js, on servers too.", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+  "Java": { level: "PROFICIENT", about: "A statically typed, object-oriented language that runs on the Java Virtual Machine, widely used for backend and enterprise systems.", url: "https://dev.java" },
+  "C / C++": { level: "PROFICIENT", about: "Compiled languages that give direct control over memory and hardware. C++ adds classes and templates on top of C.", url: "https://isocpp.org" },
+  "R": { level: "COMPETENT", about: "A language and environment built for statistical computing and data visualization.", url: "https://www.r-project.org" },
+  "GDScript": { level: "PROFICIENT", about: "The Python-like scripting language built into the Godot game engine.", url: "https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/" },
+  "HTML / CSS": { level: "ADVANCED", about: "HTML structures the content of a web page, and CSS controls how that content looks and is laid out.", url: "https://developer.mozilla.org/en-US/docs/Learn_web_development" },
+  "React": { level: "ADVANCED", about: "A JavaScript library for building user interfaces out of reusable components.", url: "https://react.dev" },
+  "Next.js": { level: "PROFICIENT", about: "A React framework that adds routing, server rendering, and build tooling for production websites.", url: "https://nextjs.org" },
+  "React Native": { level: "PROFICIENT", about: "A framework for building native iOS and Android apps with React.", url: "https://reactnative.dev" },
+  "Tailwind CSS": { level: "ADVANCED", about: "A utility-first CSS framework: you style elements by combining small, single-purpose classes.", url: "https://tailwindcss.com" },
+  "PyTorch": { level: "PROFICIENT", about: "An open-source deep learning framework for building and training neural networks, with GPU acceleration.", url: "https://pytorch.org" },
+  "LangChain": { level: "PROFICIENT", about: "A framework for building applications on top of large language models, such as chains, agents, and retrieval pipelines.", url: "https://www.langchain.com" },
+  "FastAPI / Flask": { level: "PROFICIENT", about: "Python web frameworks for building APIs. Flask is minimal and flexible; FastAPI adds type-based validation and async support.", url: "https://fastapi.tiangolo.com" },
+  "Bootstrap": { level: "COMPETENT", about: "A CSS framework with ready-made responsive layouts and components.", url: "https://getbootstrap.com" },
+  "AWS": { level: "ADVANCED", about: "Amazon Web Services, a cloud platform offering on-demand computing, storage, databases, and machine learning services.", url: "https://aws.amazon.com" },
+  "Docker": { level: "PROFICIENT", about: "A tool for packaging an application and its dependencies into a container that runs the same way everywhere.", url: "https://www.docker.com" },
+  "PostgreSQL": { level: "PROFICIENT", about: "A powerful open-source relational database known for reliability and standards compliance.", url: "https://www.postgresql.org" },
+  "Firebase": { level: "COMPETENT", about: "Google's app development platform, with hosting, authentication, databases, and file storage.", url: "https://firebase.google.com" },
+  "Selenium": { level: "PROFICIENT", about: "A framework for automating web browsers, used for testing and scripted data entry.", url: "https://www.selenium.dev" },
+  "Jira": { level: "PROFICIENT", about: "Atlassian's tool for tracking issues and managing team workflows.", url: "https://www.atlassian.com/software/jira" },
+  "Linux": { level: "ADVANCED", about: "An open-source operating system that powers most servers and development environments.", url: "https://www.kernel.org" },
+  "Git / GitHub": { level: "ADVANCED", about: "Git tracks changes to code; GitHub hosts Git repositories and adds collaboration tools like pull requests.", url: "https://git-scm.com" },
+  "Maven": { level: "COMPETENT", about: "A build and dependency management tool for Java projects.", url: "https://maven.apache.org" },
+};
+
 interface Skill {
   title: string;
   description: string;
@@ -325,6 +357,38 @@ function DetailPanel({
   );
 }
 
+// Flat-topped hexagon, as in the sketch.
+const HEXAGON = "polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0% 50%)";
+
+const PANEL_CLASSES = "rounded-2xl border border-white/15 bg-white/10 text-white/90 shadow-lg backdrop-blur-md";
+
+function SkillLevelBadge({ levelKey }: { levelKey: SkillLevelKey | null }) {
+  const level = levelKey ? SkillLevels[levelKey] : null;
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-2 overflow-hidden p-4 text-center">
+      <p className="text-xs font-semibold uppercase tracking-widest text-white/70">Expertise</p>
+      <div
+        className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-white/70 shadow-xl xl:h-24 xl:w-24 ${
+          level ? level.color : "bg-white/10"
+        }`}
+      >
+        <span className="text-2xl font-bold text-white xl:text-3xl">{level ? level.level : "?"}</span>
+      </div>
+      <p className="text-lg font-semibold">{level ? level.name : "Level"}</p>
+      {/* One pip per level, filled up to this skill's level */}
+      <div className="flex gap-1.5" aria-label={level ? `${level.level} out of 5` : undefined}>
+        {[1, 2, 3, 4, 5].map((n) => (
+          <span
+            key={n}
+            className={`h-2 w-5 rounded-full ${level && n <= level.level ? "bg-white" : "bg-white/25"}`}
+          />
+        ))}
+      </div>
+      {level && <p className="line-clamp-3 text-xs leading-snug text-white/75">{level.description}</p>}
+    </div>
+  );
+}
+
 interface CarouselSectionProps {
   carouselId: number;
   widthClass: string;
@@ -374,13 +438,13 @@ function CarouselSection({
                     ${isPressed ? "scale-95" : "scale-100"}
                     `}
                 >
-                    <CardContent className="flex h-full flex-col items-center justify-center p-4 text-center">
+                    <CardContent className="flex h-full flex-col items-center justify-center p-2 text-center xl:p-4">
                     {(() => {
                         const Icon = SKILL_ICONS[title];
                         return Icon ? <Icon className="mb-2 h-8 w-8 shrink-0 md:h-10 md:w-10" aria-hidden="true" /> : null;
                     })()}
-                    <span className="mb-2 text-xl font-semibold tracking-tight md:text-2xl">{title}</span>
-                    <p className="text-sm leading-snug opacity-80">{description}</p>
+                    <span className="mb-2 max-w-full text-[clamp(0.8rem,1.3vw,1.5rem)] font-semibold leading-tight tracking-tight">{title}</span>
+                    <p className="text-[11px] leading-snug opacity-80 xl:text-sm">{description}</p>
                     </CardContent>
                 </Card>
                 </div>
@@ -423,10 +487,11 @@ export default function Skills() {
     const selectedCarouselId = selectedCard ? Number(selectedCard.split("-")[0]) : null;
     const selectedCardIndex = selectedCard ? Number(selectedCard.split("-")[1]) : null;
 
-    const sections: CardSections = 
-        selectedCarouselId !== null && selectedCardIndex !== null
-            ? CAROUSEL_CARD_CONTENT[selectedCarouselId][selectedCardIndex]
-            : { top: null, middle: null, bottom: null, rightTop: null, rightBottom: null };
+    const selectedGroup = selectedCarouselId !== null ? SKILL_GROUPS[selectedCarouselId] : null;
+    const selectedSkill =
+        selectedGroup && selectedCardIndex !== null ? selectedGroup.skills[selectedCardIndex] : null;
+    const selectedDetails = selectedSkill ? SKILL_DETAILS[selectedSkill.title] : null;
+    const SelectedIcon = selectedSkill ? SKILL_ICONS[selectedSkill.title] : null;
 
     return (
         <div className="w-full relative">
@@ -460,27 +525,88 @@ export default function Skills() {
                         })}
                 </div>
 
-                {/* ✅ Right Column: detail panels for the selected card */}
+                {/* Right column: details for the selected skill.
+                    Left: name, experience & projects, learn more.
+                    Right: logo in a hexagon, expertise badge. */}
                 <div className="col-span-2 grid grid-cols-2 gap-4">
-                    <div className="col-span-1 flex flex-col gap-4">
-                        <DetailPanel className="h-[10%] text-xs">
-                        {sections.top || "Skill details"}
-                        </DetailPanel>
-                        <DetailPanel className="h-[60%]" emphasis>
-                        {sections.middle || "Click a skill on the left to see how I have used it."}
-                        </DetailPanel>
-                        <DetailPanel className="h-[30%] text-xs">
-                        {sections.bottom || "Coursework"}
-                        </DetailPanel>
+                    <div className="col-span-1 flex min-h-0 flex-col gap-4">
+                        <div className={`${PANEL_CLASSES} flex flex-[1] items-center px-4 py-3`}>
+                            <div className="min-w-0">
+                                <p className="text-[11px] uppercase tracking-widest text-white/60">
+                                    {selectedGroup ? selectedGroup.category : "Skill"}
+                                </p>
+                                <h3 className="truncate text-xl font-bold text-white">
+                                    {selectedSkill ? selectedSkill.title : "Pick a skill"}
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div className={`${PANEL_CLASSES} flex min-h-0 flex-[6] flex-col bg-white/15 p-4`}>
+                            <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/70">
+                                Experience & projects
+                            </p>
+                            {selectedSkill ? (
+                                <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain pr-1 text-sm leading-snug">
+                                    <p className="text-white">{selectedSkill.usage}</p>
+                                    <div>
+                                        <p className="text-xs font-semibold text-white/70">Where I used it</p>
+                                        <p>{selectedSkill.experience}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-semibold text-white/70">Projects</p>
+                                        <p>{selectedSkill.projects}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-semibold text-white/70">Coursework</p>
+                                        <p>{selectedSkill.coursework}</p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p className="m-auto text-center text-sm text-white/80">
+                                    Click a skill on the left to see where I&apos;ve used it.
+                                </p>
+                            )}
+                        </div>
+
+                        <div className={`${PANEL_CLASSES} flex min-h-0 flex-[3] flex-col p-4`}>
+                            <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-white/70">Learn more</p>
+                            {selectedDetails ? (
+                                <>
+                                    <p className="min-h-0 flex-1 overflow-y-auto overscroll-contain text-xs leading-snug">
+                                        {selectedDetails.about}
+                                    </p>
+                                    <a
+                                        href={selectedDetails.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-2 inline-flex items-center gap-1 self-start text-xs font-semibold text-white underline underline-offset-2 hover:text-white/80"
+                                    >
+                                        Official site ↗
+                                    </a>
+                                </>
+                            ) : (
+                                <p className="text-xs text-white/70">What each skill is, with a link to learn more.</p>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="col-span-1 flex flex-col gap-4">
-                        <DetailPanel className="h-1/2">
-                        {sections.rightTop || "Experience"}
-                        </DetailPanel>
-                        <DetailPanel className="h-1/2">
-                        {sections.rightBottom || "Projects"}
-                        </DetailPanel>
+                    <div className="col-span-1 flex min-h-0 flex-col gap-4">
+                        <div className={`${PANEL_CLASSES} flex flex-[4] items-center justify-center p-4`}>
+                            {/* Hexagon frame: an outer ring with the logo on an inner face */}
+                            <div className="flex aspect-[1.15] w-[78%] max-w-[200px] items-center justify-center bg-white/40" style={{ clipPath: HEXAGON }}>
+                                <div className="flex h-[88%] w-[88%] items-center justify-center bg-white text-slate-900" style={{ clipPath: HEXAGON }}>
+                                    {SelectedIcon ? (
+                                        <SelectedIcon className="h-1/2 w-1/2" aria-label={`${selectedSkill?.title} logo`} />
+                                    ) : (
+                                        <span className="text-sm font-semibold text-slate-500">Logo</span>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={`${PANEL_CLASSES} min-h-0 flex-[5]`}>
+                            <SkillLevelBadge levelKey={selectedDetails ? selectedDetails.level : null} />
+                        </div>
                     </div>
                     </div>
                 </div>
