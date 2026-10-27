@@ -11,13 +11,13 @@ import { TbBrandReactNative } from "react-icons/tb"
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 import { SkillLevels } from './skillLevels';
 import SkillLevelDisplay from "./skillLevelsBadges"
-import { Card, CardContent } from "@/components/ui/card"
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  useCarousel,
 } from "@/components/ui/carousel"
 
 const ECCENTRIC_CLIP_CLASS = "underneath-curve-clip";
@@ -389,8 +389,163 @@ function SkillLevelBadge({ levelKey }: { levelKey: SkillLevelKey | null }) {
   );
 }
 
+// Each row gets a frame that describes its category:
+//   code  - Languages: a code editor window with a file tab
+//   stack - Frameworks & Libraries: stacked layers with an import line
+//   cloud - Cloud & Tools: a card with a cloud-shaped top
+type FrameVariant = "code" | "stack" | "cloud";
+
+const FILE_NAMES: Record<string, string> = {
+  "Python": "main.py",
+  "TypeScript": "index.ts",
+  "JavaScript": "app.js",
+  "Java": "Main.java",
+  "C / C++": "main.cpp",
+  "R": "analysis.R",
+  "GDScript": "player.gd",
+  "HTML / CSS": "index.html",
+};
+
+const PACKAGE_NAMES: Record<string, string> = {
+  "React": "react",
+  "Next.js": "next",
+  "React Native": "react-native",
+  "Tailwind CSS": "tailwindcss",
+  "PyTorch": "torch",
+  "LangChain": "langchain",
+  "FastAPI / Flask": "fastapi",
+  "Bootstrap": "bootstrap",
+};
+
+// Cloud outline for the top of the Cloud & Tools cards (viewBox 0 0 100 30).
+const CLOUD_PATH =
+  "M0 30 L0 23 C0 16 7 13 14 16 C15 6 30 1 38 9 C43 -1 62 -1 67 9 C74 2 91 5 89 17 C95 16 100 20 100 25 L100 30";
+
+function SkillCardBody({ title, description, mono = false }: { title: string; description: string; mono?: boolean }) {
+  const Icon = SKILL_ICONS[title];
+  return (
+    <>
+      {Icon && <Icon className="mb-2 h-8 w-8 shrink-0 md:h-10 md:w-10" aria-hidden="true" />}
+      <span
+        className={`mb-1 max-w-full text-[clamp(0.8rem,1.3vw,1.5rem)] font-semibold leading-tight tracking-tight ${
+          mono ? "font-mono" : ""
+        }`}
+      >
+        {title}
+      </span>
+      <p className="text-[11px] leading-snug opacity-80 xl:text-sm">{description}</p>
+    </>
+  );
+}
+
+function SkillFrame({
+  variant,
+  title,
+  description,
+  selected,
+}: {
+  variant: FrameVariant;
+  title: string;
+  description: string;
+  selected: boolean;
+}) {
+  const tone = selected
+    ? "border-amber-300/80 bg-amber-50/95 text-black"
+    : "border-white/15 bg-white/10 text-white group-hover:bg-white/20";
+
+  if (variant === "code") {
+    return (
+      <div className={`flex h-full flex-col overflow-hidden rounded-lg border shadow-lg backdrop-blur-md transition-colors ${tone}`}>
+        {/* Editor title bar: window dots and a file tab */}
+        <div
+          className={`flex shrink-0 items-center gap-0.5 border-b px-1.5 py-1 xl:gap-1 xl:px-2 ${
+            selected ? "border-amber-300/60 bg-amber-100" : "border-white/10 bg-black/25"
+          }`}
+        >
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-red-400 xl:h-2 xl:w-2" />
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-yellow-400 xl:h-2 xl:w-2" />
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-green-400 xl:h-2 xl:w-2" />
+          <span className="ml-1 truncate font-mono text-[9px] opacity-80 xl:text-[10px]">{FILE_NAMES[title] ?? "main"}</span>
+        </div>
+        <div className="flex min-h-0 flex-1 flex-col items-center justify-center p-2 text-center xl:p-3">
+          <SkillCardBody title={title} description={description} mono />
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "stack") {
+    const layer = selected ? "border-amber-300/60 bg-amber-100/40" : "border-white/10 bg-white/5";
+    return (
+      <div className="relative h-full">
+        {/* Two sheets peeking out behind the card, like a stack of building blocks */}
+        <div aria-hidden="true" className={`absolute inset-x-3 top-0 bottom-3 rounded-2xl border ${layer}`} />
+        <div aria-hidden="true" className={`absolute inset-x-1.5 top-1.5 bottom-1.5 rounded-2xl border ${layer}`} />
+        <div
+          className={`absolute inset-x-0 top-3 bottom-0 flex flex-col items-center justify-center rounded-2xl border p-2 text-center shadow-lg backdrop-blur-md transition-colors xl:p-3 ${tone}`}
+        >
+          <span
+            className={`mb-2 max-w-full truncate rounded-md px-1.5 py-0.5 font-mono text-[10px] ${
+              selected ? "bg-amber-200/80" : "bg-black/25"
+            }`}
+          >
+            <span className="hidden xl:inline">import </span>
+            {PACKAGE_NAMES[title] ?? title.toLowerCase()}
+          </span>
+          <SkillCardBody title={title} description={description} />
+        </div>
+      </div>
+    );
+  }
+
+  // cloud: a slightly stronger outline so the cloud shape reads clearly
+  const cloudTone = selected ? tone : "border-white/30 bg-white/10 text-white group-hover:bg-white/20";
+  return (
+    <div className="flex h-full flex-col drop-shadow-lg">
+      <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="block h-9 w-full shrink-0 xl:h-12" aria-hidden="true">
+        <path
+          d={CLOUD_PATH + " Z"}
+          className={`transition-colors ${selected ? "fill-amber-50/95" : "fill-white/10 group-hover:fill-white/20"}`}
+        />
+        <path
+          d={CLOUD_PATH}
+          fill="none"
+          strokeWidth={1}
+          vectorEffect="non-scaling-stroke"
+          className={selected ? "stroke-amber-300/80" : "stroke-white/30"}
+        />
+      </svg>
+      <div
+        className={`-mt-px flex min-h-0 flex-1 flex-col items-center justify-center rounded-b-2xl border border-t-0 p-2 text-center transition-colors xl:p-3 ${cloudTone}`}
+      >
+        <SkillCardBody title={title} description={description} />
+      </div>
+    </div>
+  );
+}
+
+// Carousel track whose cards fade into the background at an edge whenever
+// more cards are hidden past that edge, instead of being cut off sharply.
+const EDGE_FADE_PX = 72;
+
+function FadingCarouselContent({ className, children }: { className?: string; children: ReactNode }) {
+  const { canScrollPrev, canScrollNext } = useCarousel();
+  const left = canScrollPrev ? EDGE_FADE_PX : 0;
+  const right = canScrollNext ? EDGE_FADE_PX : 0;
+  const mask = `linear-gradient(to right, transparent 0, #000 ${left}px, #000 calc(100% - ${right}px), transparent 100%)`;
+  return (
+    <CarouselContent
+      className={className}
+      viewportStyle={{ maskImage: mask, WebkitMaskImage: mask }}
+    >
+      {children}
+    </CarouselContent>
+  );
+}
+
 interface CarouselSectionProps {
   carouselId: number;
+  variant: FrameVariant;
   widthClass: string;
   cardBasis: string;
   selectedCard: string | null;
@@ -404,6 +559,7 @@ interface CarouselSectionProps {
 
 function CarouselSection({
   carouselId,
+  variant,
   widthClass,
   cardBasis,
   selectedCard,
@@ -417,7 +573,7 @@ function CarouselSection({
   return (
     <div className={`${widthClass} h-full flex justify-end`}>
     <Carousel className="w-full h-full">
-        <CarouselContent className="h-full w-full">
+        <FadingCarouselContent className="h-full w-full">
         {cardData.map(({ title, description }, index) => {
             const cardId = `${carouselId}-${index}`;
             const isSelected = selectedCard === cardId;
@@ -426,33 +582,35 @@ function CarouselSection({
             return (
             <CarouselItem key={cardId} className={`${cardBasis} h-full`}>
                 <div className="p-1 h-full">
-                <Card
+                <div
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isSelected}
                     onClick={() => handleCardClick(carouselId, index)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            handleCardClick(carouselId, index);
+                        }
+                    }}
                     onMouseDown={() => handleMouseDown(cardId)}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={handleMouseUp}
-                    className={`h-full cursor-pointer rounded-2xl border backdrop-blur-md transition-all duration-200 ease-in-out
-                    ${isSelected
-                        ? "border-amber-300/80 bg-amber-50/95 text-black shadow-xl ring-2 ring-amber-300/60"
-                        : "border-white/15 bg-white/10 text-white shadow-lg hover:-translate-y-1 hover:bg-white/20 hover:shadow-xl"}
-                    ${isPressed ? "scale-95" : "scale-100"}
-                    `}
+                    className={`group h-full cursor-pointer transition-transform duration-200 ease-in-out ${
+                        isPressed ? "scale-95" : "hover:-translate-y-1"
+                    } ${isSelected ? "drop-shadow-xl" : ""}`}
                 >
-                    <CardContent className="flex h-full flex-col items-center justify-center p-2 text-center xl:p-4">
-                    {(() => {
-                        const Icon = SKILL_ICONS[title];
-                        return Icon ? <Icon className="mb-2 h-8 w-8 shrink-0 md:h-10 md:w-10" aria-hidden="true" /> : null;
-                    })()}
-                    <span className="mb-2 max-w-full text-[clamp(0.8rem,1.3vw,1.5rem)] font-semibold leading-tight tracking-tight">{title}</span>
-                    <p className="text-[11px] leading-snug opacity-80 xl:text-sm">{description}</p>
-                    </CardContent>
-                </Card>
+                    <SkillFrame variant={variant} title={title} description={description} selected={isSelected} />
+                </div>
                 </div>
             </CarouselItem>
             );
         })}
-        </CarouselContent>
-      <CarouselPrevious />
+        </FadingCarouselContent>
+      <CarouselPrevious className="disabled:opacity-30" />
+      {/* Sits just inside the right edge, over the peeking card, because the
+          detail panels are right next to the carousels. */}
+      <CarouselNext className="right-2 z-10 border-white/40 bg-white/85 text-slate-900 shadow-lg hover:bg-white disabled:opacity-0" />
     </Carousel>
     </div>
   );
@@ -479,9 +637,11 @@ export default function Skills() {
     const handleMouseUp = () => setPressedCard(null);
 
     const carousels = [
-        { widthClass: "w-28/48", cardBasis: "lg:basis-1/3" },
-        { widthClass: "w-36/48", cardBasis: "lg:basis-1/4" },
-        { widthClass: "w-42/48", cardBasis: "lg:basis-1/5" },
+        // Each basis is a little under 1/3, 1/4, and 1/5 so part of the next
+        // card peeks in on the right, showing that the row scrolls.
+        { widthClass: "w-28/48", cardBasis: "basis-[80%] lg:basis-[29%]", variant: "code" as const },
+        { widthClass: "w-36/48", cardBasis: "basis-[80%] lg:basis-[22.5%]", variant: "stack" as const },
+        { widthClass: "w-42/48", cardBasis: "basis-[80%] lg:basis-[18.5%]", variant: "cloud" as const },
     ];
 
     const selectedCarouselId = selectedCard ? Number(selectedCard.split("-")[0]) : null;
@@ -511,6 +671,7 @@ export default function Skills() {
                             <CarouselSection
                             key={carouselId}
                             carouselId={carouselId}
+                            variant={c.variant}
                             widthClass={c.widthClass}
                             cardBasis={c.cardBasis}
                             selectedCard={selectedCard}

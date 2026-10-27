@@ -152,12 +152,15 @@ Carousel.displayName = "Carousel"
 
 const CarouselContent = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
+  React.HTMLAttributes<HTMLDivElement> & {
+    // Style for the clipping viewport around the slides (e.g. an edge fade mask).
+    viewportStyle?: React.CSSProperties
+  }
+>(({ className, viewportStyle, ...props }, ref) => {
   const { carouselRef, orientation } = useCarousel()
 
   return (
-    <div ref={carouselRef} className="overflow-hidden h-full">
+    <div ref={carouselRef} className="overflow-hidden h-full" style={viewportStyle}>
       <div
         ref={ref}
         className={cn(
