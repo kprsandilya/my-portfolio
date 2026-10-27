@@ -148,7 +148,7 @@ const CodeHoverCards: React.FC<CodeHoverCardsProps> = ({
                 <div
                   ref={(el) => { cardRefs.current[card.id] = el; }}
                   className={cn(
-                    'relative w-full h-full flex items-center justify-center overflow-hidden cursor-pointer transition-all duration-200',
+                    'relative w-full h-full flex flex-col items-center justify-center p-6 overflow-hidden cursor-pointer transition-all duration-200',
                     'hover:scale-105 active:scale-95',
                     showBorder && 'border'
                   )}
@@ -175,7 +175,7 @@ const CodeHoverCards: React.FC<CodeHoverCardsProps> = ({
 
                   {/* Character background */}
                   <div
-                    className="absolute inset-0 font-mono text-sm leading-tight opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden break-all text-foreground"
+                    className="absolute inset-0 font-mono text-sm leading-tight opacity-0 group-hover:opacity-20 transition-opacity duration-500 overflow-hidden break-all text-foreground pointer-events-none"
                     style={{
                       WebkitMaskImage:
                         'radial-gradient(' +
@@ -201,7 +201,7 @@ const CodeHoverCards: React.FC<CodeHoverCardsProps> = ({
                   </div>
                                   {/* Card info */}
                 {(card.title || card.description) && (
-                  <div className="mt-4 text-center">
+                  <div className="relative z-10 mt-4 text-center">
                     {card.title && (
                       <h3 className="text-lg font-semibold text-foreground">{card.title}</h3>
                     )}

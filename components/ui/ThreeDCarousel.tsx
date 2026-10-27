@@ -18,6 +18,8 @@ export interface ThreeDCarouselItem {
   tags: string[];
   imageUrl?: string;
   link?: string;
+  // Shown above the brand name in the card header.
+  icon?: React.ComponentType<{ className?: string }>;
 }
 
 interface ThreeDCarouselProps {
@@ -131,7 +133,8 @@ const ThreeDCarousel = ({
                     }}
                   >
                     <div className="absolute inset-0 bg-black/50" />
-                    <div className="relative z-10 text-center text-white">
+                    <div className="relative z-10 flex flex-col items-center text-center text-white">
+                      {item.icon && <item.icon className="mb-3 h-12 w-12" />}
                       <h3 className="text-2xl font-bold mb-2">
                         {item.brand.toUpperCase()}
                       </h3>

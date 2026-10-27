@@ -3,6 +3,8 @@ import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams";
 import { useThemeReady } from "./useThemeReady"
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 import { Parallax } from 'react-scroll-parallax';
+import { FaAws } from "react-icons/fa";
+import { ShieldCheck, ChartCandlestick, GraduationCap } from "lucide-react";
 
 // Certifications from the resume, plus Dean's List honors from the transcript.
 const items: ThreeDCarouselItem[] = [
@@ -10,6 +12,7 @@ const items: ThreeDCarouselItem[] = [
     id: 1,
     title: "AWS Certified Solutions Architect – Associate",
     brand: "Amazon Web Services",
+    icon: FaAws,
     description: "Designing secure, resilient, and cost-effective architectures on AWS.",
     tags: ["AWS", "Cloud", "Architecture"],
   },
@@ -17,6 +20,7 @@ const items: ThreeDCarouselItem[] = [
     id: 2,
     title: "AWS Certified Machine Learning Engineer – Associate",
     brand: "Amazon Web Services",
+    icon: FaAws,
     description: "Building, deploying, and operating machine learning workloads on AWS.",
     tags: ["AWS", "Machine Learning", "MLOps"],
   },
@@ -24,6 +28,7 @@ const items: ThreeDCarouselItem[] = [
     id: 3,
     title: "AWS Certified AI Practitioner",
     brand: "Amazon Web Services",
+    icon: FaAws,
     description: "Foundations of AI, machine learning, and generative AI services on AWS.",
     tags: ["AWS", "AI", "Generative AI"],
   },
@@ -31,6 +36,7 @@ const items: ThreeDCarouselItem[] = [
     id: 4,
     title: "AWS Certified Cloud Practitioner",
     brand: "Amazon Web Services",
+    icon: FaAws,
     description: "Core AWS services, security, pricing, and cloud concepts.",
     tags: ["AWS", "Cloud"],
   },
@@ -38,6 +44,7 @@ const items: ThreeDCarouselItem[] = [
     id: 5,
     title: "GIAC Foundational Cybersecurity Technologies (GFACT)",
     brand: "GIAC",
+    icon: ShieldCheck,
     description: "Foundations of computing, networking, and cybersecurity.",
     tags: ["Security", "Networking"],
   },
@@ -45,6 +52,7 @@ const items: ThreeDCarouselItem[] = [
     id: 6,
     title: "Options 101",
     brand: "Akuna Capital",
+    icon: ChartCandlestick,
     description: "Options pricing, trading fundamentals, and market-making concepts.",
     tags: ["Finance", "Options", "Trading"],
   },
@@ -52,6 +60,7 @@ const items: ThreeDCarouselItem[] = [
     id: 7,
     title: "Dean's List & Semester Honors",
     brand: "Purdue University",
+    icon: GraduationCap,
     description: "Earned every semester from Fall 2023 through Spring 2026, with a 3.98 cumulative GPA.",
     tags: ["Academics", "Honors"],
   },

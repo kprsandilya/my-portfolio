@@ -1,5 +1,13 @@
 import { useThemeReady } from "./useThemeReady"
 import { useState, type ReactNode } from "react"
+import type { IconType } from "react-icons"
+import {
+  SiPython, SiTypescript, SiJavascript, SiCplusplus, SiR, SiGodotengine, SiHtml5,
+  SiReact, SiNextdotjs, SiTailwindcss, SiPytorch, SiLangchain, SiFastapi, SiBootstrap,
+  SiDocker, SiPostgresql, SiFirebase, SiSelenium, SiJira, SiLinux, SiGit, SiApachemaven,
+} from "react-icons/si"
+import { FaAws, FaJava } from "react-icons/fa"
+import { TbBrandReactNative } from "react-icons/tb"
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 import { SkillLevels } from './skillLevels';
 import SkillLevelDisplay from "./skillLevelsBadges"
@@ -21,6 +29,35 @@ interface CardSections {
   rightTop: string | null;
   rightBottom: string | null;
 }
+
+// Brand icon for each skill card, keyed by the card title.
+const SKILL_ICONS: Record<string, IconType> = {
+  "Python": SiPython,
+  "TypeScript": SiTypescript,
+  "JavaScript": SiJavascript,
+  "Java": FaJava,
+  "C / C++": SiCplusplus,
+  "R": SiR,
+  "GDScript": SiGodotengine,
+  "HTML / CSS": SiHtml5,
+  "React": SiReact,
+  "Next.js": SiNextdotjs,
+  "React Native": TbBrandReactNative,
+  "Tailwind CSS": SiTailwindcss,
+  "PyTorch": SiPytorch,
+  "LangChain": SiLangchain,
+  "FastAPI / Flask": SiFastapi,
+  "Bootstrap": SiBootstrap,
+  "AWS": FaAws,
+  "Docker": SiDocker,
+  "PostgreSQL": SiPostgresql,
+  "Firebase": SiFirebase,
+  "Selenium": SiSelenium,
+  "Jira": SiJira,
+  "Linux": SiLinux,
+  "Git / GitHub": SiGit,
+  "Maven": SiApachemaven,
+};
 
 interface Skill {
   title: string;
@@ -338,6 +375,10 @@ function CarouselSection({
                     `}
                 >
                     <CardContent className="flex h-full flex-col items-center justify-center p-4 text-center">
+                    {(() => {
+                        const Icon = SKILL_ICONS[title];
+                        return Icon ? <Icon className="mb-2 h-8 w-8 shrink-0 md:h-10 md:w-10" aria-hidden="true" /> : null;
+                    })()}
                     <span className="mb-2 text-xl font-semibold tracking-tight md:text-2xl">{title}</span>
                     <p className="text-sm leading-snug opacity-80">{description}</p>
                     </CardContent>
@@ -393,7 +434,10 @@ export default function Skills() {
             <div className="relative z-10 w-full px-6 py-16 md:px-16">
                 <div className="grid grid-cols-5 lg:h-[720px] gap-6">
                 {/* ✅ Left Column with generated carousels */}
-                <div className="col-span-3 grid grid-rows-3 gap-4 justify-items-end pr-4">
+                {/* grid-cols-1 pins the track to the column width; otherwise it
+                    grows to fit every card and the carousels spill under the
+                    detail panels. */}
+                <div className="col-span-3 grid grid-cols-1 grid-rows-3 gap-4 justify-items-end pr-4">
                         {carousels.map((c, carouselId) => {
                         const cardData = CAROUSEL_CARD_DATA[carouselId];
                         const cardContent = CAROUSEL_CARD_CONTENT[carouselId];
