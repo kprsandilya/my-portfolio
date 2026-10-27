@@ -166,7 +166,18 @@ export default function Education() {
         // Re-measure after fonts/layout settle.
         const timers = [120, 400, 1000].map((t) => setTimeout(measure, t))
         window.addEventListener('resize', measure)
+        // Each year's row is sized by its course text, so the cards can move
+        // whenever fonts load or text re-wraps, even without a window resize.
+        // Re-measure on any size change of the section so the dots follow.
+        let cancelled = false
+        const observer = new ResizeObserver(() => measure())
+        if (contentRef.current) observer.observe(contentRef.current)
+        document.fonts?.ready.then(() => {
+            if (!cancelled) measure()
+        })
         return () => {
+            cancelled = true
+            observer.disconnect()
             window.removeEventListener('resize', measure)
             timers.forEach(clearTimeout)
         }
