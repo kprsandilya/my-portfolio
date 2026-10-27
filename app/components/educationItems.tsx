@@ -61,6 +61,14 @@ const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, s
         return "rgb(31, 41, 55)";
     };
 
+    // Text color for the "<grade> Classes" label on the closed card. It must
+    // contrast with getColor() rather than inherit the section's text color.
+    const getLabelColor = () => {
+        if (theme === "dark") return "rgb(229, 231, 235)"; // gray-200
+        if (theme === "surprise") return "rgb(17, 24, 39)"; // gray-900
+        return "rgb(255, 255, 255)";
+    };
+
     const getItemColor = () => {
         // This returns the item/card background GRADIENT
         
@@ -158,7 +166,7 @@ const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, s
         onClick={() => set(open => !open)}>
 
           <animated.div
-              style={{ opacity: textOpacity }}
+              style={{ opacity: textOpacity, color: getLabelColor() }}
               className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
               <span className="text-xl font-medium italic">{grade} Classes</span>

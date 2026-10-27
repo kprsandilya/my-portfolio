@@ -13,6 +13,24 @@ import { TypeAnimation } from 'react-type-animation';
 
 const splitter = new GraphemeSplitter();
 
+const GREETING_CLASSES = "text-5xl font-bold font-mono tracking-wider text-[#1bbc68] drop-shadow-[0_0_5px_#1bbc68] max-w-4xl bg-black leading-tight";
+
+const GREETINGS = [
+    "Hi! I'm Sandilya Kambhampati, a student at Purdue University!",
+    // Telugu
+    'నమస్కారం! నేను పర్డ్యూ యూనివర్సిటీ విద్యార్థిని, శాండిల్య కంభంపాటి!',
+    // Mandarin Chinese
+    '你好! 我是 Sandilya Kambhampati, 普渡大学的学生!',
+    // Bulgarian
+    'Здравейте! Аз съм Сандиля Камбампати, студент в Университета Пърдю!',
+    // Spanish
+    '¡Hola! Soy Sandilya Kambhampati, ¡un estudiante de la Universidad de Purdue!',
+    // French
+    "Bonjour! Je suis Sandilya Kambhampati, un étudiant à l'Université Purdue!",
+    // Hindi
+    'नमस्ते! मैं सन्धिल्य कम्भम्पाटी हूँ, पर्ड्यू विश्वविद्यालय का छात्र हूँ!',
+];
+
 export default function Info() {
     const { theme, setTheme } = useThemeReady();
 
@@ -80,34 +98,28 @@ export default function Info() {
                 </div>
             </div>
             <div className="py-18 h-full w-[150vh] text-center rounded-xl">
-                <TypeAnimation
-                    splitter={(str) => splitter.splitGraphemes(str)}
-                    className="text-5xl font-bold font-mono tracking-wider text-[#1bbc68] drop-shadow-[0_0_5px_#1bbc68] max-w-4xl bg-black leading-tight"
-                    sequence={[
-                    "Hi! I'm Sandilya Kambhampati, a student at Purdue University!",
-                    2000,
-                    // Telugu
-                    'నమస్కారం! నేను పర్డ్యూ యూనివర్సిటీ విద్యార్థిని, శాండిల్య కంభంపాటి!',
-                    2000,
-                    // Mandarin Chinese 🇨🇳
-                    '你好! 我是 Sandilya Kambhampati, 普渡大学的学生!', 
-                    2000,
-                    // Bulgarian 🇧🇬
-                    'Здравейте! Аз съм Сандиля Камбампати, студент в Университета Пърдю!',
-                    2000,
-                    // Spanish 🇪🇸
-                    '¡Hola! Soy Sandilya Kambhampati, ¡un estudiante de la Universidad de Purdue!',
-                    2000,
-                    // French 🇫🇷
-                    'Bonjour! Je suis Sandilya Kambhampati, un étudiant à l\'Université Purdue!',
-                    2000,
-                    // Hindi 🇮🇳
-                    'नमस्ते! मैं सन्धिल्य कम्भम्पाटी हूँ, पर्ड्यू विश्वविद्यालय का छात्र हूँ!',
-                    2000
-                ]}
-                    style={{ fontSize: '2em' }}
-                    repeat={Infinity}
-                />
+                {/* Every greeting is rendered invisibly in the same grid cell as
+                    the typing text, so the box is always as tall as the longest
+                    greeting. Without this, the box grows and shrinks as lines
+                    wrap, and the whole page below jumps up and down. */}
+                <div className="grid">
+                    {GREETINGS.map((greeting) => (
+                        <div key={greeting} aria-hidden="true" className="invisible col-start-1 row-start-1">
+                            <span className={GREETING_CLASSES} style={{ fontSize: '2em' }}>
+                                {greeting}|
+                            </span>
+                        </div>
+                    ))}
+                    <div className="col-start-1 row-start-1">
+                        <TypeAnimation
+                            splitter={(str) => splitter.splitGraphemes(str)}
+                            className={GREETING_CLASSES}
+                            sequence={GREETINGS.flatMap((greeting) => [greeting, 2000])}
+                            style={{ fontSize: '2em' }}
+                            repeat={Infinity}
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     )
