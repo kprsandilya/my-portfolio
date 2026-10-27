@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import SectionKicker from "../../components/sectionKicker";
 import { MOCKUPS } from "./hobbies";
 
-// Wraps each mockup: a switcher bar to move between the five designs, then
+// Wraps each mockup: a switcher bar to move between the designs, then
 // the hobbies section label and title, styled like the rest of the site.
 export default function MockupFrame({
   slug,

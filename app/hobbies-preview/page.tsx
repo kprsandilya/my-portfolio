@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MOCKUPS } from "./_shared/hobbies";
 
-// Index of the five hobbies-section mockups. Temporary: once one is chosen
+// Index of the hobbies-section mockups. Temporary: once one is chosen
 // it moves to the home page and this folder is deleted.
 export default function HobbiesPreviewIndex() {
   return (
@@ -12,7 +12,7 @@ export default function HobbiesPreviewIndex() {
         </p>
         <h1 className="mt-2 text-4xl font-semibold tracking-tight">Hobbies section mockups</h1>
         <p className="mt-2 text-[var(--pf-fg-muted)]">
-          Five takes on a hobbies section for the bottom of the home page. Each one works with the light, dark, and
+          Two takes on a hobbies section for the bottom of the home page. Each one works with the light, dark, and
           surprise themes.
         </p>
 
