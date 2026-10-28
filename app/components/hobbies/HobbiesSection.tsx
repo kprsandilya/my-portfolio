@@ -25,7 +25,8 @@ export default function HobbiesSection() {
           io.disconnect();
         }
       },
-      { rootMargin: "1200px 0px" }
+      // Start a few screens early so the board is ready when you arrive.
+      { rootMargin: "300% 0px" }
     );
     io.observe(el);
     return () => io.disconnect();

@@ -4,7 +4,9 @@ import { useMemo } from "react";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-export const SKATEBOARD_URL = "/skateboard-opt.glb";
+// Lightweight copy of skateboard-opt.glb (base-color textures only, quantized
+// geometry): about 1.6 MB instead of 11 MB.
+export const SKATEBOARD_URL = "/skateboard-lite.glb";
 
 export type Axis = "x" | "y" | "z";
 

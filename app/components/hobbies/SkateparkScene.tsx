@@ -12,7 +12,7 @@ import { usePalette, type Palette } from "./usePalette";
 const PIPE_RADIUS = 4;
 const PIPE_LENGTH = 26;
 // How far up each wall the board rides, in radians from the bottom.
-const SWING = 1.05;
+const SWING = 1.2;
 // Number of back-and-forth passes over the whole scroll.
 const PASSES = 6;
 
@@ -52,21 +52,50 @@ function HalfPipe({ palette }: { palette: Palette }) {
   );
 }
 
+// Board height above the half-pipe surface (so the wheels sit on it).
+const RIDE_HEIGHT = 0.14;
+
+function surfacePoint(t: number) {
+  const { x, y, z } = boardPose(t);
+  return new THREE.Vector3(x, y, z);
+}
+
 function RidingBoard({ progress }: { progress: MotionValue<number> }) {
   const ref = useRef<THREE.Group>(null);
+  const target = useMemo(() => new THREE.Quaternion(), []);
+  const basis = useMemo(() => new THREE.Matrix4(), []);
+
   useFrame(() => {
-    if (!ref.current) return;
+    const board = ref.current;
+    if (!board) return;
     const t = THREE.MathUtils.clamp(progress.get(), 0, 1);
-    const { x, y, z, angle } = boardPose(t);
-    ref.current.position.set(x, y + 0.12, z);
-    // Tilt with the wall so the wheels stay on the surface, and face down the pipe.
-    ref.current.rotation.set(-angle, 0, 0);
+    const here = surfacePoint(t);
+
+    // Direction of travel: where the board will be a moment later. This points
+    // the nose up the wall on the way up and down it on the way back, turning
+    // at the top of each wall like a kickturn.
+    const step = 0.0015;
+    const ahead = t + step <= 1 ? surfacePoint(t + step) : here.clone().add(here.clone().sub(surfacePoint(t - step)));
+    const forward = ahead.sub(here);
+
+    // "Up" for the board is the surface normal, pointing toward the pipe's
+    // center line, so the wheels stay flat against the curve.
+    const up = new THREE.Vector3(0, PIPE_RADIUS - here.y, -here.z).normalize();
+    forward.addScaledVector(up, -forward.dot(up));
+    if (forward.lengthSq() < 1e-10) forward.set(-1, 0, 0);
+    forward.normalize();
+    const side = new THREE.Vector3().crossVectors(forward, up);
+
+    // FlatSkateboard's length runs along X and its deck faces +Y.
+    basis.makeBasis(forward, up, side);
+    target.setFromRotationMatrix(basis);
+    board.quaternion.slerp(target, 0.35);
+    board.position.copy(here).addScaledVector(up, RIDE_HEIGHT);
   });
+
   return (
     <group ref={ref}>
-      <group rotation={[0, 0, 0]}>
-        <FlatSkateboard length={3.2} />
-      </group>
+      <FlatSkateboard length={3.2} />
     </group>
   );
 }
