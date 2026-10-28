@@ -8,14 +8,15 @@ import { HOBBIES } from "./hobbies";
 import HobbiesTitle from "./HobbiesTitle";
 import { FlatSkateboard } from "./Skateboard";
 import { usePalette, type Palette } from "./usePalette";
-import { airStart, DECK_WIDTH, PIPE_LENGTH, PIPE_RADIUS, rideState } from "./ride";
+import { airStart, DECK_WIDTH, OUTRO_START, PIPE_LENGTH, PIPE_RADIUS, rideState } from "./ride";
 
 const SEGMENTS = HOBBIES.length; // one air per hobby
 // The first part of the scroll is the intro: the title over a wide shot of
 // the half-pipe, with the camera swooping down behind the board.
 const INTRO = 0.08;
-// Ride progress (after the intro) where the run is over.
-const RUN_DONE = 0.985;
+// Ride progress (after the intro) where the last air is done and the board
+// starts rolling out.
+const RUN_DONE = OUTRO_START;
 
 const smooth = (v: number) => v * v * (3 - 2 * v);
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -118,6 +119,13 @@ function ChaseCamera({ ride, intro }: { ride: MotionValue<number>; intro: Motion
     const desired = establishing.clone().lerp(chase, e);
     const lookTarget = new THREE.Vector3(2, 1.5, 0).lerp(s.position, e);
 
+    // Roll-out: follow only to the end of the pipe, then stay there and rise
+    // while the board rolls on into the distance.
+    if (s.outro > 0) {
+      const o = smooth(s.outro);
+      desired.set(Math.max(chase.x, -PIPE_LENGTH / 2 + 1), THREE.MathUtils.lerp(chase.y, 6.5, o), 0);
+    }
+
     cam.position.lerp(desired, 0.15);
     look.current.lerp(lookTarget, 0.25);
     cam.lookAt(look.current);
@@ -208,7 +216,8 @@ export default function SkateparkScene() {
   const ride = useTransform(scrollYProgress, (v) => clamp01((v - INTRO) / (1 - INTRO)));
   const titleOpacity = useTransform(scrollYProgress, [0, INTRO * 0.7], [1, 0]);
   const barWidth = useTransform(ride, [0, 1], ["0%", "100%"]);
-  const barOpacity = useTransform(scrollYProgress, [INTRO * 0.5, INTRO], [0, 1]);
+  const barOpacity = useTransform(scrollYProgress, [INTRO * 0.5, INTRO, 0.97, 0.995], [0, 1, 1, 0]);
+  const endFade = useTransform(scrollYProgress, [0.965, 1], [0, 0.85]);
 
   return (
     // Tall track: scrolling through it drives the run. The stage stays pinned.
@@ -230,6 +239,10 @@ export default function SkateparkScene() {
           <ChaseCamera ride={ride} intro={intro} />
         </Canvas>
 
+        {/* Soft fade to the terminal color at the very end, so the stage hands
+            off to the footer instead of stopping abruptly. */}
+        <motion.div style={{ opacity: endFade }} className="pointer-events-none absolute inset-0 bg-[var(--pf-term)]" />
+
         <motion.div style={{ opacity: titleOpacity }}>
           <HobbiesTitle />
         </motion.div>
@@ -246,7 +259,7 @@ export default function SkateparkScene() {
           <HobbyPanel key={h.id} index={i} ride={ride} />
         ))}
 
-        <StatusLine ride={ride} from={RUN_DONE} to={1.02}>
+        <StatusLine ride={ride} from={RUN_DONE + 0.01} to={1.02}>
           <p className="text-sm opacity-80">
             <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span> exit
           </p>

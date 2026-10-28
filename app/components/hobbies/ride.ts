@@ -2,8 +2,9 @@ import * as THREE from "three";
 
 // Motion for the half-pipe run, kept free of React so it can be checked on its
 // own. The run is one segment per hobby. In each segment the board climbs one
-// wall, launches off the lip into an air (180° spin plus a kickflip), lands
-// back in, and drops down toward the opposite wall for the next segment.
+// wall, launches off the lip into an air (a smooth 180° turn), lands back in,
+// and drops down toward the opposite wall for the next segment. After the last
+// air the board turns down the pipe and rolls out the end, slowing to a stop.
 
 export const PIPE_RADIUS = 4;
 export const PIPE_LENGTH = 30;
@@ -13,6 +14,11 @@ const CLIMB = 0.32; // share of a segment spent climbing (and the same descendin
 const AIR_HEIGHT = 2.4; // how high above the coping the board flies
 const X_START = PIPE_LENGTH / 2 - 3;
 const X_END = -PIPE_LENGTH / 2 + 3;
+// Share of the ride spent on the roll-out after the last air, and how far the
+// board rolls (past the end of the pipe and into the fog).
+const OUTRO = 0.12;
+export const OUTRO_START = 1 - OUTRO;
+const ROLL_DISTANCE = 22;
 
 export interface RideState {
   position: THREE.Vector3;
@@ -23,6 +29,8 @@ export interface RideState {
   // 0 at the bottom of the pipe, rising up the wall, 1 at the top of an air.
   // The camera uses it to move in close as the board reaches the apex.
   closeness: number;
+  // 0 during the run; 0 to 1 while the board rolls out at the end.
+  outro: number;
 }
 
 // Closeness while on the wall: grows with height, reaching 0.55 at the lip.
@@ -33,9 +41,9 @@ const wallCloseness = (y: number) => 0.55 * Math.pow(THREE.MathUtils.clamp(y / P
 const climb = (v: number) => 1.6 * v - 0.6 * v * v;
 const climbRate = (v: number) => 1.6 - 1.2 * v;
 
-/** Scroll progress at which segment k's air starts. */
+/** Ride progress at which segment k's air starts. */
 export function airStart(k: number, segments: number) {
-  return (k + CLIMB) / segments;
+  return ((k + CLIMB) / segments) * OUTRO_START;
 }
 
 function segmentOf(t: number, segments: number) {
@@ -67,10 +75,24 @@ function onSurface(x: number, dx: number, a: number, da: number) {
 }
 
 const Y_AXIS = new THREE.Vector3(0, 1, 0);
-const X_AXIS = new THREE.Vector3(1, 0, 0);
 const smooth = (v: number) => v * v * (3 - 2 * v);
 
 export function rideState(t: number, segments: number): RideState {
+  const tc = THREE.MathUtils.clamp(t, 0, 1);
+  if (tc <= OUTRO_START) return runState(tc / OUTRO_START, segments);
+
+  // Roll-out: turn to face down the pipe, then roll out the end and slow down.
+  const o = (tc - OUTRO_START) / OUTRO;
+  const end = runState(1, segments);
+  const roll = 1 - (1 - o) * (1 - o); // eases to a stop
+  const position = new THREE.Vector3(X_END - ROLL_DISTANCE * roll, RIDE_HEIGHT, 0);
+  const rolling = orient(new THREE.Vector3(-1, 0, 0), Y_AXIS);
+  const quaternion = end.quaternion.clone().slerp(rolling, smooth(Math.min(1, o / 0.3)));
+  return { position, quaternion, airborne: false, segment: segments - 1, side: end.side, closeness: 0, outro: o };
+}
+
+// The six-air run, for run progress t (0-1).
+function runState(t: number, segments: number): RideState {
   const { k, u, side } = segmentOf(t, segments);
   const x = THREE.MathUtils.lerp(X_START, X_END, THREE.MathUtils.clamp(t, 0, 1));
   const dx = (X_END - X_START) / segments; // per unit of u
@@ -79,12 +101,12 @@ export function rideState(t: number, segments: number): RideState {
   if (u < CLIMB) {
     const v = u / CLIMB;
     const s = onSurface(x, dx, lip * climb(v), (lip * climbRate(v)) / CLIMB);
-    return { ...s, airborne: false, segment: k, side, closeness: wallCloseness(s.position.y) };
+    return { ...s, airborne: false, segment: k, side, closeness: wallCloseness(s.position.y), outro: 0 };
   }
   if (u > 1 - CLIMB) {
     const w = (u - (1 - CLIMB)) / CLIMB;
     const s = onSurface(x, dx, lip * climb(1 - w), (-lip * climbRate(1 - w)) / CLIMB);
-    return { ...s, airborne: false, segment: k, side, closeness: wallCloseness(s.position.y) };
+    return { ...s, airborne: false, segment: k, side, closeness: wallCloseness(s.position.y), outro: 0 };
   }
 
   // In the air: rise straight up off the lip and come back down onto it.
@@ -94,17 +116,14 @@ export function rideState(t: number, segments: number): RideState {
   const position = takeoff.position.clone();
   position.y += AIR_HEIGHT * Math.sin(Math.PI * air);
 
-  // 180° turn around the deck's normal plus a kickflip around the board's
-  // length, easing into the landing orientation at the end.
+  // A smooth 180° turn around the deck's normal so the nose points back down
+  // the wall, easing into the landing orientation at the end.
   const e = smooth(air);
-  const trick = takeoff.quaternion
-    .clone()
-    .multiply(new THREE.Quaternion().setFromAxisAngle(Y_AXIS, Math.PI * e))
-    .multiply(new THREE.Quaternion().setFromAxisAngle(X_AXIS, 2 * Math.PI * e));
+  const trick = takeoff.quaternion.clone().multiply(new THREE.Quaternion().setFromAxisAngle(Y_AXIS, Math.PI * e));
   const settle = THREE.MathUtils.clamp((air - 0.8) / 0.2, 0, 1);
   const quaternion = settle > 0 ? trick.slerp(landing.quaternion, settle) : trick;
 
   // Continues from the lip's 0.55 up to 1 at the top of the air.
   const closeness = wallCloseness(takeoff.position.y) + (1 - wallCloseness(takeoff.position.y)) * Math.sin(Math.PI * air);
-  return { position, quaternion, airborne: true, segment: k, side, closeness };
+  return { position, quaternion, airborne: true, segment: k, side, closeness, outro: 0 };
 }
