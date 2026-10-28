@@ -8,13 +8,13 @@ import {
   GiPokerHand,
 } from "react-icons/gi";
 
-// Shared content for the hobby mockups. Edit the text here and every mockup
-// picks it up. Only facts from the resume, transcript, and GitHub are used.
+// Content for the Hobbies section (the half-pipe ride). Edit the text here.
+// Only facts from the resume, transcript, and GitHub are used.
 export interface Hobby {
   id: "skate" | "violin" | "piano" | "gamejams" | "dnd" | "puzzles";
   name: string;
   icon: IconType;
-  file: string; // used by the terminal mockup: `cat <file>`
+  file: string; // shown in the terminal-style cards
   kind: string; // short category, e.g. "Instrument"
   blurb: string; // one sentence
   details: string[]; // a few facts
@@ -87,7 +87,3 @@ export const HOBBIES: Hobby[] = [
   },
 ];
 
-export const MOCKUPS = [
-  { slug: "shell", title: "Hobby shell", summary: "An interactive terminal. Type or click commands; ./skate flips the 3D board." },
-  { slug: "skatepark", title: "Neon skatepark", summary: "Scroll to ride the board through a glowing wireframe bowl as hobby cards pop up." },
-] as const;

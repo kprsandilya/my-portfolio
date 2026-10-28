@@ -11,7 +11,7 @@ import Projects from "./components/projects"
 import Awards from "./components/awards"
 import Skills from "./components/skills"
 import Footer from "./components/footer"
-import Skate from "./components/hobbies"
+import HobbiesSection from "./components/hobbies/HobbiesSection"
 import SectionKicker from "./components/sectionKicker"
 import { ChevronDown } from "lucide-react"
 
@@ -83,9 +83,9 @@ export default function TestHome() {
       </div>
 
 
-      {/* <div className="relative z-50">
-        <Skate />
-      </div> */}
+      <div className="relative z-50">
+        <HobbiesSection />
+      </div>
 
       <div className="relative z-50">
         <Footer />

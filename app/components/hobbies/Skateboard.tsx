@@ -66,4 +66,3 @@ export function FlatSkateboard({ length = 3 }: { length?: number }) {
   );
 }
 
-useGLTF.preload(SKATEBOARD_URL);

@@ -4,9 +4,9 @@ import { Suspense, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import * as THREE from "three";
-import { HOBBIES } from "../_shared/hobbies";
-import { FlatSkateboard } from "../_shared/Skateboard";
-import { usePalette, type Palette } from "../_shared/usePalette";
+import { HOBBIES } from "./hobbies";
+import { FlatSkateboard } from "./Skateboard";
+import { usePalette, type Palette } from "./usePalette";
 
 // Half-pipe dimensions (world units).
 const PIPE_RADIUS = 4;
@@ -120,7 +120,8 @@ export default function SkateparkScene() {
 
   return (
     // Tall track: scrolling through it drives the ride. The stage stays pinned.
-    <div ref={track} className="relative h-[600vh] bg-[var(--pf-term)]">
+    // Keep the height in sync with the placeholder in HobbiesSection.
+    <div ref={track} className="relative h-[450vh] bg-[var(--pf-term)]">
       <div className="sticky top-0 h-screen overflow-hidden">
         <Canvas camera={{ position: [16, 8, 11], fov: 45 }} dpr={[1, 2]}>
           <color attach="background" args={[palette.term]} />

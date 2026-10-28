@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useThemeReady } from "../../components/useThemeReady";
+import { useThemeReady } from "../useThemeReady";
 
 // Canvas and three.js code can't read CSS variables, so this resolves the
 // theme tokens from globals.css into plain color strings and re-reads them
