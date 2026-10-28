@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -17,8 +17,13 @@ export function useSkateboard(length = 3) {
   const { scene } = useGLTF(SKATEBOARD_URL);
 
   return useMemo(() => {
-    // Clone so several canvases can show the board at once.
+    // Clone so several canvases can show the board at once, and give this
+    // copy its own materials so its glow can be set independently.
     const object = scene.clone(true);
+    object.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (mesh.isMesh) mesh.material = (mesh.material as THREE.Material).clone();
+    });
     const box = new THREE.Box3().setFromObject(object);
     const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
@@ -40,8 +45,21 @@ export function useSkateboard(length = 3) {
 }
 
 // Board lying flat with its length along world X, ready to roll or flip.
-export function FlatSkateboard({ length = 3 }: { length?: number }) {
+// `glow` tints the board with a soft emissive color so the mostly black deck
+// stands out against dark backgrounds.
+export function FlatSkateboard({ length = 3, glow, glowStrength = 0.35 }: { length?: number; glow?: string; glowStrength?: number }) {
   const { object, longAxis, upAxis } = useSkateboard(length);
+
+  useEffect(() => {
+    object.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (!mesh.isMesh) return;
+      const mat = mesh.material as THREE.MeshStandardMaterial;
+      if (!mat.emissive) return;
+      mat.emissive.set(glow ?? "#000000");
+      mat.emissiveIntensity = glow ? glowStrength : 0;
+    });
+  }, [object, glow, glowStrength]);
 
   // Rotate the model so long axis -> X and up axis -> Y.
   const rotation = useMemo(() => {

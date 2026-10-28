@@ -20,7 +20,13 @@ export interface RideState {
   airborne: boolean;
   segment: number; // which hobby's air this segment ends in
   side: 1 | -1; // which wall: +Z or -Z
+  // 0 at the bottom of the pipe, rising up the wall, 1 at the top of an air.
+  // The camera uses it to move in close as the board reaches the apex.
+  closeness: number;
 }
+
+// Closeness while on the wall: grows with height, reaching 0.55 at the lip.
+const wallCloseness = (y: number) => 0.55 * Math.pow(THREE.MathUtils.clamp(y / PIPE_RADIUS, 0, 1), 1.5);
 
 // Climb profile: fast at the bottom, still moving at the lip (so the nose is
 // pointing up when the board takes off). f(0)=0, f(1)=1, f'(1)>0.
@@ -73,12 +79,12 @@ export function rideState(t: number, segments: number): RideState {
   if (u < CLIMB) {
     const v = u / CLIMB;
     const s = onSurface(x, dx, lip * climb(v), (lip * climbRate(v)) / CLIMB);
-    return { ...s, airborne: false, segment: k, side };
+    return { ...s, airborne: false, segment: k, side, closeness: wallCloseness(s.position.y) };
   }
   if (u > 1 - CLIMB) {
     const w = (u - (1 - CLIMB)) / CLIMB;
     const s = onSurface(x, dx, lip * climb(1 - w), (-lip * climbRate(1 - w)) / CLIMB);
-    return { ...s, airborne: false, segment: k, side };
+    return { ...s, airborne: false, segment: k, side, closeness: wallCloseness(s.position.y) };
   }
 
   // In the air: rise straight up off the lip and come back down onto it.
@@ -98,5 +104,7 @@ export function rideState(t: number, segments: number): RideState {
   const settle = THREE.MathUtils.clamp((air - 0.8) / 0.2, 0, 1);
   const quaternion = settle > 0 ? trick.slerp(landing.quaternion, settle) : trick;
 
-  return { position, quaternion, airborne: true, segment: k, side };
+  // Continues from the lip's 0.55 up to 1 at the top of the air.
+  const closeness = wallCloseness(takeoff.position.y) + (1 - wallCloseness(takeoff.position.y)) * Math.sin(Math.PI * air);
+  return { position, quaternion, airborne: true, segment: k, side, closeness };
 }

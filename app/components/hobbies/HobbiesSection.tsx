@@ -2,14 +2,22 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import SectionKicker from "../sectionKicker";
-import { GradientText } from "@/components/ui/shadcn-io/gradient-text";
+import HobbiesTitle from "./HobbiesTitle";
 
 // The 3D scene (and the skateboard model) only load once the section is
 // close to the screen, so they don't slow down the rest of the page.
-const SkateparkScene = dynamic(() => import("./SkateparkScene"), { ssr: false });
+const SkateparkScene = dynamic(() => import("./SkateparkScene"), { ssr: false, loading: () => <Placeholder /> });
 
-const TITLE_GRADIENT = "linear-gradient(90deg, var(--pf-accent) 0%, var(--pf-accent-2) 50%, var(--pf-accent) 100%)";
+// Same height and pinned title as the scene, so nothing moves when it loads.
+function Placeholder() {
+  return (
+    <div className="relative h-[600vh]">
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <HobbiesTitle />
+      </div>
+    </div>
+  );
+}
 
 export default function HobbiesSection() {
   const trigger = useRef<HTMLDivElement>(null);
@@ -33,22 +41,10 @@ export default function HobbiesSection() {
   }, []);
 
   return (
-    <section id="hobbies" className="relative bg-[color:var(--pf-term)] text-[var(--pf-term-fg)]">
-      <SectionKicker index="06" path="hobbies" className="pt-16" />
-      <div className="flex flex-col items-center px-6 pb-10 pt-10 text-center">
-        <GradientText
-          className="text-5xl font-semibold leading-none tracking-tighter sm:text-6xl md:text-8xl"
-          gradient={TITLE_GRADIENT}
-          text="Off the Clock"
-        />
-        <p className="mt-4 font-mono text-sm opacity-70">
-          <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span>{" "}
-          scroll to ride through what I do for fun
-        </p>
-      </div>
-
-      {/* Same height as the scene's scroll track, so the page doesn't jump when it loads. */}
-      <div ref={trigger}>{near ? <SkateparkScene /> : <div className="h-[600vh]" aria-hidden="true" />}</div>
+    // The title lives inside the pinned stage (over the half-pipe) instead of
+    // above it, so scrolling flows straight from the title into the run.
+    <section id="hobbies" ref={trigger} className="relative bg-[color:var(--pf-term)] text-[var(--pf-term-fg)]">
+      {near ? <SkateparkScene /> : <Placeholder />}
     </section>
   );
 }
