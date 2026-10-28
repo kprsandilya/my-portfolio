@@ -8,14 +8,25 @@ import { HOBBIES } from "./hobbies";
 import HobbiesTitle from "./HobbiesTitle";
 import { FlatSkateboard } from "./Skateboard";
 import { usePalette, type Palette } from "./usePalette";
-import { airStart, DECK_WIDTH, OUTRO_START, PIPE_LENGTH, PIPE_RADIUS, rideState } from "./ride";
+import { ParametricGeometry } from "three/examples/jsm/geometries/ParametricGeometry.js";
+import {
+  airStart,
+  DECK_WIDTH,
+  END_WALL_RADIUS,
+  END_WALL_WIDTH,
+  END_WALL_X,
+  OUTRO_START,
+  PIPE_LENGTH,
+  PIPE_RADIUS,
+  rideState,
+} from "./ride";
 
 const SEGMENTS = HOBBIES.length; // one air per hobby
 // The first part of the scroll is the intro: the title over a wide shot of
 // the half-pipe, with the camera swooping down behind the board.
 const INTRO = 0.08;
 // Ride progress (after the intro) where the last air is done and the board
-// starts rolling out.
+// heads for the end wall.
 const RUN_DONE = OUTRO_START;
 
 const smooth = (v: number) => v * v * (3 - 2 * v);
@@ -55,6 +66,45 @@ function HalfPipe({ palette }: { palette: Palette }) {
           </mesh>
         </group>
       ))}
+    </group>
+  );
+}
+
+// Curved end wall past the end of the pipe, where the board comes to rest.
+function EndWall({ palette }: { palette: Palette }) {
+  const wall = useMemo(
+    () =>
+      new ParametricGeometry(
+        (u, v, target) => {
+          const a = (u * Math.PI) / 2;
+          target.set(
+            END_WALL_X - END_WALL_RADIUS * Math.sin(a),
+            END_WALL_RADIUS - END_WALL_RADIUS * Math.cos(a),
+            (v - 0.5) * END_WALL_WIDTH
+          );
+        },
+        12,
+        14
+      ),
+    []
+  );
+  const deckX = END_WALL_X - END_WALL_RADIUS - DECK_WIDTH / 2;
+  return (
+    <group>
+      <mesh geometry={wall}>
+        <meshBasicMaterial color={palette.accent} wireframe transparent opacity={0.4} />
+      </mesh>
+      <mesh geometry={wall}>
+        <meshBasicMaterial color={palette.accent2} transparent opacity={0.07} side={THREE.DoubleSide} />
+      </mesh>
+      <mesh position={[deckX, END_WALL_RADIUS, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[DECK_WIDTH, END_WALL_WIDTH, 3, 14]} />
+        <meshBasicMaterial color={palette.accent} wireframe transparent opacity={0.3} />
+      </mesh>
+      <mesh position={[END_WALL_X - END_WALL_RADIUS, END_WALL_RADIUS, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.08, 0.08, END_WALL_WIDTH, 12]} />
+        <meshBasicMaterial color={palette.accent3} />
+      </mesh>
     </group>
   );
 }
@@ -105,6 +155,7 @@ function BoardLights({ ride, palette }: { ride: MotionValue<number>; palette: Pa
 function ChaseCamera({ ride, intro }: { ride: MotionValue<number>; intro: MotionValue<number> }) {
   const look = useRef(new THREE.Vector3(8, 1, 0));
   const establishing = useMemo(() => new THREE.Vector3(PIPE_LENGTH / 2 + 12, 9, 10), []);
+  const endShot = useMemo(() => new THREE.Vector3(END_WALL_X + 8, 2.6, 6), []);
   useFrame(({ camera }, delta) => {
     const s = rideState(ride.get(), SEGMENTS);
     const c = smooth(s.closeness);
@@ -122,11 +173,18 @@ function ChaseCamera({ ride, intro }: { ride: MotionValue<number>; intro: Motion
     const desired = establishing.clone().lerp(chase, e);
     const lookTarget = new THREE.Vector3(2, 1.5, 0).lerp(s.position, e);
 
-    // Roll-out: follow only to the end of the pipe, then stay there and rise
-    // while the board carves away toward the horizon.
-    if (s.outro > 0) {
-      const o = smooth(s.outro);
-      desired.set(Math.max(chase.x, -PIPE_LENGTH / 2 + 1), THREE.MathUtils.lerp(chase.y, 5, o), 0);
+    // Ending: as the board heads up the end wall, swing out to a
+    // three-quarter view so the curve and the board leaning on it are both in
+    // the shot. Once it's resting, tilt up past the top of the wall.
+    const w = smooth(clamp01((s.outro - 0.25) / 0.45));
+    if (w > 0) {
+      desired.lerp(endShot, w);
+      lookTarget.lerp(new THREE.Vector3(END_WALL_X - 1, 1.6, 0), w);
+    }
+    if (s.rest > 0) {
+      const r = smooth(s.rest);
+      desired.y += 1.5 * r;
+      lookTarget.y += 6 * r;
     }
 
     // Frame-rate independent easing toward the targets.
@@ -135,18 +193,6 @@ function ChaseCamera({ ride, intro }: { ride: MotionValue<number>; intro: Motion
     camera.lookAt(look.current);
   });
   return null;
-}
-
-// Fog closes in during the roll-out so the board fades into the horizon.
-function RollOutFog({ ride, palette }: { ride: MotionValue<number>; palette: Palette }) {
-  const fog = useRef<THREE.Fog>(null);
-  useFrame(() => {
-    if (!fog.current) return;
-    const o = smooth(rideState(ride.get(), SEGMENTS).outro);
-    fog.current.near = THREE.MathUtils.lerp(16, 4, o);
-    fog.current.far = THREE.MathUtils.lerp(42, 18, o);
-  });
-  return <fog ref={fog} attach="fog" args={[palette.term, 16, 42]} />;
 }
 
 // On wide screens, shift the picture right so the board isn't under the
@@ -230,22 +276,23 @@ export default function SkateparkScene() {
   const titleOpacity = useTransform(scrollYProgress, [0, INTRO * 0.7], [1, 0]);
   const barWidth = useTransform(ride, [0, 1], ["0%", "100%"]);
   const barOpacity = useTransform(scrollYProgress, [INTRO * 0.5, INTRO, 0.93, 0.96], [0, 1, 1, 0]);
-  // Fade the stage out once the board has carved off toward the horizon.
-  const endFade = useTransform(scrollYProgress, [0.93, 0.975], [0, 1]);
+  // Fade the stage out while the camera tilts up from the resting board.
+  const endFade = useTransform(scrollYProgress, [0.965, 0.995], [0, 1]);
 
   return (
     // Tall track: scrolling through it drives the run. The stage stays pinned.
     // Keep the height in sync with the placeholder in HobbiesSection.
-    <div ref={track} className="relative h-[700vh] bg-[var(--pf-term)]">
+    <div ref={track} data-ride-track className="relative h-[700vh] bg-[var(--pf-term)]">
       <div className="sticky top-0 h-screen overflow-hidden">
         <Canvas camera={{ position: [PIPE_LENGTH / 2 + 12, 9, 10], fov: 50 }} dpr={[1, 2]}>
           <FrameRight />
           <color attach="background" args={[palette.term]} />
-          <RollOutFog ride={ride} palette={palette} />
+          <fog attach="fog" args={[palette.term, 16, 42]} />
           <ambientLight intensity={1.1} />
           <directionalLight position={[4, 10, 6]} intensity={1.2} />
           <gridHelper args={[80, 80, palette.accent, palette.term2]} position={[0, -0.01, 0]} />
           <HalfPipe palette={palette} />
+          <EndWall palette={palette} />
           <Suspense fallback={null}>
             <RidingBoard ride={ride} glow={palette.accent} />
           </Suspense>

@@ -29,7 +29,7 @@ export const HOBBIES: Hobby[] = [
     file: "skate.md",
     kind: "Sport",
     blurb: "Four wheels, one board, and a lot of practice.",
-    details: ["The board doing airs in this half-pipe is a real 3D skateboard model."],
+    details: ["The board riding this run is a real 3D skateboard model."],
     accent: "--pf-accent",
   },
   {
