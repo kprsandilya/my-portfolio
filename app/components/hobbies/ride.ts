@@ -4,21 +4,23 @@ import * as THREE from "three";
 // own. The run is one segment per hobby. In each segment the board climbs one
 // wall, launches off the lip into an air (a smooth 180° turn), lands back in,
 // and drops down toward the opposite wall for the next segment. After the last
-// air the board turns down the pipe and rolls out the end, slowing to a stop.
+// air the board rolls out the end of the pipe and carves an S toward the
+// horizon, slowing as it goes.
 
 export const PIPE_RADIUS = 4;
 export const PIPE_LENGTH = 30;
 export const DECK_WIDTH = 3;
 const RIDE_HEIGHT = 0.14; // board center above the surface, so the wheels sit on it
 const CLIMB = 0.32; // share of a segment spent climbing (and the same descending)
-const AIR_HEIGHT = 2.4; // how high above the coping the board flies
+const AIR_HEIGHT = 1.8; // how high above the coping the board flies
 const X_START = PIPE_LENGTH / 2 - 3;
 const X_END = -PIPE_LENGTH / 2 + 3;
-// Share of the ride spent on the roll-out after the last air, and how far the
-// board rolls (past the end of the pipe and into the fog).
+// Share of the ride spent on the roll-out after the last air, how far the
+// board rolls (out of the pipe toward the horizon), and how wide its S is.
 const OUTRO = 0.12;
 export const OUTRO_START = 1 - OUTRO;
-const ROLL_DISTANCE = 22;
+const ROLL_DISTANCE = 40;
+const S_WIDTH = 4;
 
 export interface RideState {
   position: THREE.Vector3;
@@ -81,12 +83,15 @@ export function rideState(t: number, segments: number): RideState {
   const tc = THREE.MathUtils.clamp(t, 0, 1);
   if (tc <= OUTRO_START) return runState(tc / OUTRO_START, segments);
 
-  // Roll-out: turn to face down the pipe, then roll out the end and slow down.
+  // Roll-out: out the end of the pipe and along an S toward the horizon,
+  // slowing as it goes. The nose follows the curve.
   const o = (tc - OUTRO_START) / OUTRO;
   const end = runState(1, segments);
   const roll = 1 - (1 - o) * (1 - o); // eases to a stop
-  const position = new THREE.Vector3(X_END - ROLL_DISTANCE * roll, RIDE_HEIGHT, 0);
-  const rolling = orient(new THREE.Vector3(-1, 0, 0), Y_AXIS);
+  const wave = 2 * Math.PI * roll; // one full S
+  const position = new THREE.Vector3(X_END - ROLL_DISTANCE * roll, RIDE_HEIGHT, S_WIDTH * Math.sin(wave));
+  const heading = new THREE.Vector3(-ROLL_DISTANCE, 0, S_WIDTH * 2 * Math.PI * Math.cos(wave));
+  const rolling = orient(heading, Y_AXIS);
   const quaternion = end.quaternion.clone().slerp(rolling, smooth(Math.min(1, o / 0.3)));
   return { position, quaternion, airborne: false, segment: segments - 1, side: end.side, closeness: 0, outro: o };
 }

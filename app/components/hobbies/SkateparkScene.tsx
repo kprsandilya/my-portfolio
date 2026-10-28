@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import * as THREE from "three";
 import { HOBBIES } from "./hobbies";
 import HobbiesTitle from "./HobbiesTitle";
@@ -98,20 +98,23 @@ function BoardLights({ ride, palette }: { ride: MotionValue<number>; palette: Pa
   );
 }
 
-// Follow cam that adapts to the board. On the flat it trails a few board
-// lengths behind; as the board climbs it closes in and drops below it; at the
-// top of each air it's right on the board, looking up, with a wider lens.
+// Calm follow cam. It trails a few board lengths behind and eases in closer
+// as the board climbs to the top of each air. It stays near the pipe's center
+// line instead of swinging from wall to wall, keeps a fixed lens, and its
+// movement is damped over time rather than snapping to every scroll tick.
 function ChaseCamera({ ride, intro }: { ride: MotionValue<number>; intro: MotionValue<number> }) {
   const look = useRef(new THREE.Vector3(8, 1, 0));
   const establishing = useMemo(() => new THREE.Vector3(PIPE_LENGTH / 2 + 12, 9, 10), []);
-  useFrame(({ camera }) => {
-    const cam = camera as THREE.PerspectiveCamera;
+  useFrame(({ camera }, delta) => {
     const s = rideState(ride.get(), SEGMENTS);
     const c = smooth(s.closeness);
 
-    const distance = THREE.MathUtils.lerp(5.5, 1.6, c);
-    const dir = new THREE.Vector3(1, 0.45 - 0.75 * c, -s.side * 0.9 * c).normalize();
+    const distance = THREE.MathUtils.lerp(5, 2.2, c);
+    const dir = new THREE.Vector3(1, 0.4 - 0.55 * c, 0).normalize();
     const chase = s.position.clone().addScaledVector(dir, distance);
+    // Only partly follow the board across the pipe: about a third of the way
+    // on the flat, more as it rises toward an air.
+    chase.z = s.position.z * (0.3 + 0.4 * c);
     chase.y = Math.max(chase.y, 0.4);
 
     // Intro: blend from a wide establishing shot into the chase position.
@@ -120,23 +123,30 @@ function ChaseCamera({ ride, intro }: { ride: MotionValue<number>; intro: Motion
     const lookTarget = new THREE.Vector3(2, 1.5, 0).lerp(s.position, e);
 
     // Roll-out: follow only to the end of the pipe, then stay there and rise
-    // while the board rolls on into the distance.
+    // while the board carves away toward the horizon.
     if (s.outro > 0) {
       const o = smooth(s.outro);
-      desired.set(Math.max(chase.x, -PIPE_LENGTH / 2 + 1), THREE.MathUtils.lerp(chase.y, 6.5, o), 0);
+      desired.set(Math.max(chase.x, -PIPE_LENGTH / 2 + 1), THREE.MathUtils.lerp(chase.y, 5, o), 0);
     }
 
-    cam.position.lerp(desired, 0.15);
-    look.current.lerp(lookTarget, 0.25);
-    cam.lookAt(look.current);
-
-    const fov = THREE.MathUtils.lerp(50, 66, c * e);
-    if (Math.abs(cam.fov - fov) > 0.05) {
-      cam.fov = THREE.MathUtils.lerp(cam.fov, fov, 0.15);
-      cam.updateProjectionMatrix();
-    }
+    // Frame-rate independent easing toward the targets.
+    camera.position.lerp(desired, 1 - Math.exp(-delta * 3));
+    look.current.lerp(lookTarget, 1 - Math.exp(-delta * 5));
+    camera.lookAt(look.current);
   });
   return null;
+}
+
+// Fog closes in during the roll-out so the board fades into the horizon.
+function RollOutFog({ ride, palette }: { ride: MotionValue<number>; palette: Palette }) {
+  const fog = useRef<THREE.Fog>(null);
+  useFrame(() => {
+    if (!fog.current) return;
+    const o = smooth(rideState(ride.get(), SEGMENTS).outro);
+    fog.current.near = THREE.MathUtils.lerp(16, 4, o);
+    fog.current.far = THREE.MathUtils.lerp(42, 18, o);
+  });
+  return <fog ref={fog} attach="fog" args={[palette.term, 16, 42]} />;
 }
 
 // On wide screens, shift the picture right so the board isn't under the
@@ -211,23 +221,27 @@ function StatusLine({ ride, from, to, children }: { ride: MotionValue<number>; f
 export default function SkateparkScene() {
   const palette = usePalette();
   const track = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: track, offset: ["start start", "end end"] });
+  const { scrollYProgress: rawProgress } = useScroll({ target: track, offset: ["start start", "end end"] });
+  // Spring-smoothed scroll: a fast flick of the wheel becomes a smooth glide
+  // instead of an instant jump, which keeps the motion calm.
+  const scrollYProgress = useSpring(rawProgress, { stiffness: 70, damping: 24, restDelta: 0.0001 });
   const intro = useTransform(scrollYProgress, (v) => clamp01(v / INTRO));
   const ride = useTransform(scrollYProgress, (v) => clamp01((v - INTRO) / (1 - INTRO)));
   const titleOpacity = useTransform(scrollYProgress, [0, INTRO * 0.7], [1, 0]);
   const barWidth = useTransform(ride, [0, 1], ["0%", "100%"]);
-  const barOpacity = useTransform(scrollYProgress, [INTRO * 0.5, INTRO, 0.97, 0.995], [0, 1, 1, 0]);
-  const endFade = useTransform(scrollYProgress, [0.965, 1], [0, 0.85]);
+  const barOpacity = useTransform(scrollYProgress, [INTRO * 0.5, INTRO, 0.93, 0.96], [0, 1, 1, 0]);
+  // Fade the stage out once the board has carved off toward the horizon.
+  const endFade = useTransform(scrollYProgress, [0.93, 0.975], [0, 1]);
 
   return (
     // Tall track: scrolling through it drives the run. The stage stays pinned.
     // Keep the height in sync with the placeholder in HobbiesSection.
-    <div ref={track} className="relative h-[600vh] bg-[var(--pf-term)]">
+    <div ref={track} className="relative h-[700vh] bg-[var(--pf-term)]">
       <div className="sticky top-0 h-screen overflow-hidden">
         <Canvas camera={{ position: [PIPE_LENGTH / 2 + 12, 9, 10], fov: 50 }} dpr={[1, 2]}>
           <FrameRight />
           <color attach="background" args={[palette.term]} />
-          <fog attach="fog" args={[palette.term, 16, 42]} />
+          <RollOutFog ride={ride} palette={palette} />
           <ambientLight intensity={1.1} />
           <directionalLight position={[4, 10, 6]} intensity={1.2} />
           <gridHelper args={[80, 80, palette.accent, palette.term2]} position={[0, -0.01, 0]} />
