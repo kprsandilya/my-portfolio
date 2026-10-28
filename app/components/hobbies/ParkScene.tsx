@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import * as THREE from "three";
 import { ParametricGeometry } from "three/examples/jsm/geometries/ParametricGeometry.js";
 import { HOBBIES } from "./hobbies";
@@ -517,8 +517,6 @@ function FrameRight() {
 const PANEL_POSITION =
   "pointer-events-none absolute inset-x-4 bottom-24 md:inset-x-auto md:bottom-auto md:left-[5vw] md:top-1/2 md:w-[min(440px,38vw)] md:-translate-y-1/2";
 
-// The trick that unlocks each hobby, shown in the panel's prompt line.
-const TRICK_NAMES = ["air --out-of-bowl", "ollie --funbox", "boardslide --rail", "frontside-air --quarter-pipe", "crooked-grind --ledge", "air --kicker"];
 
 // Hobby panel on the left. Each one slides in as its trick starts and stays
 // until the next trick.
@@ -535,7 +533,7 @@ function HobbyPanel({ index, ride }: { index: number; ride: MotionValue<number> 
       <div className="rounded-2xl border border-white/10 bg-[var(--pf-term)]/85 p-6 text-[var(--pf-term-fg)] shadow-2xl backdrop-blur">
         <div className="flex items-center justify-between font-mono text-xs opacity-80">
           <span>
-            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span> {TRICK_NAMES[index]}
+            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span> {hobby.trick}
           </span>
           <span>
             {String(index + 1).padStart(2, "0")} / {String(COUNT).padStart(2, "0")}
@@ -569,7 +567,8 @@ function StatusLine({ ride, from, to, children }: { ride: MotionValue<number>; f
   );
 }
 
-export default function ParkScene() {
+// `onComplete` fires once, when the run has played to the end.
+export default function ParkScene({ onComplete }: { onComplete?: () => void }) {
   const palette = usePalette();
   const track = useRef<HTMLDivElement>(null);
   const { scrollYProgress: rawProgress } = useScroll({ target: track, offset: ["start start", "end end"] });
@@ -580,6 +579,13 @@ export default function ParkScene() {
   const barWidth = useTransform(ride, [0, 1], ["0%", "100%"]);
   const barOpacity = useTransform(scrollYProgress, [INTRO * 0.5, INTRO, 0.93, 0.96], [0, 1, 1, 0]);
   const endFade = useTransform(scrollYProgress, [0.965, 0.995], [0, 1]);
+  const completed = useRef(false);
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    if (!completed.current && v >= 0.995) {
+      completed.current = true;
+      onComplete?.();
+    }
+  });
 
   return (
     // Tall track: scrolling through it drives the run. The stage stays pinned.

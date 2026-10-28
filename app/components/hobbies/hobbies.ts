@@ -19,6 +19,7 @@ export interface Hobby {
   blurb: string; // one sentence
   details: string[]; // a few facts
   accent: "--pf-accent" | "--pf-accent-2" | "--pf-accent-3";
+  trick: string; // the skatepark trick that unlocks this hobby, as a command
 }
 
 export const HOBBIES: Hobby[] = [
@@ -31,6 +32,7 @@ export const HOBBIES: Hobby[] = [
     blurb: "Four wheels, one board, and a lot of practice.",
     details: ["The board riding this run is a real 3D skateboard model."],
     accent: "--pf-accent",
+    trick: "air --out-of-bowl",
   },
   {
     id: "violin",
@@ -41,6 +43,7 @@ export const HOBBIES: Hobby[] = [
     blurb: "Playing violin in the Purdue String Orchestra.",
     details: ["Purdue String Orchestra every semester since Fall 2023."],
     accent: "--pf-accent-2",
+    trick: "ollie --funbox",
   },
   {
     id: "piano",
@@ -51,6 +54,7 @@ export const HOBBIES: Hobby[] = [
     blurb: "Learned piano alongside violin at Purdue.",
     details: ["Class Piano I and II at Purdue."],
     accent: "--pf-accent-3",
+    trick: "boardslide --rail",
   },
   {
     id: "gamejams",
@@ -64,6 +68,7 @@ export const HOBBIES: Hobby[] = [
       "Tia's Sailing Simulator pairs a Godot game with a live Llama 3.1 voice companion.",
     ],
     accent: "--pf-accent",
+    trick: "frontside-air --quarter-pipe",
   },
   {
     id: "dnd",
@@ -74,6 +79,7 @@ export const HOBBIES: Hobby[] = [
     blurb: "Running campaigns as the Dungeon Master.",
     details: ["Built DM Workbench, an offline desktop app for running D&D 5e campaigns."],
     accent: "--pf-accent-2",
+    trick: "crooked-grind --ledge",
   },
   {
     id: "puzzles",
@@ -84,6 +90,7 @@ export const HOBBIES: Hobby[] = [
     blurb: "Estimathons, poker theory, and anything with numbers.",
     details: ["Built an Estimathon scoreboard app and a poker solver."],
     accent: "--pf-accent-3",
+    trick: "air --kicker",
   },
 ];
 
