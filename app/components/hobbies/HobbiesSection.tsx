@@ -48,7 +48,7 @@ export default function HobbiesSection() {
       </div>
 
       {/* Same height as the scene's scroll track, so the page doesn't jump when it loads. */}
-      <div ref={trigger}>{near ? <SkateparkScene /> : <div className="h-[450vh]" aria-hidden="true" />}</div>
+      <div ref={trigger}>{near ? <SkateparkScene /> : <div className="h-[600vh]" aria-hidden="true" />}</div>
     </section>
   );
 }
