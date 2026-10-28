@@ -9,7 +9,26 @@ import { HOBBIES } from "./hobbies";
 import HobbiesTitle from "./HobbiesTitle";
 import { FlatSkateboard } from "./Skateboard";
 import { usePalette, type Palette } from "./usePalette";
-import { BOWL, bowlY, FUNBOX, KICKER, LEDGE, parkState, QUARTER, RAIL, REST_LEDGE, REST_START, SLAB, TRICKS } from "./park";
+import {
+  BACK_WALL,
+  BANK,
+  BOARD,
+  BOWL,
+  bowlY,
+  FUNBOX,
+  KICKER,
+  LEDGE,
+  MANUAL_PAD,
+  parkState,
+  QUARTER,
+  RAIL,
+  REST_LEDGE,
+  REST_START,
+  RUN_END,
+  SLAB,
+  STATION,
+  TRICKS,
+} from "./park";
 
 const COUNT = HOBBIES.length; // one trick per hobby
 // The first part of the scroll is the intro: the title over a wide shot of
@@ -181,7 +200,7 @@ function Rail({ palette }: { palette: Palette }) {
   return (
     <group>
       <mesh position={[(RAIL.fromX + RAIL.toX) / 2, RAIL.height, RAIL.z]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.06, 0.06, length, 12]} />
+        <cylinderGeometry args={[RAIL.radius, RAIL.radius, length, 12]} />
         <meshStandardMaterial color={palette.accent3} emissive={palette.accent3} emissiveIntensity={0.6} metalness={0.6} roughness={0.3} />
       </mesh>
       {[RAIL.fromX + 0.5, RAIL.toX - 0.5].map((px) => (
@@ -274,6 +293,32 @@ function QuarterPipe({ palette }: { palette: Palette }) {
   );
 }
 
+// A bank ramp along the back of the park, rising toward the back wall.
+function Bank({ palette }: { palette: Palette }) {
+  const geometry = useMemo(() => {
+    const shape = new THREE.Shape([
+      new THREE.Vector2(BANK.nearZ, 0),
+      new THREE.Vector2(BANK.farZ, 0),
+      new THREE.Vector2(BANK.farZ, BANK.height),
+    ]);
+    // The profile is drawn in (z, y) and pushed out along X.
+    const g = new THREE.ExtrudeGeometry(shape, { depth: BANK.toX - BANK.fromX, bevelEnabled: false });
+    g.rotateY(-Math.PI / 2);
+    g.translate(BANK.toX, 0, 0);
+    return g;
+  }, []);
+  return <Concrete geometry={geometry} palette={palette} />;
+}
+
+function BackWall({ palette }: { palette: Palette }) {
+  const geometry = useMemo(() => {
+    const g = new THREE.BoxGeometry(BACK_WALL.toX - BACK_WALL.fromX, BACK_WALL.height, BACK_WALL.thickness);
+    g.translate((BACK_WALL.fromX + BACK_WALL.toX) / 2, BACK_WALL.height / 2, BACK_WALL.z);
+    return g;
+  }, []);
+  return <Concrete geometry={geometry} palette={palette} />;
+}
+
 // Bright paint on a few walls, a nod to the graffiti in real parks. Each tag
 // uses one of the hobby accent colors.
 function Paint({ palette }: { palette: Palette }) {
@@ -286,6 +331,10 @@ function Paint({ palette }: { palette: Palette }) {
     { pos: [FUNBOX.x, 0.35, FUNBOX.z - FUNBOX.width / 2 - 0.01], rot: [0, Math.PI, 0], size: [3.2, 0.4] },
     // Front of the long ledge.
     { pos: [(LEDGE.fromX + LEDGE.toX) / 2, 0.3, LEDGE.z + LEDGE.depth / 2 + 0.01], rot: [0, 0, 0], size: [5, 0.3] },
+    // Pieces along the back wall.
+    { pos: [-15, 1, BACK_WALL.z + BACK_WALL.thickness / 2 + 0.01], rot: [0, 0, 0], size: [5, 1.2] },
+    { pos: [3.5, 1.1, BACK_WALL.z + BACK_WALL.thickness / 2 + 0.01], rot: [0, 0, 0], size: [6, 1] },
+    { pos: [14, 0.9, BACK_WALL.z + BACK_WALL.thickness / 2 + 0.01], rot: [0, 0, 0], size: [4, 1.3] },
   ];
   return (
     <group>
@@ -315,9 +364,20 @@ function Park({ palette }: { palette: Palette }) {
         z={REST_LEDGE.z}
         height={REST_LEDGE.height}
         depth={REST_LEDGE.width}
-        edgeZ={REST_LEDGE.z}
+        edgeZ={REST_LEDGE.z + REST_LEDGE.width / 2}
         palette={palette}
       />
+      <Ledge
+        fromX={MANUAL_PAD.fromX}
+        toX={MANUAL_PAD.toX}
+        z={MANUAL_PAD.z}
+        height={MANUAL_PAD.height}
+        depth={MANUAL_PAD.depth}
+        edgeZ={MANUAL_PAD.z + MANUAL_PAD.depth / 2}
+        palette={palette}
+      />
+      <Bank palette={palette} />
+      <BackWall palette={palette} />
       <Paint palette={palette} />
     </group>
   );
@@ -336,7 +396,7 @@ function RidingBoard({ ride, glow }: { ride: MotionValue<number>; glow: string }
   });
   return (
     <group ref={ref}>
-      <FlatSkateboard length={2} glow={glow} glowStrength={0.25} />
+      <FlatSkateboard length={BOARD.length} glow={glow} glowStrength={0.25} />
     </group>
   );
 }
@@ -363,62 +423,74 @@ function BoardLights({ ride, palette }: { ride: MotionValue<number>; palette: Pa
   );
 }
 
-// Calm follow cam. On the street it trails behind the board along a smoothed
-// heading and eases in closer during each trick. In the bowl it rises and
-// looks across from the far side, since a camera directly behind would end
-// up inside the bowl's wall. At the end it eases back and tilts up.
+// Calm follow cam, built from three shots that blend into each other:
+// - In the bowl, a camera circling slowly around the rim (a camera behind the
+//   board would end up inside the bowl's wall).
+// - On the street, a chase from behind along the route's smoothed direction,
+//   easing in closer during each trick.
+// - Around the quarter pipe and the ledge, a fixed spot in front of the ramp,
+//   so the camera never swings around behind it as the board turns.
+// At the end it settles into a three-quarter shot of the board resting
+// against the ledge and tilts up.
+const BOWL_END = TRICKS[0].end; // the air out of the bowl has landed
+const ESTABLISHING = new THREE.Vector3(10, 22, 26);
+const END_SHOT = new THREE.Vector3(REST_LEDGE.fromX + 1.6, 1.5, REST_LEDGE.z - 4.6);
+const END_LOOK = new THREE.Vector3(REST_LEDGE.fromX + 0.5, 0.3, REST_LEDGE.z);
+const lerp = THREE.MathUtils.lerp;
+const ramp = (v: number, a: number, b: number) => smooth(clamp01((v - a) / (b - a)));
+
 function ChaseCamera({ ride, intro }: { ride: MotionValue<number>; intro: MotionValue<number> }) {
-  const heading = useRef(new THREE.Vector3(-1, 0, 0));
   const look = useRef(new THREE.Vector3(0, 0, 0));
-  const establishing = useMemo(() => new THREE.Vector3(10, 22, 26), []);
-  const bowlCenter = useMemo(() => new THREE.Vector3(BOWL.x, 0, BOWL.z), []);
-  const endShot = useMemo(() => new THREE.Vector3(REST_LEDGE.fromX + 3.5, 2.6, REST_LEDGE.z - 6), []);
-  const endLook = useMemo(() => new THREE.Vector3(REST_LEDGE.fromX - 3, REST_LEDGE.height, REST_LEDGE.z), []);
   useFrame(({ camera }, delta) => {
-    const s = parkState(ride.get());
+    const p = ride.get();
+    const s = parkState(p);
     const c = smooth(s.closeness);
-    heading.current.lerp(s.heading, 1 - Math.exp(-delta * 2)).normalize();
-    const h = heading.current;
+    const h = s.heading;
+    const board = s.position;
 
-    // Street camera: behind and above, looking a little ahead of the board
-    // so the next obstacle is in view.
-    const distance = THREE.MathUtils.lerp(5.5, 4, c);
-    const street = s.position.clone().addScaledVector(h, -distance);
-    street.y = Math.max(s.position.y, 0) + THREE.MathUtils.lerp(1.7, 1.2, c);
+    // Street: behind and a little above, looking ahead of the board.
+    const desired = board.clone().addScaledVector(h, -lerp(5.5, 4, c));
+    desired.y = Math.max(board.y, 0) + lerp(1.7, 1.2, c);
+    const lookTarget = board.clone().addScaledVector(h, lerp(4, 1, c));
+    lookTarget.y = board.y + 0.3;
+    const atBoard = board.clone().setY(board.y + 0.3);
 
-    // Bowl camera: above the bowl on the opposite side from the board.
-    const radial = new THREE.Vector3(s.position.x - BOWL.x, 0, s.position.z - BOWL.z);
-    const r = radial.length();
-    radial.normalize();
-    const bowlCam = bowlCenter.clone().addScaledVector(radial, -2.5);
-    bowlCam.y = 4.5;
-    const inBowl = smooth(clamp01((BOWL.rimRadius + 3 - r) / 3.5));
+    // Bowl: starts behind the drop-in on the east deck, rises to see the
+    // floor, then circles north as the board carves around to the exit.
+    const t = clamp01(p / BOWL_END);
+    const az = lerp(0, 1.9, ramp(t, 0.35, 0.9));
+    const radius = lerp(9.5, 7.8, ramp(t, 0.3, 0.9));
+    const height = t < 0.5 ? lerp(2.2, 4.2, ramp(t, 0.1, 0.4)) : lerp(4.2, 2, ramp(t, 0.6, 1));
+    const bowlCam = new THREE.Vector3(BOWL.x + Math.cos(az) * radius, height, BOWL.z + Math.sin(az) * radius);
+    const inBowl = 1 - ramp(p, BOWL_END, BOWL_END + 0.035);
+    desired.lerp(bowlCam, inBowl);
+    lookTarget.lerp(atBoard, inBowl);
 
-    const chase = street.lerp(bowlCam, inBowl);
-    const ahead = THREE.MathUtils.lerp(4, 1, c) * (1 - inBowl);
-    const chaseLook = s.position.clone().addScaledVector(h, ahead);
-    chaseLook.y = s.position.y + 0.3;
+    // Quarter pipe and ledge: a fixed spot in front of the ramp.
+    const st = ramp(p, STATION.in[0], STATION.in[1]) * (1 - ramp(p, STATION.out[0], STATION.out[1]));
+    desired.lerp(STATION.position, st);
+    lookTarget.lerp(atBoard, st);
 
-    // Intro: blend from a wide shot of the whole park into the chase.
+    // Intro: blend from a wide shot of the whole park.
     const e = smooth(intro.get());
-    const desired = establishing.clone().lerp(chase, e);
-    const lookTarget = new THREE.Vector3(0, 0, 0).lerp(chaseLook, e);
+    const target = ESTABLISHING.clone().lerp(desired, e);
+    const aim = new THREE.Vector3(0, 0, 0).lerp(lookTarget, e);
 
-    // Ending: as the board pops onto the ledge, settle into a three-quarter
-    // shot of it with the bowl behind. Once it has stopped, tilt up.
-    const w = smooth(clamp01((ride.get() - 0.84) / 0.1));
-    if (w > 0) {
-      desired.lerp(endShot, w);
-      lookTarget.lerp(endLook, w);
-    }
+    // Ending: a three-quarter shot of the board against the ledge, then tilt up.
+    const w = ramp(p, RUN_END - 0.02, RUN_END + 0.06);
+    target.lerp(END_SHOT, w);
+    aim.lerp(END_LOOK, w);
     if (s.rest > 0) {
       const k = smooth(s.rest);
-      desired.y += 1.5 * k;
-      lookTarget.y += 4 * k;
+      target.y += 1.5 * k;
+      aim.y += 4 * k;
     }
 
-    camera.position.lerp(desired, 1 - Math.exp(-delta * 3));
-    look.current.lerp(lookTarget, 1 - Math.exp(-delta * 5));
+    // Never go behind the quarter pipe.
+    target.x = Math.min(target.x, QUARTER.x - 1.5);
+
+    camera.position.lerp(target, 1 - Math.exp(-delta * 3));
+    look.current.lerp(aim, 1 - Math.exp(-delta * 5));
     camera.lookAt(look.current);
   });
   return null;
@@ -446,7 +518,7 @@ const PANEL_POSITION =
   "pointer-events-none absolute inset-x-4 bottom-24 md:inset-x-auto md:bottom-auto md:left-[5vw] md:top-1/2 md:w-[min(440px,38vw)] md:-translate-y-1/2";
 
 // The trick that unlocks each hobby, shown in the panel's prompt line.
-const TRICK_NAMES = ["air --out-of-bowl", "ollie --over funbox", "grind --50-50 rail", "air --quarter-pipe", "grind --ledge", "ollie --off kicker"];
+const TRICK_NAMES = ["air --out-of-bowl", "ollie --funbox", "boardslide --rail", "frontside-air --quarter-pipe", "crooked-grind --ledge", "air --kicker"];
 
 // Hobby panel on the left. Each one slides in as its trick starts and stays
 // until the next trick.
@@ -513,7 +585,7 @@ export default function ParkScene() {
     // Tall track: scrolling through it drives the run. The stage stays pinned.
     <div ref={track} data-ride-track className="relative h-[800vh] bg-[var(--pf-term)]">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <Canvas camera={{ position: [10, 22, 26], fov: 50 }} dpr={[1, 2]}>
+        <Canvas camera={{ position: ESTABLISHING.toArray(), fov: 50 }} dpr={[1, 2]}>
           <FrameRight />
           <color attach="background" args={[palette.term]} />
           <fog attach="fog" args={[palette.term, 22, 60]} />
