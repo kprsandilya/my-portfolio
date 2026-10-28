@@ -8,7 +8,7 @@ import {
   GiPokerHand,
 } from "react-icons/gi";
 
-// Content for the Hobbies section (the half-pipe ride). Edit the text here.
+// Content for the Hobbies section (the skatepark run). Edit the text here.
 // Only facts from the resume, transcript, and GitHub are used.
 export interface Hobby {
   id: "skate" | "violin" | "piano" | "gamejams" | "dnd" | "puzzles";

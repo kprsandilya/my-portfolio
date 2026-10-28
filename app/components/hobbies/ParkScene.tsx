@@ -583,6 +583,7 @@ export default function ParkScene() {
 
   return (
     // Tall track: scrolling through it drives the run. The stage stays pinned.
+    // Keep the height in sync with the placeholder in HobbiesSection.
     <div ref={track} data-ride-track className="relative h-[800vh] bg-[var(--pf-term)]">
       <div className="sticky top-0 h-screen overflow-hidden">
         <Canvas camera={{ position: ESTABLISHING.toArray(), fov: 50 }} dpr={[1, 2]}>

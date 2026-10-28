@@ -3,7 +3,7 @@ import { GradientText } from "@/components/ui/shadcn-io/gradient-text";
 
 const TITLE_GRADIENT = "linear-gradient(90deg, var(--pf-accent) 0%, var(--pf-accent-2) 50%, var(--pf-accent) 100%)";
 
-// Section label and title, drawn over the top of the half-pipe stage. Used by
+// Section label and title, drawn over the top of the skatepark stage. Used by
 // both the loading placeholder and the 3D scene so the title never moves.
 export default function HobbiesTitle() {
   return (

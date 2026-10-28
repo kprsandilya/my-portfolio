@@ -8,12 +8,12 @@ import { HOBBIES } from "./hobbies";
 
 // The 3D scene (and the skateboard model) only load once the section is
 // close to the screen, so they don't slow down the rest of the page.
-const SkateparkScene = dynamic(() => import("./SkateparkScene"), { ssr: false, loading: () => <Placeholder /> });
+const ParkScene = dynamic(() => import("./ParkScene"), { ssr: false, loading: () => <Placeholder /> });
 
 // Same height and pinned title as the scene, so nothing moves when it loads.
 function Placeholder() {
   return (
-    <div className="relative h-[700vh]">
+    <div className="relative h-[800vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
         <HobbiesTitle />
       </div>
@@ -77,10 +77,10 @@ export default function HobbiesSection() {
   }, [reduceMotion]);
 
   return (
-    // The title lives inside the pinned stage (over the half-pipe) instead of
+    // The title lives inside the pinned stage (over the skatepark) instead of
     // above it, so scrolling flows straight from the title into the run.
     <section id="hobbies" ref={trigger} className="relative bg-[color:var(--pf-term)] text-[var(--pf-term-fg)]">
-      {reduceMotion ? <StaticHobbies /> : near ? <SkateparkScene /> : <Placeholder />}
+      {reduceMotion ? <StaticHobbies /> : near ? <ParkScene /> : <Placeholder />}
     </section>
   );
 }
