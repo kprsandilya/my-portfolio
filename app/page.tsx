@@ -17,6 +17,10 @@ import { ChevronDown } from "lucide-react"
 
 import { GradientText } from '@/components/ui/shadcn-io/gradient-text';
 
+// The "But College is More than Academics" photo wall (fed by public/college).
+// Hidden until there are photos to show; flip to true to bring it back.
+const SHOW_COLLEGE_PHOTOS = false;
+
 export default function TestHome() {
   const { theme } = useThemeReady();
 
@@ -49,12 +53,14 @@ export default function TestHome() {
       </div>
 
       <div id="education" className="relative z-30 mt-16 md:mt-24 w-full scroll-mt-16">
-        <Education />
+        <Education roomForPhotos={SHOW_COLLEGE_PHOTOS} />
       </div>
 
-      <div className="relative z-40 mt-0">
-        <Pictures />
-      </div>
+      {SHOW_COLLEGE_PHOTOS && (
+        <div className="relative z-40 mt-0">
+          <Pictures />
+        </div>
+      )}
 
       <div className="relative z-50 mt-0">
         <Experience />

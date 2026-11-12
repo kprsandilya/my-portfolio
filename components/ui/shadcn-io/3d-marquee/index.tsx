@@ -2,20 +2,33 @@
 
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import React from "react";
 
+export type MarqueeImage = { src: string; alt: string };
+
 export type ThreeDMarqueeProps = {
-  images: string[];
+  images: MarqueeImage[];
   className?: string;
 };
 
+const COLUMNS = 5;
+// The tilted grid looks empty with only a few photos, so the list is repeated
+// until every column has at least this many tiles.
+const MIN_PER_COLUMN = 5;
+
 export const ThreeDMarquee = ({ images, className }: ThreeDMarqueeProps) => {
-  // Split the images array into 4 equal parts
-  const chunkSize = Math.ceil(images.length / 5);
-  const chunks = Array.from({ length: 5 }, (_, colIndex) => { // 🛑 Create 5 chunks
-    const start = colIndex * chunkSize;
-    return images.slice(start, start + chunkSize);
-  });
+  const filled: MarqueeImage[] = [];
+  if (images.length) {
+    const target = Math.max(images.length, COLUMNS * MIN_PER_COLUMN);
+    for (let i = 0; i < target; i++) filled.push(images[i % images.length]);
+  }
+
+  // Deal tiles across columns round-robin (tile i -> column i % 5), so a
+  // repeated photo lands in a different column and row than its twin.
+  const chunks = Array.from({ length: COLUMNS }, (_, colIndex) =>
+    filled.filter((_, i) => i % COLUMNS === colIndex),
+  );
 
   return (
     <div
@@ -45,9 +58,9 @@ export const ThreeDMarquee = ({ images, className }: ThreeDMarqueeProps) => {
               >
                 <GridLineVertical className="-left-4" offset="80px" />
                 {subarray.map((image, imageIndex) => (
-                  <div className="relative" key={imageIndex + image}>
+                  <div className="relative w-full" key={imageIndex + image.src}>
                     <GridLineHorizontal className="-top-4" offset="20px" />
-                    <motion.img
+                    <motion.div
                       whileHover={{
                         y: -10,
                       }}
@@ -55,13 +68,19 @@ export const ThreeDMarquee = ({ images, className }: ThreeDMarqueeProps) => {
                         duration: 0.3,
                         ease: "easeInOut",
                       }}
-                      key={imageIndex + image}
-                      src={image}
-                      alt={`Image ${imageIndex + 1}`}
-                      className="aspect-[970/700] rounded-lg object-cover ring ring-gray-950/5 hover:shadow-2xl"
-                      width={970}
-                      height={700}
-                    />
+                      className="overflow-hidden rounded-lg ring ring-gray-950/5 hover:shadow-2xl"
+                    >
+                      {/* next/image serves a resized copy, so full-size phone
+                          photos in the folder don't slow the page down. */}
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        width={970}
+                        height={700}
+                        sizes="(max-width: 640px) 300px, (max-width: 1024px) 450px, 600px"
+                        className="aspect-[970/700] h-auto w-full object-cover"
+                      />
+                    </motion.div>
                   </div>
                 ))}
               </motion.div>

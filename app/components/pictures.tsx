@@ -1,19 +1,31 @@
 "use client";
 
-import { useThemeReady } from "./useThemeReady"
+import { useEffect, useState } from "react";
 
-import { ThreeDMarquee } from "@/components/ui/shadcn-io/3d-marquee";
+import { ThreeDMarquee, type MarqueeImage } from "@/components/ui/shadcn-io/3d-marquee";
+
+// Photos come from public/college via /api/college-photos, so adding a photo
+// to that folder is all it takes to show it here.
 export default function ThreeDMarqueeDemo() {
-    const { theme, setTheme } = useThemeReady();
+    const [images, setImages] = useState<MarqueeImage[]>([]);
+
+    useEffect(() => {
+        let cancelled = false;
+        fetch("/api/college-photos")
+            .then((res) => (res.ok ? res.json() : []))
+            .then((photos: MarqueeImage[]) => {
+                if (!cancelled) setImages(photos);
+            })
+            .catch(() => {});
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
     const getColors = () => 'bg-gradient-to-b from-[var(--pf-bg-deep)] to-[var(--pf-bg-alt)]';
 
     const getFadingOverlay = () => 'bg-gradient-to-b from-transparent via-transparent to-[var(--pf-bg)]';
 
-  const images = [
-    "https://assets.aceternity.com/cloudinary_bkp/3d-card.png",
-    "https://assets.aceternity.com/animated-modal.png",
-  ];
   return (
     <div className={`relative h-[1400px] w-full ${getColors()}`}>
       

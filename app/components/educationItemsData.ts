@@ -1,10 +1,8 @@
 // Course highlights for each year, taken from the Purdue transcript.
 
-// Course cards are tinted with the three theme accents (see globals.css).
-const TINT = (accent: string) => `color-mix(in srgb, var(${accent}) 18%, var(--pf-raised))`;
-
-// Cards cycle through these so neighboring courses look different.
-const CARD_STYLES = [TINT('--pf-accent'), TINT('--pf-accent-2'), TINT('--pf-accent-3')];
+// Course codes are colored with the three theme accents (see globals.css),
+// cycling so neighboring courses look different.
+const ACCENTS = ['--pf-accent', '--pf-accent-2', '--pf-accent-3'];
 
 interface Course {
   courseName: string;
@@ -13,7 +11,7 @@ interface Course {
 }
 
 const withStyles = (courses: Course[]) =>
-  courses.map((course, i) => ({ ...course, css: CARD_STYLES[i % CARD_STYLES.length] }));
+  courses.map((course, i) => ({ ...course, accent: ACCENTS[i % ACCENTS.length] }));
 
 // Freshman year: Summer 2023 through Spring 2024
 const list1 = withStyles([

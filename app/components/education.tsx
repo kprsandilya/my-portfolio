@@ -49,13 +49,13 @@ function buildRoadPath(points: { x: number; y: number }[]) {
 }
 
 const YEARS = [
-  { grade: 'Freshman', side: 'left', listIndex: 1 },
-  { grade: 'Sophomore', side: 'right', listIndex: 2 },
-  { grade: 'Junior', side: 'left', listIndex: 3 },
-  { grade: 'Senior', side: 'right', listIndex: 4 },
+  { grade: 'Freshman', side: 'left', listIndex: 1, years: '2023 – 2024' },
+  { grade: 'Sophomore', side: 'right', listIndex: 2, years: '2024 – 2025' },
+  { grade: 'Junior', side: 'left', listIndex: 3, years: '2025 – 2026' },
+  { grade: 'Senior', side: 'right', listIndex: 4, years: '2026 – 2027' },
 ] as const
 
-export default function Education() {
+export default function Education({ roomForPhotos = true }: { roomForPhotos?: boolean }) {
     const [mounted, setMounted] = React.useState(false);
     React.useEffect(() => {
         setMounted(true);
@@ -293,7 +293,11 @@ export default function Education() {
             .
         </div>
 
-        <div className="relative z-10 flex flex-col gap-[14vh] py-[10vh]">
+        {/* On lg screens the "More than Academics" box from the next section
+            is centered on this section's bottom edge (half of it sits up here),
+            so leave enough room under the last card that it never overlaps.
+            Not needed while that section is hidden. */}
+        <div className={`relative z-10 flex flex-col gap-16 md:gap-24 pt-[10vh] pb-[10vh] ${roomForPhotos ? 'lg:pb-[340px]' : ''}`}>
           {YEARS.map((year, i) => (
             <EducationItems
               key={year.grade}
@@ -301,6 +305,7 @@ export default function Education() {
               listIndex={year.listIndex}
               side={year.side}
               grade={year.grade}
+              years={year.years}
               registerRef={(el) => {
                 cardRefs.current[i] = el
               }}
