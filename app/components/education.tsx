@@ -179,6 +179,7 @@ export default function Education({ roomForPhotos = true }: { roomForPhotos?: bo
     <div ref={containerRef} className={styles.body}>
       {/* The band fades in from the top instead of starting with a hard edge. */}
       <div
+        aria-hidden="true"
         className={`${styles.animated__layers} ${getBackgroundColors()} pointer-events-none`}
         style={{ maskImage: EDGE_FADE, WebkitMaskImage: EDGE_FADE }}
       >
@@ -246,14 +247,14 @@ export default function Education({ roomForPhotos = true }: { roomForPhotos?: bo
       <div ref={contentRef} className="relative z-10 w-full">
         <SectionKicker index="01" path="education" className="relative z-20 pt-24" />
         {/* 40px below the label, matching the other sections */}
-        <h1 className={`${styles.title} relative z-20 bg-transparent`} style={{ paddingTop: 40 }}>
+        <h2 className={`${styles.title} relative z-20 bg-transparent`} style={{ paddingTop: 40 }}>
             <span>
                 <animated.span style={{ y: titleY }}>My</animated.span>
-            </span>
+            </span>{' '}
             <span>
                 <animated.span style={{ y: titleY }}>Educational Journey</animated.span>
             </span>
-        </h1>
+        </h2>
 
         {/* Winding "road" that connects the years. Measured in px and rebuilt
             on resize, so it scales with the layout. */}

@@ -17,8 +17,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       {/* Single app-level parallax controller so any section can use <Parallax>
           on its inner content (the colored section blocks stay static). */}
       <ParallaxProvider>
-        {children}
+        {/* Before the page so it comes first for keyboard and screen reader
+            users; it's fixed to the top, so the order doesn't change the look. */}
         <NavBar />
+        {children}
       </ParallaxProvider>
     </ThemeProvider>
   );

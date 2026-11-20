@@ -26,7 +26,7 @@ export default function Footer() {
       <div className="md:w-1/3 text-center md:text-left mb-6 md:mb-0">
         <h2 className="text-2xl font-semibold">Let’s Build Something Great</h2>
         <p className="mt-2 text-[var(--pf-term-fg)]/70">
-          Crafted with <span className="text-[var(--pf-accent)]">♥</span> by Sandilya Kambhampati. 
+          Crafted with <span aria-hidden="true" className="text-[var(--pf-term-accent)]">♥</span><span className="sr-only">love</span> by Sandilya Kambhampati. 
         </p>
       </div>
 
@@ -34,7 +34,7 @@ export default function Footer() {
       <div className="md:w-1/3 flex justify-center items-center mb-6 md:mb-0">
         <img
           src="/Logo.png"
-          alt="Logo"
+          alt=""
           className="object-contain w-32 h-32 sm:w-40 sm:h-40 scale-x-[1.3]"
         />
       </div>
@@ -43,7 +43,7 @@ export default function Footer() {
       <div className="md:w-1/3 flex flex-row items-center justify-center gap-4">
         <img
           src="/profile.jpeg"
-          alt="Profile"
+          alt=""
           className={`w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 ${getBorderBackground()} object-cover`}
         />
         <div className="grid grid-cols-2 gap-3 sm:gap-6">
@@ -52,8 +52,8 @@ export default function Footer() {
             variant="ghost"
             className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
           >
-            <Link href="https://www.linkedin.com/in/kprsandilya/" target="_blank">
-              <LinkedinLogoIcon width={44} height={44} />
+            <Link href="https://www.linkedin.com/in/kprsandilya/" aria-label="LinkedIn (opens in a new tab)" target="_blank" rel="noopener noreferrer">
+              <LinkedinLogoIcon width={44} height={44} aria-hidden="true" />
             </Link>
           </Button>
 
@@ -62,8 +62,8 @@ export default function Footer() {
             variant="ghost"
             className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
           >
-            <Link href="https://github.com/kprsandilya/" target="_blank">
-              <GithubLogoIcon width={44} height={44} />
+            <Link href="https://github.com/kprsandilya/" aria-label="GitHub (opens in a new tab)" target="_blank" rel="noopener noreferrer">
+              <GithubLogoIcon width={44} height={44} aria-hidden="true" />
             </Link>
           </Button>
 
@@ -72,8 +72,8 @@ export default function Footer() {
             variant="ghost"
             className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
           >
-            <Link href="mailto:kprsandilya@gmail.com" target="_blank">
-              <EnvelopeSimpleIcon width={44} height={44} />
+            <Link href="mailto:kprsandilya@gmail.com" aria-label="Email Sandilya">
+              <EnvelopeSimpleIcon width={44} height={44} aria-hidden="true" />
             </Link>
           </Button>
 
@@ -82,8 +82,8 @@ export default function Footer() {
             variant="ghost"
             className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
           >
-            <Link href="/Resume.pdf" target="_blank">
-              <FileIcon width={44} height={44} />
+            <Link href="/Resume.pdf" aria-label="Résumé, PDF (opens in a new tab)" target="_blank" rel="noopener noreferrer">
+              <FileIcon width={44} height={44} aria-hidden="true" />
             </Link>
           </Button>
         </div>

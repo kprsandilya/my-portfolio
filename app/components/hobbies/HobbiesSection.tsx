@@ -24,7 +24,7 @@ function Placeholder() {
 
 const Prompt = () => (
   <>
-    <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span>
+    <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-term-accent)]">$</span>
   </>
 );
 

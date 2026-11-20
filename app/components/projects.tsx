@@ -184,7 +184,7 @@ export default function ThreeDPinGrid() {
                 title and the gap between them stays the same. */}
             <Parallax speed={8} className='w-full relative text-center pt-24'>
                 <SectionKicker index="03" path="projects" className="relative z-10 mb-10" />
-                <h1 className="text-balance px-4 text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter">
+                <h2 className="text-balance px-4 text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter">
                     <LineShadowText 
                     className="italic" 
                     shadowColor={textShadow()}
@@ -209,7 +209,7 @@ export default function ThreeDPinGrid() {
                     Projects
                     </LineShadowText>
 
-                </h1>
+                </h2>
             </Parallax>
             <Parallax speed={8}>
               <CodeHoverCards 

@@ -29,9 +29,12 @@ export default function TestHome() {
   const getBackgroundColor = () => 'bg-[color:var(--pf-term)]';
 
   return (
-    <div className="relative w-full min-h-screen">
+    <div id="top" className="relative w-full min-h-screen">
+      {/* Everything but the footer is the page's main content. tabIndex lets
+          the skip link move focus here. */}
+      <main id="main" tabIndex={-1} className="outline-none">
 
-      <div className="absolute inset-0 z-0 h-[890px]">
+      <div aria-hidden="true" className="absolute inset-0 z-0 h-[890px]">
         <Header />
       </div>
 
@@ -43,11 +46,12 @@ export default function TestHome() {
       <div className="relative z-20 mt-10 flex justify-center">
         <a
           href="#education"
-          className="group inline-flex flex-col items-center gap-1 font-mono text-sm text-[var(--pf-fg-muted)] transition-colors hover:text-[var(--pf-accent)]"
+          className="group inline-flex flex-col items-center gap-1 font-mono text-sm text-[var(--pf-fg-muted)] transition-colors hover:text-[var(--pf-accent-text)]"
         >
-          <span>
-            <span className="text-[var(--pf-accent)]">$</span> scroll --down
+          <span aria-hidden="true">
+            <span className="text-[var(--pf-accent-text)]">$</span> scroll --down
           </span>
+          <span className="sr-only">Scroll down to Education</span>
           <ChevronDown className="h-5 w-5 animate-bounce" aria-hidden="true" />
         </a>
       </div>
@@ -62,27 +66,29 @@ export default function TestHome() {
         </div>
       )}
 
-      <div className="relative z-50 mt-0">
+      <div id="experience" className="relative z-50 mt-0 scroll-mt-16">
         <Experience />
       </div>
 
-      <div className="relative z-50 mt-0">
+      <div id="projects" className="relative z-50 mt-0 scroll-mt-16">
         <Projects />
       </div>
 
-      <div className="relative z-50 mt-0">
+      <div id="awards" className="relative z-50 mt-0 scroll-mt-16">
         <Awards />
       </div>
 
-      <div className={`relative z-50 ${getBackgroundColor()} flex flex-col items-center`}>
+      <div id="skills" className={`relative z-50 ${getBackgroundColor()} flex flex-col items-center scroll-mt-16`}>
         <div className="w-full mt-8">
           <SectionKicker index="05" path="skills" className="pt-6 md:pt-16" />
           <div className="flex flex-col items-center px-6 pt-10 pb-6 text-center">
-            <GradientText
-              className="text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter text-center"
-              gradient={textGradient()}
-              text="Skills and Frameworks"
-            />
+            <h2>
+              <GradientText
+                className="text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter text-center"
+                gradient={textGradient()}
+                text="Skills and Frameworks"
+              />
+            </h2>
           </div>
           <Skills />
         </div>
@@ -92,6 +98,8 @@ export default function TestHome() {
       <div className="relative z-50">
         <HobbiesSection />
       </div>
+
+      </main>
 
       <div className="relative z-50">
         <Footer />

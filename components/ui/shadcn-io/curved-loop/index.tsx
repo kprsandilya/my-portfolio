@@ -70,7 +70,9 @@ const CurvedLoop: FC<CurvedLoopProps> = ({
 
   useEffect(() => {
     if (!spacing || !ready) return;
-    
+    // Endless scrolling text: hold still for visitors who ask for less motion.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const step = () => {
       if (!dragRef.current && textPathRef.current) {
         const delta = dirRef.current === 'right' ? speed : -speed;

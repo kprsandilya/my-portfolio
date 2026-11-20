@@ -255,7 +255,10 @@ function NewHoleBackground({
   );
 
   const drawLines = React.useCallback((ctx: CanvasRenderingContext2D) => {
-    if (stateRef.current.linesCanvas) {
+    // A 0x0 canvas (e.g. the page laid out while hidden) makes drawImage
+    // throw, which would crash the whole page.
+    const lines = stateRef.current.linesCanvas;
+    if (lines && lines.width > 0 && lines.height > 0) {
       ctx.drawImage(stateRef.current.linesCanvas, 0, 0);
     }
   }, []);
@@ -305,6 +308,8 @@ function NewHoleBackground({
     drawLines(ctx);
     drawParticles(ctx);
     ctx.restore();
+    // With reduced motion, draw a single still frame instead of animating.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     animationFrameIdRef.current = requestAnimationFrame(tick);
   }, [moveDiscs, moveParticles, drawDiscs, drawLines, drawParticles]);
 
@@ -325,6 +330,8 @@ function NewHoleBackground({
       setDiscs();
       setLines();
       setParticles();
+      // Resizing clears the canvas; redraw the still frame when not animating.
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) tick();
     };
     window.addEventListener('resize', handleResize);
     return () => {

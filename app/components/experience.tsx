@@ -102,7 +102,7 @@ const CARD_CLASSES = "rounded-xl border border-[var(--pf-border)] bg-[var(--pf-r
 function IconBadge({ icon: IconComponent, small = false }: { icon: Icon; small?: boolean }) {
   return (
     <div
-      className={`flex shrink-0 items-center justify-center rounded-xl bg-[var(--pf-bg-alt)] text-[var(--pf-accent)] shadow-inner ${
+      className={`flex shrink-0 items-center justify-center rounded-xl bg-[var(--pf-bg-alt)] text-[var(--pf-accent-text)] shadow-inner ${
         small ? "h-11 w-11" : "h-16 w-16"
       }`}
     >
@@ -157,7 +157,10 @@ export default function Experience() {
             {/* Header: its own row, so the cards can never cover it. The curved
                 text rises about 10.6% of the width above its box, so the top
                 padding is that plus the 40px gap used under every section label. */}
-            <div className={`relative z-20 pt-[calc(10.6vw+40px)] ${loopFit}`}>
+            {/* The curved, scrolling title is decorative; this is the heading
+                screen readers announce. */}
+            <h2 className="sr-only">Work Experience</h2>
+            <div aria-hidden="true" className={`relative z-20 pt-[calc(10.6vw+40px)] ${loopFit}`}>
                 <CurvedLoop
                     marqueeText="WORK EXPERIENCE"
                     speed={2}
@@ -176,10 +179,10 @@ export default function Experience() {
                             <IconBadge icon={role.icon} />
                             <div className="font-light">
                                 <h3 className="text-lg font-semibold sm:text-xl">{role.name}</h3>
-                                <h4 className="text-sm sm:text-base">{role.position}</h4>
-                                <h4 className="text-sm opacity-80">
+                                <p className="text-sm sm:text-base">{role.position}</p>
+                                <p className="text-sm opacity-80">
                                     {role.time} · {role.location}
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <Divider className="my-4" />

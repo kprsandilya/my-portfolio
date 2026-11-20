@@ -102,7 +102,13 @@ function CardBack({ card, active }: { card: CardData & { details: CardDetails };
         </div>
       )}
 
-      <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto overscroll-contain p-4 text-left">
+      {/* Focusable so keyboard users can scroll it when the text is long. */}
+      <div
+        tabIndex={active ? 0 : -1}
+        role="region"
+        aria-label={`About ${card.title}`}
+        className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto overscroll-contain p-4 text-left"
+      >
         <div className="flex flex-wrap items-center gap-2">
           <h3 className="mr-auto text-base font-semibold text-foreground">{card.title}</h3>
           <VisibilityBadge visibility={details.visibility} />
@@ -147,10 +153,17 @@ function CardBack({ card, active }: { card: CardData & { details: CardDetails };
           {details.visibility === 'private' && (
             <span className="text-xs text-muted-foreground">Code is private.</span>
           )}
-          <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-            <RotateCcw className="h-3 w-3" />
-            Click to flip back
-          </span>
+          {/* A real button so keyboard users can turn the card back over. Its
+              click bubbles up to the card, which does the flip. */}
+          <button
+            type="button"
+            data-flip-back
+            tabIndex={active ? 0 : -1}
+            className="ml-auto inline-flex items-center gap-1 rounded-md px-1 text-[11px] text-muted-foreground hover:text-foreground"
+          >
+            <RotateCcw className="h-3 w-3" aria-hidden="true" />
+            Flip back
+          </button>
       </div>
     </div>
   );
@@ -184,6 +197,18 @@ const CodeHoverCards: React.FC<CodeHoverCardsProps> = ({
   // True while a card is turned edge-on, halfway through a flip.
   const [turning, setTurning] = useState<{ [key: string]: boolean }>({});
   const cardRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  // The card that just flipped, so focus can follow it to its new side.
+  const pendingFocus = useRef<string | null>(null);
+
+  React.useEffect(() => {
+    const id = pendingFocus.current;
+    if (!id) return;
+    pendingFocus.current = null;
+    const el = cardRefs.current[id];
+    if (!el) return;
+    if (flipped[id]) el.querySelector<HTMLElement>('[data-flip-back]')?.focus();
+    else el.focus();
+  }, [flipped]);
 
   const generateRandomString = (length: number): string => {
     return Array.from({ length }, () => characterSet[Math.floor(Math.random() * characterSet.length)]).join('');
@@ -217,6 +242,7 @@ const CodeHoverCards: React.FC<CodeHoverCardsProps> = ({
       if (turning[card.id]) return;
       setTurning(prev => ({ ...prev, [card.id]: true }));
       setTimeout(() => {
+        pendingFocus.current = card.id;
         setFlipped(prev => ({ ...prev, [card.id]: !prev[card.id] }));
         setTurning(prev => ({ ...prev, [card.id]: false }));
       }, FLIP_HALF_MS);
@@ -269,10 +295,19 @@ const CodeHoverCards: React.FC<CodeHoverCardsProps> = ({
               >
                 <div
                   ref={(el) => { cardRefs.current[card.id] = el; }}
-                  role="button"
-                  tabIndex={0}
-                  aria-pressed={card.details ? isFlipped : undefined}
-                  aria-label={card.details ? `${card.title}: ${isFlipped ? 'hide' : 'show'} details` : card.title}
+                  // A button while the front shows. Turned over, it becomes a
+                  // labeled group, because its links and flip-back button
+                  // can't sit inside another button.
+                  role={isFlipped ? 'group' : 'button'}
+                  tabIndex={isFlipped ? -1 : 0}
+                  aria-label={
+                    isFlipped
+                      ? `${card.title} details`
+                      : [card.title, card.description, card.details ? 'Show details' : null]
+                          .filter(Boolean)
+                          .map((part) => String(part).replace(/[.!?]$/, ''))
+                          .join('. ')
+                  }
                   className={cn(
                     'relative w-full cursor-pointer transition-transform ease-in-out',
                     !isFlipped && 'hover:scale-105'
@@ -287,6 +322,8 @@ const CodeHoverCards: React.FC<CodeHoverCardsProps> = ({
                   onTouchMove={enableTouch ? (e) => handleTouchMove(e, card.id) : undefined}
                   onClick={() => handleCardClick(card)}
                   onKeyDown={(e) => {
+                    // Turned over, keys belong to the links and flip-back button.
+                    if (isFlipped) return;
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       handleCardClick(card);
@@ -310,6 +347,7 @@ const CodeHoverCards: React.FC<CodeHoverCardsProps> = ({
 
                     {/* Character background, kept faint so the text stays readable */}
                     <div
+                      aria-hidden="true"
                       className="absolute inset-0 font-mono text-sm leading-tight opacity-0 group-hover:opacity-20 transition-opacity duration-500 overflow-hidden break-all text-foreground pointer-events-none"
                       style={{
                         WebkitMaskImage: mask,

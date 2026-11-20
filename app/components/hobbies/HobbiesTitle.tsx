@@ -12,14 +12,16 @@ export default function HobbiesTitle({ children }: { children?: ReactNode }) {
     <div className="pointer-events-none absolute inset-x-0 top-0 pt-20 text-center text-[var(--pf-term-fg)]">
       <SectionKicker index="06" path="hobbies" />
       <div className="px-6 pt-10">
-        <GradientText
-          className="text-5xl font-semibold leading-none tracking-tighter sm:text-6xl md:text-8xl"
-          gradient={TITLE_GRADIENT}
-          text="Off the Clock"
-        />
+        <h2>
+          <GradientText
+            className="text-5xl font-semibold leading-none tracking-tighter sm:text-6xl md:text-8xl"
+            gradient={TITLE_GRADIENT}
+            text="Off the Clock"
+          />
+        </h2>
         {children ?? (
           <p className="mt-4 font-mono text-sm opacity-70">
-            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span>{" "}
+            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-term-accent)]">$</span>{" "}
             scroll to drop in
           </p>
         )}

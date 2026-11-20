@@ -1,7 +1,7 @@
 'use client';
  
 import * as React from 'react';
-import { motion, type Transition } from 'motion/react';
+import { motion, useReducedMotion, type Transition } from 'motion/react';
  
 import { cn } from '@/lib/utils';
  
@@ -23,6 +23,9 @@ function GradientText({
   const baseStyle: React.CSSProperties = {
     backgroundImage: gradient,
   };
+  // The gradient sweeps forever; hold it still for reduced motion.
+  const reduceMotion = useReducedMotion();
+  const animate = reduceMotion ? undefined : { backgroundPositionX: ['0%', '200%'] };
  
   return (
     <span
@@ -33,7 +36,7 @@ function GradientText({
       <motion.span
         className="m-0 text-transparent bg-clip-text bg-[length:200%_100%]"
         style={baseStyle}
-        animate={{ backgroundPositionX: ['0%', '200%'] }}
+        animate={animate}
         transition={transition}
       >
         {text}
@@ -41,9 +44,10 @@ function GradientText({
  
       {neon && (
         <motion.span
+          aria-hidden="true"
           className="m-0 absolute top-0 left-0 text-transparent bg-clip-text blur-[8px] mix-blend-plus-lighter bg-[length:200%_100%]"
           style={baseStyle}
-          animate={{ backgroundPositionX: ['0%', '200%'] }}
+          animate={animate}
           transition={transition}
         >
           {text}

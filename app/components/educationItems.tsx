@@ -61,7 +61,7 @@ const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, s
         >
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 font-mono text-xs text-[var(--pf-fg-muted)] sm:text-sm">
-              <span className="text-[var(--pf-accent)]">{yearNumber}</span>
+              <span className="text-[var(--pf-accent-text)]">{yearNumber}</span>
               <span aria-hidden="true" className="opacity-40">/</span>
               <span>{years}</span>
               {inProgress && (
@@ -162,7 +162,7 @@ const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, s
                             in progress
                           </span>
                         ) : (
-                          <span className="w-9 shrink-0 text-right font-mono text-base font-bold text-[var(--pf-accent)] sm:text-lg">
+                          <span className="w-9 shrink-0 text-right font-mono text-base font-bold text-[var(--pf-accent-text)] sm:text-lg">
                             {course.grade}
                           </span>
                         )}

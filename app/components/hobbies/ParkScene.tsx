@@ -537,7 +537,7 @@ function HobbyPanel({ index, ride }: { index: number; ride: MotionValue<number> 
       <div className="rounded-2xl border border-white/10 bg-[var(--pf-term)]/85 p-4 text-[var(--pf-term-fg)] shadow-2xl backdrop-blur md:p-6">
         <div className="flex items-center justify-between font-mono text-xs opacity-80">
           <span>
-            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span> {hobby.trick}
+            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-term-accent)]">$</span> {hobby.trick}
           </span>
           <span>
             {String(index + 1).padStart(2, "0")} / {String(COUNT).padStart(2, "0")}
@@ -596,6 +596,8 @@ export default function ParkScene({ onComplete }: { onComplete?: () => void }) {
     // Keep the height in sync with the placeholder in HobbiesSection.
     <div ref={track} data-ride-track className="relative h-[800vh] bg-[var(--pf-term)]">
       <div className="sticky top-0 h-svh overflow-hidden">
+        {/* The 3D park is decoration; the hobby panels carry the content. */}
+        <div aria-hidden="true" className="absolute inset-0">
         <Canvas camera={{ position: ESTABLISHING.toArray(), fov: 50 }} dpr={[1, 2]}>
           <FrameRight />
           <color attach="background" args={[palette.term]} />
@@ -610,6 +612,7 @@ export default function ParkScene({ onComplete }: { onComplete?: () => void }) {
           <BoardLights ride={ride} palette={palette} />
           <ChaseCamera ride={ride} intro={intro} />
         </Canvas>
+        </div>
 
         <motion.div style={{ opacity: endFade }} className="pointer-events-none absolute inset-0 bg-[var(--pf-term)]" />
 
@@ -619,7 +622,7 @@ export default function ParkScene({ onComplete }: { onComplete?: () => void }) {
 
         <StatusLine ride={ride} from={0.001} to={TRICKS[0].start}>
           <p className="text-sm opacity-80">
-            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span> ./skate --drop-in bowl
+            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-term-accent)]">$</span> ./skate --drop-in bowl
           </p>
           <p className="mt-3 font-sans text-2xl font-semibold">Drop in.</p>
           <p className="mt-1 font-sans text-sm opacity-75">Keep scrolling. Every trick around the park unlocks a hobby.</p>
@@ -631,7 +634,7 @@ export default function ParkScene({ onComplete }: { onComplete?: () => void }) {
 
         <StatusLine ride={ride} from={REST_START} to={1.02}>
           <p className="text-sm opacity-80">
-            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span> exit
+            <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-term-accent)]">$</span> exit
           </p>
           <p className="mt-3 font-sans text-2xl font-semibold">Run complete.</p>
           <p className="mt-1 font-sans text-sm opacity-75">

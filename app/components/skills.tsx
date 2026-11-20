@@ -376,7 +376,7 @@ function SkillLevelBadge({ levelKey }: { levelKey: SkillLevelKey | null }) {
       </div>
       <p className="text-lg font-semibold">{level ? level.name : "Level"}</p>
       {/* One pip per level, filled up to this skill's level */}
-      <div className="flex gap-1.5" aria-label={level ? `${level.level} out of 5` : undefined}>
+      <div className="flex gap-1.5" role={level ? "img" : undefined} aria-label={level ? `${level.level} out of 5` : undefined} aria-hidden={level ? undefined : true}>
         {[1, 2, 3, 4, 5].map((n) => (
           <span
             key={n}
@@ -555,6 +555,7 @@ interface CarouselSectionProps {
   handleMouseUp: () => void;
   cardData: { title: string; description: string }[];
   cardContent: CardSections[];
+  label: string;
 }
 
 function CarouselSection({
@@ -569,10 +570,11 @@ function CarouselSection({
   handleMouseUp,
   cardData,
   cardContent,
+  label,
 }: CarouselSectionProps) {
   return (
     <div className={`${widthClass} h-full flex justify-end`}>
-    <Carousel className="w-full h-full">
+    <Carousel className="w-full h-full" aria-label={label}>
         <FadingCarouselContent className="h-full w-full">
         {cardData.map(({ title, description }, index) => {
             const cardId = `${carouselId}-${index}`;
@@ -680,6 +682,7 @@ export default function Skills() {
                             handleMouseUp={handleMouseUp}
                             cardData={cardData}           // pass specific card array
                             cardContent={cardContent}     // pass specific content array
+                            label={SKILL_GROUPS[carouselId].category}
                             />
                         );
                         })}
@@ -690,7 +693,9 @@ export default function Skills() {
                     Right: logo in a hexagon, expertise badge. */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-2">
                     <div className="col-span-1 flex min-h-0 flex-col gap-4">
-                        <div className={`${PANEL_CLASSES} flex flex-[1] items-center px-4 py-3`}>
+                        {/* Announced when a skill is picked, so screen reader users
+                            hear that the details below changed. */}
+                        <div aria-live="polite" className={`${PANEL_CLASSES} flex flex-[1] items-center px-4 py-3`}>
                             <div className="min-w-0">
                                 <p className="text-[11px] uppercase tracking-widest text-white/60">
                                     {selectedGroup ? selectedGroup.category : "Skill"}
@@ -756,9 +761,9 @@ export default function Skills() {
                             <div className="flex aspect-[1.15] w-[78%] max-w-[200px] items-center justify-center bg-white/40" style={{ clipPath: HEXAGON }}>
                                 <div className="flex h-[88%] w-[88%] items-center justify-center bg-white text-slate-900" style={{ clipPath: HEXAGON }}>
                                     {SelectedIcon ? (
-                                        <SelectedIcon className="h-1/2 w-1/2" aria-label={`${selectedSkill?.title} logo`} />
+                                        <SelectedIcon className="h-1/2 w-1/2" role="img" aria-label={`${selectedSkill?.title} logo`} />
                                     ) : (
-                                        <span className="text-sm font-semibold text-slate-500">Logo</span>
+                                        <span className="text-sm font-semibold text-slate-600">Logo</span>
                                     )}
                                 </div>
                             </div>

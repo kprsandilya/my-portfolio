@@ -31,6 +31,8 @@ interface ThreeDCarouselProps {
   subtitle?: string;
   tagline?: string;
   isMobileSwipe?: boolean;
+  // Spoken name of the carousel, e.g. "Awards and certifications".
+  label?: string;
 }
 
 const ThreeDCarousel = ({
@@ -42,6 +44,7 @@ const ThreeDCarousel = ({
   subtitle = "Customer Cases",
   tagline = "Explore how our textile sensor technology is revolutionizing multiple industries with intelligent fabric solutions tailored to specific needs.",
   isMobileSwipe = true,
+  label = "Carousel",
 }: ThreeDCarouselProps) => {
   const [active, setActive] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -99,6 +102,8 @@ const ThreeDCarousel = ({
   return (
     <section
       id="ThreeDCarousel"
+      aria-roledescription="carousel"
+      aria-label={label}
       className="bg-transparent min-w-full mx-auto flex items-center justify-center"
     >
       <div
@@ -113,10 +118,22 @@ const ThreeDCarousel = ({
           onTouchEnd={onTouchEnd}
           ref={carouselRef}
         >
-          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center ">
+          {/* Announces the new slide when someone changes it, but stays quiet
+              while it turns by itself. */}
+          <div
+            aria-live={autoRotate && isInView && !isHovering ? "off" : "polite"}
+            className="absolute top-0 left-0 w-full h-full flex items-center justify-center "
+          >
             {items.map((item, index) => (
               <div
                 key={item.id}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${index + 1} of ${items.length}: ${item.title}`}
+                // Only the front slide can be read or tabbed into; the ones
+                // peeking in at the sides are just decoration.
+                aria-hidden={index !== active}
+                inert={index !== active}
                 className={`absolute top-0 w-full max-w-md transform transition-all duration-500 ${getCardAnimationClass(
                   index
                 )}`}
@@ -133,11 +150,13 @@ const ThreeDCarousel = ({
                     }}
                   >
                     <div className="absolute inset-0 bg-black/50" />
-                    <div className="relative z-10 flex flex-col items-center text-center text-white">
+                    {/* Banner repeats the title and brand shown below, so it
+                        is hidden from screen readers. */}
+                    <div aria-hidden="true" className="relative z-10 flex flex-col items-center text-center text-white">
                       {item.icon && <item.icon className="mb-3 h-12 w-12" />}
-                      <h3 className="text-2xl font-bold mb-2">
+                      <p className="text-2xl font-bold mb-2">
                         {item.brand.toUpperCase()}
-                      </h3>
+                      </p>
                       <div className="w-12 h-1 bg-white mx-auto mb-2" />
                       <p className="text-sm ">{item.title}</p>
                     </div>
@@ -189,36 +208,46 @@ const ThreeDCarousel = ({
           </div>
 
           <button
-              className="absolute left-4 w-10 h-10 bg-white/40 rounded-full hidden sm:flex items-center justify-center text-gray-500 hover:bg-white/80 z-30 shadow-md transition-all hover:scale-110"
+              type="button"
+              className="absolute left-4 w-10 h-10 bg-white/70 rounded-full hidden sm:flex items-center justify-center text-gray-700 hover:bg-white/90 z-30 shadow-md transition-all hover:scale-110"
               onClick={() =>
                 setActive((prev) => (prev - 1 + items.length) % items.length)
               }
               style={{ top: `calc(${cardHeight / 2}px - 40px)` }}
-              aria-label="Previous"
+              aria-label="Previous slide"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5" aria-hidden="true" />
             </button>
             <button
-              className="absolute right-4  w-10 h-10 bg-white/40 rounded-full hidden sm:flex items-center justify-center text-gray-500 hover:bg-white/80 z-30 shadow-md transition-all hover:scale-110"
+              type="button"
+              className="absolute right-4  w-10 h-10 bg-white/70 rounded-full hidden sm:flex items-center justify-center text-gray-700 hover:bg-white/90 z-30 shadow-md transition-all hover:scale-110"
               onClick={() => setActive((prev) => (prev + 1) % items.length)}
               style={{ top: `calc(${cardHeight / 2}px - 40px)` }}
-              aria-label="Next"
+              aria-label="Next slide"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-5 h-5" aria-hidden="true" />
             </button>
 
-          <div className="absolute bottom-6 left-0 right-0 flex justify-center items-center space-x-3 z-30">
-            {items.map((_, idx) => (
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center gap-1 z-30">
+            {items.map((item, idx) => (
+              // The visible dot is small; the button around it is a 24px target.
               <button
-                key={idx}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  active === idx
-                    ? "bg-gray-500 w-5"
-                    : "bg-gray-200 hover:bg-gray-300"
-                }`}
+                key={item.id}
+                type="button"
+                className="group flex h-6 min-w-6 items-center justify-center rounded-full"
                 onClick={() => setActive(idx)}
-                aria-label={`Go to item ${idx + 1}`}
-              />
+                aria-label={`Show slide ${idx + 1}: ${item.title}`}
+                aria-current={active === idx ? "true" : undefined}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`block h-2 rounded-full transition-all duration-300 ${
+                    active === idx
+                      ? "w-5 bg-gray-600"
+                      : "w-2 bg-gray-400 group-hover:bg-gray-500"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>

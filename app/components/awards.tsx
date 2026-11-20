@@ -121,12 +121,15 @@ export default function Awards() {
                     {/* Label inside the parallax wrapper so it moves with the title. */}
                     <Parallax speed={6} className='w-full relative text-center pt-20 md:pt-36'>
                         <SectionKicker index="04" path="awards" className="relative z-10 mb-10" />
-                        <GradientText className="text-balance px-4 text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter"
-                            gradient={textGradient()} text="Awards and Certifications"/>
+                        <h2>
+                            <GradientText className="text-balance px-4 text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter"
+                                gradient={textGradient()} text="Awards and Certifications"/>
+                        </h2>
                     </Parallax>
                     <Parallax speed={6} className="relative z-10 pt-10 md:pt-32 w-full">
                         <ThreeDCarousel
                         items={items}
+                        label="Awards and certifications"
                         autoRotate={true}
                         rotateInterval={4000}
                         cardHeight={500}
