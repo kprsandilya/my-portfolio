@@ -35,7 +35,9 @@ const EducationItems: React.FC<EducationItemsProps> = ({ className, listIndex, s
   const yearNumber = String(listIndex).padStart(2, '0')
 
   return (
-    <div className={`relative flex w-full px-6 md:px-[70px] ${className ?? ''}`}>
+    // On phones the card leaves a gutter on its road side, so the road's
+    // marker next to it stays on screen.
+    <div className={`relative flex w-full md:px-[70px] ${side === 'left' ? 'pl-4 pr-12' : 'pl-12 pr-4'} ${className ?? ''}`}>
       <motion.div
         ref={registerRef}
         className={`${CARD} group/card relative w-full overflow-hidden md:w-[min(600px,46%)] ${

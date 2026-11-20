@@ -18,7 +18,7 @@ export default function NavBar() {
   const getNavbarClasses = () => "bg-[var(--pf-bg)]/70 border-[var(--pf-border)] text-[var(--pf-fg)]";
 
   const getButtonClasses = (buttonTheme: string) => {
-    const base = "rounded-lg px-5 py-1.5 text-xs font-medium transition-colors";
+    const base = "rounded-lg px-2.5 sm:px-5 py-1.5 text-xs font-medium transition-colors";
     const active = "bg-[var(--pf-accent)] text-[var(--pf-on-accent)]";
     const inactive =
       "hover:bg-[var(--pf-bg-deep)] text-[var(--pf-fg)]";
@@ -30,21 +30,21 @@ return (
     className={`fixed top-0 left-0 z-50 w-full border-b backdrop-blur-lg bg-opacity-80 ${getNavbarClasses()}`}
   >
     {/* Inner Container */}
-    <div className="flex items-center justify-between px-6 py-3 max-w-6xl mx-auto">
+    <div className="flex items-center justify-between gap-3 px-4 py-2 sm:px-6 sm:py-3 max-w-6xl mx-auto">
       {/* Left: Logo / Title */}
       <div className="flex items-center gap-3">
         <img
           src="/favicon.ico"
           alt="Logo"
-          className="w-10 h-10  rounded-lg object-contain"
+          className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-contain"
         />
-        <h1 className="text-xl font-semibold tracking-tight">
+        <h1 className="text-lg sm:text-xl font-semibold tracking-tight">
           Sandilya<span className="text-[var(--pf-accent)]">.dev</span>
         </h1>
       </div>
 
-      {/* Center: Navigation Icons */}
-      <div className="flex items-center justify-center gap-6">
+      {/* Center: Navigation Icons (no room for them on phones) */}
+      <div className="hidden md:flex items-center justify-center gap-6">
         <TooltipProvider delayDuration={100}>
           {[
             { icon: Home, label: "Home" },

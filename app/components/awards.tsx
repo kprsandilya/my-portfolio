@@ -115,16 +115,16 @@ export default function Awards() {
                 above, minus 2px of overlap to hide the sub-pixel seam), so it
                 only fills the area Projects doesn't reach. */}
             <div className={`absolute inset-x-0 top-[calc(clamp(150px,20vh,260px)-2px)] h-[40%] ${getProjectsBottomColor()}`} />
-            <div className={`relative w-full ${ECCENTRIC_CLIP_CLASS} ${getBackgroundColor()} shadow-2xl pb-[clamp(100px,14vh,200px)] overflow-hidden`}>
+            <div className={`relative w-full ${ECCENTRIC_CLIP_CLASS} ${getBackgroundColor()} shadow-2xl pb-6 md:pb-[clamp(100px,14vh,200px)] overflow-hidden`}>
                 <div className={`w-full will-change-transform `}>
                     {/* <BackgroundBeams className="absolute inset-0" /> */}
                     {/* Label inside the parallax wrapper so it moves with the title. */}
-                    <Parallax speed={6} className='w-full relative text-center pt-36'>
+                    <Parallax speed={6} className='w-full relative text-center pt-20 md:pt-36'>
                         <SectionKicker index="04" path="awards" className="relative z-10 mb-10" />
-                        <GradientText className="text-balance text-8xl font-semibold leading-none tracking-tighter"
+                        <GradientText className="text-balance px-4 text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter"
                             gradient={textGradient()} text="Awards and Certifications"/>
                     </Parallax>
-                    <Parallax speed={6} className="relative z-10 pt-32 w-full">
+                    <Parallax speed={6} className="relative z-10 pt-10 md:pt-32 w-full">
                         <ThreeDCarousel
                         items={items}
                         autoRotate={true}
@@ -138,7 +138,7 @@ export default function Awards() {
             {/* Bottom curved transition: a Skills-colored layer sits behind an
                 Awards-colored panel whose bottom is curved away, so the curve
                 reveals the (contrasting) Skills color and flows into it. */}
-            <div className="relative w-full h-[clamp(140px,18vh,260px)] -mt-px">
+            <div className="relative w-full h-[90px] md:h-[clamp(140px,18vh,260px)] -mt-px">
                 <div className={`absolute inset-0 ${getSkillsColor()}`} />
                 <div className={`absolute inset-0 ${getBottomBackgroundColor()} ${BOTTOM_CLIP_CLASS}`} />
             </div>

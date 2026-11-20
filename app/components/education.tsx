@@ -281,7 +281,7 @@ export default function Education({ roomForPhotos = true }: { roomForPhotos?: bo
 
         <div
           ref={introRef}
-          className={`font-serif text-3xl md:text-4xl pb-16 ${getTextColors()} relative z-20 max-w-5xl mx-auto px-6 text-center leading-tight`}
+          className={`font-serif text-2xl sm:text-3xl md:text-4xl pb-16 ${getTextColors()} relative z-20 max-w-5xl mx-auto px-6 text-center leading-tight`}
         >
             I am a Purdue University student double majoring in Computer Science (Machine Intelligence) and Data Science with minors in Mathematics and Statistics, now also pursuing an M.S. in Computer Science, with a{' '}
             <HighlightText

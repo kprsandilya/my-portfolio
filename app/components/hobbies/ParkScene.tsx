@@ -497,15 +497,19 @@ function ChaseCamera({ ride, intro }: { ride: MotionValue<number>; intro: Motion
 }
 
 // On wide screens, shift the picture right so the board isn't under the
-// hobby panel on the left.
+// hobby panel on the left. On phones the panel sits along the bottom, so
+// shift the picture up instead, and widen the view a little because a tall,
+// narrow screen otherwise crops the park tightly from the sides.
 function FrameRight() {
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const size = useThree((s) => s.size);
   useEffect(() => {
     if (size.width >= 768) {
+      camera.fov = 50;
       camera.setViewOffset(size.width, size.height, -size.width * 0.17, 0, size.width, size.height);
     } else {
-      camera.clearViewOffset();
+      camera.fov = size.width < size.height ? 62 : 50;
+      camera.setViewOffset(size.width, size.height, 0, size.height * 0.2, size.width, size.height);
     }
     camera.updateProjectionMatrix();
   }, [camera, size.width, size.height]);
@@ -530,7 +534,7 @@ function HobbyPanel({ index, ride }: { index: number; ride: MotionValue<number> 
   const Icon = hobby.icon;
   return (
     <motion.div style={{ opacity, x }} className={PANEL_POSITION}>
-      <div className="rounded-2xl border border-white/10 bg-[var(--pf-term)]/85 p-6 text-[var(--pf-term-fg)] shadow-2xl backdrop-blur">
+      <div className="rounded-2xl border border-white/10 bg-[var(--pf-term)]/85 p-4 text-[var(--pf-term-fg)] shadow-2xl backdrop-blur md:p-6">
         <div className="flex items-center justify-between font-mono text-xs opacity-80">
           <span>
             <span className="text-[var(--pf-prompt)]">~/hobbies</span> <span className="text-[var(--pf-accent)]">$</span> {hobby.trick}
@@ -539,10 +543,10 @@ function HobbyPanel({ index, ride }: { index: number; ride: MotionValue<number> 
             {String(index + 1).padStart(2, "0")} / {String(COUNT).padStart(2, "0")}
           </span>
         </div>
-        <p className="mt-4 flex items-center gap-3 text-3xl font-semibold" style={{ color: `var(${hobby.accent})` }}>
+        <p className="mt-3 flex items-center gap-3 text-2xl font-semibold md:mt-4 md:text-3xl" style={{ color: `var(${hobby.accent})` }}>
           <Icon aria-hidden="true" /> {hobby.name}
         </p>
-        <p className="mt-3 text-base">{hobby.blurb}</p>
+        <p className="mt-2 text-sm md:mt-3 md:text-base">{hobby.blurb}</p>
         <ul className="mt-2 list-disc space-y-1 pl-5 text-sm opacity-75">
           {hobby.details.map((d) => (
             <li key={d}>{d}</li>
@@ -591,7 +595,7 @@ export default function ParkScene({ onComplete }: { onComplete?: () => void }) {
     // Tall track: scrolling through it drives the run. The stage stays pinned.
     // Keep the height in sync with the placeholder in HobbiesSection.
     <div ref={track} data-ride-track className="relative h-[800vh] bg-[var(--pf-term)]">
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="sticky top-0 h-svh overflow-hidden">
         <Canvas camera={{ position: ESTABLISHING.toArray(), fov: 50 }} dpr={[1, 2]}>
           <FrameRight />
           <color attach="background" args={[palette.term]} />

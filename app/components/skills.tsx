@@ -427,7 +427,7 @@ function SkillCardBody({ title, description, mono = false }: { title: string; de
     <>
       {Icon && <Icon className="mb-2 h-8 w-8 shrink-0 md:h-10 md:w-10" aria-hidden="true" />}
       <span
-        className={`mb-1 max-w-full text-[clamp(0.8rem,1.3vw,1.5rem)] font-semibold leading-tight tracking-tight ${
+        className={`mb-1 max-w-full text-base lg:text-[clamp(0.8rem,1.3vw,1.5rem)] font-semibold leading-tight tracking-tight ${
           mono ? "font-mono" : ""
         }`}
       >
@@ -607,7 +607,9 @@ function CarouselSection({
             );
         })}
         </FadingCarouselContent>
-      <CarouselPrevious className="disabled:opacity-30" />
+      {/* On phones the row spans the screen, so the arrow sits just inside the
+          left edge instead of out in the margin. */}
+      <CarouselPrevious className="left-2 z-10 border-white/40 bg-white/85 text-slate-900 shadow-lg hover:bg-white disabled:opacity-0 lg:-left-12 lg:border-input lg:bg-background lg:text-foreground lg:shadow-none lg:disabled:opacity-30" />
       {/* Sits just inside the right edge, over the peeking card, because the
           detail panels are right next to the carousels. */}
       <CarouselNext className="right-2 z-10 border-white/40 bg-white/85 text-slate-900 shadow-lg hover:bg-white disabled:opacity-0" />
@@ -634,10 +636,11 @@ export default function Skills() {
 
     const carousels = [
         // Each basis is a little under 1/3, 1/4, and 1/5 so part of the next
-        // card peeks in on the right, showing that the row scrolls.
-        { widthClass: "w-28/48", cardBasis: "basis-[80%] lg:basis-[29%]", variant: "code" as const },
-        { widthClass: "w-36/48", cardBasis: "basis-[80%] lg:basis-[22.5%]", variant: "stack" as const },
-        { widthClass: "w-42/48", cardBasis: "basis-[80%] lg:basis-[18.5%]", variant: "cloud" as const },
+        // card peeks in on the right, showing that the row scrolls. Below lg
+        // the rows are stacked full width, with fewer, larger cards per row.
+        { widthClass: "w-full lg:w-28/48", cardBasis: "basis-[62%] sm:basis-[40%] md:basis-[30%] lg:basis-[29%]", variant: "code" as const },
+        { widthClass: "w-full lg:w-36/48", cardBasis: "basis-[62%] sm:basis-[40%] md:basis-[30%] lg:basis-[22.5%]", variant: "stack" as const },
+        { widthClass: "w-full lg:w-42/48", cardBasis: "basis-[62%] sm:basis-[40%] md:basis-[30%] lg:basis-[18.5%]", variant: "cloud" as const },
     ];
 
     const selectedCarouselId = selectedCard ? Number(selectedCard.split("-")[0]) : null;
@@ -652,13 +655,13 @@ export default function Skills() {
     return (
         <div className="w-full relative">
             <div className={`w-full ${getBackgroundColor()} shadow-2xl`}>
-            <div className="relative z-10 w-full px-6 py-16 md:px-16">
-                <div className="grid grid-cols-5 lg:h-[720px] gap-6">
+            <div className="relative z-10 w-full px-4 py-16 sm:px-6 md:px-16">
+                <div className="grid grid-cols-1 gap-6 lg:h-[720px] lg:grid-cols-5">
                 {/* ✅ Left Column with generated carousels */}
                 {/* grid-cols-1 pins the track to the column width; otherwise it
                     grows to fit every card and the carousels spill under the
                     detail panels. */}
-                <div className="col-span-3 grid grid-cols-1 grid-rows-3 gap-4 justify-items-end pr-4">
+                <div className="grid grid-cols-1 grid-rows-[repeat(3,13rem)] gap-4 justify-items-end lg:col-span-3 lg:grid-rows-3 lg:pr-4">
                         {carousels.map((c, carouselId) => {
                         const cardData = CAROUSEL_CARD_DATA[carouselId];
                         const cardContent = CAROUSEL_CARD_CONTENT[carouselId];
@@ -685,7 +688,7 @@ export default function Skills() {
                 {/* Right column: details for the selected skill.
                     Left: name, experience & projects, learn more.
                     Right: logo in a hexagon, expertise badge. */}
-                <div className="col-span-2 grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-2">
                     <div className="col-span-1 flex min-h-0 flex-col gap-4">
                         <div className={`${PANEL_CLASSES} flex flex-[1] items-center px-4 py-3`}>
                             <div className="min-w-0">
@@ -698,12 +701,12 @@ export default function Skills() {
                             </div>
                         </div>
 
-                        <div className={`${PANEL_CLASSES} flex min-h-0 flex-[6] flex-col bg-white/15 p-4`}>
+                        <div className={`${PANEL_CLASSES} flex min-h-[10rem] flex-[6] flex-col bg-white/15 p-4 lg:min-h-0`}>
                             <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/70">
                                 Experience & projects
                             </p>
                             {selectedSkill ? (
-                                <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain pr-1 text-sm leading-snug">
+                                <div className="space-y-3 pr-1 text-sm leading-snug lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:overscroll-contain">
                                     <p className="text-white">{selectedSkill.usage}</p>
                                     <div>
                                         <p className="text-xs font-semibold text-white/70">Where I used it</p>
@@ -720,7 +723,7 @@ export default function Skills() {
                                 </div>
                             ) : (
                                 <p className="m-auto text-center text-sm text-white/80">
-                                    Click a skill on the left to see where I&apos;ve used it.
+                                    <span className="lg:hidden">Tap a skill above</span><span className="hidden lg:inline">Click a skill on the left</span> to see where I&apos;ve used it.
                                 </p>
                             )}
                         </div>
@@ -729,7 +732,7 @@ export default function Skills() {
                             <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-white/70">Learn more</p>
                             {selectedDetails ? (
                                 <>
-                                    <p className="min-h-0 flex-1 overflow-y-auto overscroll-contain text-xs leading-snug">
+                                    <p className="text-xs leading-snug lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:overscroll-contain">
                                         {selectedDetails.about}
                                     </p>
                                     <a
@@ -761,7 +764,7 @@ export default function Skills() {
                             </div>
                         </div>
 
-                        <div className={`${PANEL_CLASSES} min-h-0 flex-[5]`}>
+                        <div className={`${PANEL_CLASSES} min-h-[14rem] flex-[5] lg:min-h-0`}>
                             <SkillLevelBadge levelKey={selectedDetails ? selectedDetails.level : null} />
                         </div>
                     </div>

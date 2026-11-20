@@ -258,6 +258,26 @@
   padding-top: 50px;
 }
 
+/* The curves above are scaled to the section's height. On a phone the
+   sections are narrow and very tall, so the curves turn into steep peaks.
+   There, draw the curved top as an elliptical corner radius of a fixed depth
+   instead. */
+@media (max-width: 767px) {
+  .clip-top-curve {
+    clip-path: none;
+    -webkit-clip-path: none;
+    border-top-left-radius: 50% 80px;
+    border-top-right-radius: 50% 80px;
+  }
+
+  .eccentric-curve-clip {
+    clip-path: none;
+    -webkit-clip-path: none;
+    border-top-left-radius: 60% 90px;
+    border-top-right-radius: 40% 60px;
+  }
+}
+
 .aurora-text-clip {
     /* Required for the text to adopt the background */
     color: transparent; 

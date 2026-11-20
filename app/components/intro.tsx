@@ -13,7 +13,7 @@ import { TypeAnimation } from 'react-type-animation';
 
 const splitter = new GraphemeSplitter();
 
-const GREETING_CLASSES = "text-5xl font-bold font-mono tracking-wider text-[var(--pf-prompt)] drop-shadow-[0_0_5px_var(--pf-prompt)] max-w-4xl bg-[var(--pf-term)] leading-tight";
+const GREETING_CLASSES = "text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold font-mono tracking-wider text-[var(--pf-prompt)] drop-shadow-[0_0_5px_var(--pf-prompt)] max-w-4xl bg-[var(--pf-term)] leading-tight";
 
 const GREETINGS = [
     "Hi! I'm Sandilya Kambhampati, a student at Purdue University!",
@@ -44,52 +44,52 @@ export default function Info() {
                 <img
                 src="/profile.jpeg"
                 alt="Profile"
-                className={`w-64 h-64 rounded-full border-4 ${getBorderBackground()} object-cover`}
+                className={`w-44 h-44 sm:w-64 sm:h-64 rounded-full border-4 ${getBorderBackground()} object-cover`}
                 />
-                <div className="mx-auto mb-4 flex justify-center gap-8">
+                <div className="mx-auto mb-4 flex justify-center gap-4 sm:gap-8">
                     <Button
                     as={Link}
                     isIconOnly={true}
                     variant="solid"
-                    className={`flex h-14 w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
+                    className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
                     href="https://www.linkedin.com/in/kprsandilya/"
                     target="_blank"
                     >
-                    <LinkedinLogoIcon size={44} />
+                    <LinkedinLogoIcon size={36} />
                     </Button>
                     <Button
                     as={Link}
                     isIconOnly={true}
                     variant="solid"
-                    className={`flex h-14 w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
+                    className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
                     href="https://github.com/kprsandilya/"
                     target="_blank"
                     >
-                    <GithubLogoIcon size={44} />
+                    <GithubLogoIcon size={36} />
                     </Button>
                     <Button
                     as={Link}
                     isIconOnly={true}
                     variant="solid"
-                    className={`flex h-14 w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
+                    className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
                     href="mailto: kprsandilya@gmail.com"
                     target="_blank"
                     >
-                    <EnvelopeSimpleIcon size={44} />
+                    <EnvelopeSimpleIcon size={36} />
                     </Button>
                     <Button
                     as={Link}
                     isIconOnly={true}
                     variant="solid"
-                    className={`flex h-14 w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
+                    className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center shadow-xl rounded-xl ${getBackground()}`}
                     href="/Resume.pdf"
                     target="_blank"
                     >
-                    <FileIcon size={44} />
+                    <FileIcon size={36} />
                     </Button>
                 </div>
             </div>
-            <div className="py-18 h-full w-[150vh] text-center rounded-xl">
+            <div className="py-12 sm:py-18 h-full w-full max-w-[150vh] px-4 sm:px-6 text-center rounded-xl">
                 {/* Every greeting is rendered invisibly in the same grid cell as
                     the typing text, so the box is always as tall as the longest
                     greeting. Without this, the box grows and shrinks as lines
@@ -97,7 +97,7 @@ export default function Info() {
                 <div className="grid">
                     {GREETINGS.map((greeting) => (
                         <div key={greeting} aria-hidden="true" className="invisible col-start-1 row-start-1">
-                            <span className={GREETING_CLASSES} style={{ fontSize: '2em' }}>
+                            <span className={GREETING_CLASSES}>
                                 {greeting}|
                             </span>
                         </div>
@@ -107,7 +107,7 @@ export default function Info() {
                             splitter={(str) => splitter.splitGraphemes(str)}
                             className={GREETING_CLASSES}
                             sequence={GREETINGS.flatMap((greeting) => [greeting, 2000])}
-                            style={{ fontSize: '2em' }}
+                           
                             repeat={Infinity}
                         />
                     </div>

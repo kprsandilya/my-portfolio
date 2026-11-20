@@ -76,7 +76,7 @@ export default function TestHome() {
 
       <div className={`relative z-50 ${getBackgroundColor()} flex flex-col items-center`}>
         <div className="w-full mt-8">
-          <SectionKicker index="05" path="skills" className="pt-16" />
+          <SectionKicker index="05" path="skills" className="pt-6 md:pt-16" />
           <div className="flex flex-col items-center px-6 pt-10 pb-6 text-center">
             <GradientText
               className="text-5xl sm:text-6xl md:text-8xl font-semibold leading-none tracking-tighter text-center"

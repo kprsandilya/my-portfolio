@@ -15,7 +15,7 @@ const ParkScene = dynamic(() => import("./ParkScene"), { ssr: false, loading: ()
 function Placeholder() {
   return (
     <div className="relative h-[800vh]">
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="sticky top-0 h-svh overflow-hidden">
         <HobbiesTitle />
       </div>
     </div>

@@ -102,10 +102,10 @@ const ThreeDCarousel = ({
       className="bg-transparent min-w-full mx-auto flex items-center justify-center"
     >
       <div
-        className="w-full px-4 sm:px-6 lg:px-8 min-w-[350px] md:min-w-[1000px] max-w-7xl"
+        className="w-full px-4 sm:px-6 lg:px-8 min-w-0 md:min-w-[1000px] max-w-7xl"
       >
         <div
-          className="relative overflow-hidden h-[550px] "
+          className="relative overflow-hidden h-[480px] sm:h-[550px]"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
           onTouchStart={onTouchStart}
@@ -189,7 +189,7 @@ const ThreeDCarousel = ({
           </div>
 
           <button
-              className="absolute left-4 w-10 h-10 bg-white/40 rounded-full flex items-center justify-center text-gray-500 hover:bg-white/80 z-30 shadow-md transition-all hover:scale-110"
+              className="absolute left-4 w-10 h-10 bg-white/40 rounded-full hidden sm:flex items-center justify-center text-gray-500 hover:bg-white/80 z-30 shadow-md transition-all hover:scale-110"
               onClick={() =>
                 setActive((prev) => (prev - 1 + items.length) % items.length)
               }
@@ -199,7 +199,7 @@ const ThreeDCarousel = ({
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
-              className="absolute right-4  w-10 h-10 bg-white/40 rounded-full flex items-center justify-center text-gray-500 hover:bg-white/80 z-30 shadow-md transition-all hover:scale-110"
+              className="absolute right-4  w-10 h-10 bg-white/40 rounded-full hidden sm:flex items-center justify-center text-gray-500 hover:bg-white/80 z-30 shadow-md transition-all hover:scale-110"
               onClick={() => setActive((prev) => (prev + 1) % items.length)}
               style={{ top: `calc(${cardHeight / 2}px - 40px)` }}
               aria-label="Next"
