@@ -34,7 +34,7 @@ export default function NavBar() {
 
 return (
   <header
-    className={`fixed top-0 left-0 z-50 w-full border-b backdrop-blur-lg bg-opacity-80 ${getNavbarClasses()}`}
+    className={`fixed top-0 left-0 z-[90] w-full border-b backdrop-blur-lg bg-opacity-80 ${getNavbarClasses()}`}
   >
     {/* Inner Container */}
     <div className="flex items-center justify-between gap-3 px-4 py-2 sm:px-6 sm:py-3 max-w-6xl mx-auto">

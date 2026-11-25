@@ -13,7 +13,7 @@ import { TypeAnimation } from 'react-type-animation';
 
 const splitter = new GraphemeSplitter();
 
-const GREETING_CLASSES = "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-mono tracking-wider text-[var(--pf-prompt)] drop-shadow-[0_0_5px_var(--pf-prompt)] max-w-4xl bg-[var(--pf-term)] leading-tight";
+const GREETING_CLASSES = "text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-mono tracking-wider text-[var(--pf-prompt)] drop-shadow-[0_0_5px_var(--pf-prompt)] max-w-4xl bg-[var(--pf-term)] leading-tight";
 
 const GREETINGS = [
     "Hi! I'm Sandilya Kambhampati, a student at Purdue University!",
